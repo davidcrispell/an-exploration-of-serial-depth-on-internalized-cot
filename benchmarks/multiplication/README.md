@@ -47,6 +47,14 @@ The validator checks all 10,000 records for:
 - duplicate commutative operand pairs; and
 - leakage between validation and test splits.
 
+## Training stages
+
+`train_explicit_cot.py` first teaches the full visible long-multiplication trace.
+`train_internalized_cot.py` then removes its 47 tokens from left to right at the
+paper's rate of eight tokens per epoch. The removal boundary uses exponential
+smoothing with lambda 4, and AdamW is reset whenever one more token is scheduled
+for removal. Both stages use the same GPT-2 tokenization and held-out evaluator.
+
 ## Provenance
 
 Source: [`da03/Internalize_CoT_Step_by_Step`](https://github.com/da03/Internalize_CoT_Step_by_Step),

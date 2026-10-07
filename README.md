@@ -90,6 +90,26 @@ python -m benchmarks.multiplication.train_explicit_cot \
 This is a deliberately separate explicit-CoT stage. It establishes that each architecture can
 perform the visible algorithm before the stepwise token-removal curriculum tests internalization.
 
+Starting from that checkpoint, reproduce the paper's left-to-right internalization curriculum with:
+
+```bash
+python -m benchmarks.multiplication.train_internalized_cot \
+  --checkpoint /path/to/4x4-explicit-cot/explicit_cot_epoch_000.pt \
+  --train-path /path/to/4_by_4_mult/train.txt \
+  --validation-path benchmarks/multiplication/data/4x4/validation.txt \
+  --test-path benchmarks/multiplication/data/4x4/test.txt \
+  --output-dir /path/to/4x4-internalized-cot \
+  --cache-dir /path/to/token-cache \
+  --digits 4 --epochs 8 --batch-size 32 --accumulate 1 \
+  --lr 5e-5 --max-grad-norm 1.0 --remove-per-epoch 8 \
+  --removal-smoothing-lambda 4 --seed 3456
+```
+
+The trainer removes eight CoT tokens per epoch, samples the paper's exponential smoothing offset,
+resets AdamW each time the scheduled removal advances, and stops once the whole trace is hidden and
+validation exact-answer accuracy reaches 99%. It keeps a single atomic `latest.pt` checkpoint plus
+the complete epoch-level validation history, avoiding multi-gigabyte checkpoint accumulation.
+
 This is a fast variant of the [PyTorch GPT-2 trainer](https://github.com/karpathy/llm.c/blob/7b929300217ff1a974b63791a228928b39b26409/train_gpt2.py) from
 Andrej Karpathy's [llm.c](https://github.com/karpathy/llm.c) repo, which attains the same final validation loss in:
 * 2.4B tokens instead of 10B

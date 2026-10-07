@@ -6,7 +6,10 @@ import torch
 
 from benchmarks.multiplication.cot import (
     answer_tokens_from_explicit_generation,
+    compute_removal_distribution,
+    cot_token_count,
     encode_explicit_example,
+    remove_cot_prefix_batch,
     shifted_inputs_and_labels,
     strip_compile_prefix,
 )
@@ -77,6 +80,33 @@ class CoTFormattingTests(unittest.TestCase):
         tensor = torch.tensor([1])
         result = strip_compile_prefix({"_orig_mod.layer": tensor, "other": tensor})
         self.assertEqual(set(result), {"layer", "other"})
+
+    def test_paper_removal_smoothing_distribution(self):
+        probabilities = compute_removal_distribution(4.0)
+        self.assertAlmostEqual(probabilities.sum().item(), 1.0)
+        self.assertAlmostEqual(
+            probabilities[0].item(), 1 - torch.exp(torch.tensor(-4.0)).item()
+        )
+        self.assertGreater(probabilities[1].item(), probabilities[2].item())
+
+    def test_left_removal_preserves_separators_and_masks_padding(self):
+        ids, prompt_length = encode_explicit_example(self.tokenizer, self.line)
+        cot_tokens = cot_token_count(ids, self.tokenizer.eot_token)
+        encoded = torch.tensor([ids, ids])
+        inputs, labels, removed = remove_cot_prefix_batch(
+            encoded,
+            torch.tensor([1, cot_tokens + 20]),
+            eot_token=self.tokenizer.eot_token,
+        )
+        self.assertEqual(removed.tolist(), [1, cot_tokens])
+        self.assertEqual(inputs.shape, labels.shape)
+        self.assertTrue(torch.all(labels[:, : prompt_length - 1] == -1))
+        self.assertEqual(
+            int((inputs[0] == self.tokenizer.eot_token).sum().item()), 2
+        )
+        self.assertEqual(labels[0, len(ids) - 3].item(), self.tokenizer.eot_token)
+        second_length = len(ids) - cot_tokens - 1
+        self.assertTrue(torch.all(labels[1, second_length:] == -1))
 
 
 if __name__ == "__main__":

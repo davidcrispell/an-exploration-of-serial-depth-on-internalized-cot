@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import math
 from pathlib import Path
 from typing import Iterable, Sequence
 
@@ -67,6 +68,78 @@ def shifted_inputs_and_labels(
     labels = encoded[:, 1:].clone()
     labels[:, : prompt_length - 1] = IGNORE_INDEX
     return inputs, labels
+
+
+def compute_removal_distribution(
+    smoothing_lambda: float, truncate_length: int = 100
+) -> torch.Tensor:
+    """Return the paper's truncated exponential distribution over extra removals."""
+    if truncate_length < 1:
+        raise ValueError("truncate_length must be positive")
+    probabilities = torch.zeros(truncate_length, dtype=torch.float64)
+    if math.isinf(smoothing_lambda):
+        probabilities[0] = 1.0
+        return probabilities
+    if smoothing_lambda <= 0:
+        raise ValueError("smoothing_lambda must be positive")
+    positions = torch.arange(truncate_length, dtype=torch.float64)
+    probabilities = (1 - math.exp(-smoothing_lambda)) * torch.exp(
+        -smoothing_lambda * positions
+    )
+    probabilities[-1] += 1.0 - probabilities.sum()
+    return probabilities
+
+
+def cot_token_count(encoded: Sequence[int], eot_token: int) -> int:
+    """Count tokens strictly between the first and second EOS separators."""
+    separators = [index for index, token in enumerate(encoded) if token == eot_token]
+    if len(separators) != 3:
+        raise ValueError(f"expected exactly three EOS tokens, found {len(separators)}")
+    return separators[1] - separators[0] - 1
+
+
+def remove_cot_prefix_batch(
+    encoded: torch.Tensor,
+    removals: torch.Tensor,
+    *,
+    eot_token: int,
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    """Remove each row's leftmost CoT tokens and prepare padded shifted targets.
+
+    The first EOS (after the question), second EOS (after the CoT), answer marker,
+    answer, and final EOS are retained. Padding is ignored by the loss.
+    """
+    if encoded.ndim != 2:
+        raise ValueError("encoded examples must have shape [batch, sequence]")
+    if removals.ndim != 1 or removals.shape[0] != encoded.shape[0]:
+        raise ValueError("removals must have one value per encoded example")
+
+    shortened: list[torch.Tensor] = []
+    prompt_lengths: list[int] = []
+    actual_removals: list[int] = []
+    for row, requested in zip(encoded, removals):
+        separators = torch.where(row == eot_token)[0]
+        if separators.numel() != 3:
+            raise ValueError(
+                f"expected exactly three EOS tokens, found {separators.numel()}"
+            )
+        first = int(separators[0].item())
+        second = int(separators[1].item())
+        available = second - first - 1
+        amount = min(max(int(requested.item()), 0), available)
+        shortened.append(torch.cat((row[: first + 1], row[first + 1 + amount :])))
+        prompt_lengths.append(first + 1)
+        actual_removals.append(amount)
+
+    max_length = max(row.numel() for row in shortened)
+    inputs = encoded.new_full((len(shortened), max_length - 1), eot_token)
+    labels = encoded.new_full((len(shortened), max_length - 1), IGNORE_INDEX)
+    for index, (row, prompt_length) in enumerate(zip(shortened, prompt_lengths)):
+        length = row.numel() - 1
+        inputs[index, :length] = row[:-1]
+        labels[index, :length] = row[1:]
+        labels[index, : prompt_length - 1] = IGNORE_INDEX
+    return inputs, labels, encoded.new_tensor(actual_removals)
 
 
 def strip_compile_prefix(state_dict: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
