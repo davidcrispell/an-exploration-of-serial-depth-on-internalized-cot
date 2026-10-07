@@ -1,5 +1,47 @@
 # Modded-NanoGPT
 
+## Configurable-depth experimental fork
+
+This branch is pinned to upstream commit
+[`dec62cd89dea97f7b13ab544715eb0e755e5a93c`](https://github.com/KellerJordan/modded-nanogpt/tree/dec62cd89dea97f7b13ab544715eb0e755e5a93c),
+the homogeneous-block 10.8-minute record, and exposes the model architecture on the command line.
+
+The defaults reproduce the upstream architecture:
+
+| Option | Meaning | Default |
+| --- | --- | ---: |
+| `--n-layer`, `--layers` | Transformer block count | 12 |
+| `--n-embd`, `--width` | Residual/model width | 768 |
+| `--n-head`, `--heads` | Attention head count | 6 |
+| `--n-ff`, `--mlp-width` | MLP hidden width | 3072 |
+
+The default attention head width is therefore 128. Running without architecture arguments preserves
+the original model:
+
+```bash
+./run.sh
+```
+
+An exactly parameter-matched shallow/deep pair, counting every trainable parameter in the untied
+embedding/head model, is:
+
+```bash
+# Deep control: 12 layers, 162,201,600 parameters
+./run.sh --layers 12 --width 768 --heads 6 --mlp-width 3072
+
+# Shallow treatment: 6 layers, 162,201,600 parameters
+./run.sh --layers 6 --width 1024 --heads 8 --mlp-width 2768
+```
+
+Both configurations retain 128-dimensional attention heads. The trainer prints the resolved
+architecture and verifies its analytical parameter count before moving the model to CUDA.
+
+Run the CPU-only architecture tests with:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
 This is a fast variant of the [PyTorch GPT-2 trainer](https://github.com/karpathy/llm.c/blob/7b929300217ff1a974b63791a228928b39b26409/train_gpt2.py) from
 Andrej Karpathy's [llm.c](https://github.com/karpathy/llm.c) repo, which attains the same final validation loss in:
 * 2.4B tokens instead of 10B
@@ -165,4 +207,3 @@ will automatically adjust the gradient accumulation in order to have the same to
 7. [Hägele, Alexander, et al. "Scaling Laws and Compute-Optimal Training Beyond Fixed Training Durations." arXiv preprint arXiv:2405.18392 (2024).](https://arxiv.org/abs/2405.18392)
 
 <img src="img/dofa.jpg" alt="itsover_wereback" style="width:100%;">
-

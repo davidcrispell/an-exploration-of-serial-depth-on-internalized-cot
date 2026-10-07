@@ -2,6 +2,9 @@ import os
 import sys
 with open(sys.argv[0]) as f:
     code = f.read() # read the code of this file ASAP, for logging
+with open(os.path.join(os.path.dirname(__file__), "model.py")) as f:
+    code += "\n\n# ===== model.py =====\n" + f.read()
+import argparse
 import uuid
 import glob
 import time
@@ -9,11 +12,11 @@ from dataclasses import dataclass
 
 import numpy as np
 import torch
-from torch import nn
-import torch.nn.functional as F
 import torch.distributed as dist
 import torch._inductor.config as config
 from torch.nn.parallel import DistributedDataParallel as DDP
+
+from model import GPT, add_architecture_arguments, config_from_args
 
 # -----------------------------------------------------------------------------
 # Muon optimizer
@@ -30,7 +33,7 @@ def zeropower_via_newtonschulz5(G, steps=10, eps=1e-7):
     of minimizing steps, it turns out to be empirically effective to keep increasing the slope at
     zero even beyond the point where the iteration no longer converges all the way to one everywhere
     on the interval. This iteration therefore does not produce UV^T but rather something like US'V^T
-    where S' is diagonal with S_{ii}' \sim Uniform(0.5, 1.5), which turns out not to hurt model
+    where S' is diagonal with S_{ii}' \\sim Uniform(0.5, 1.5), which turns out not to hurt model
     performance at all relative to UV^T, where USV^T = G is the SVD.
     """
     assert len(G.shape) == 2
@@ -117,141 +120,6 @@ class Muon(torch.optim.Optimizer):
                 g = updates_flat[curr_idx:curr_idx+p.numel()].view_as(p.data).type_as(p.data)
                 p.data.add_(g, alpha=-lr)
                 curr_idx += p.numel()
-
-# -----------------------------------------------------------------------------
-# PyTorch nn.Module definitions for the GPT-2 model
-
-class Rotary(torch.nn.Module):
-
-    def __init__(self, dim, base=10000):
-        super().__init__()
-        self.inv_freq = 1.0 / (base ** (torch.arange(0, dim, 2).float() / dim))
-        self.seq_len_cached = None
-        self.cos_cached = None
-        self.sin_cached = None
-
-    def forward(self, x):
-        seq_len = x.shape[1]
-        if seq_len != self.seq_len_cached:
-            self.seq_len_cached = seq_len
-            t = torch.arange(seq_len, device=x.device).type_as(self.inv_freq)
-            freqs = torch.outer(t, self.inv_freq).to(x.device)
-            self.cos_cached = freqs.cos().bfloat16()
-            self.sin_cached = freqs.sin().bfloat16()
-        return self.cos_cached[None, :, None, :], self.sin_cached[None, :, None, :]
-
-def apply_rotary_emb(x, cos, sin):
-    assert x.ndim == 4 # multihead attention
-    d = x.shape[3]//2
-    x1 = x[..., :d]
-    x2 = x[..., d:]
-    y1 = x1 * cos + x2 * sin
-    y2 = x1 * (-sin) + x2 * cos
-    return torch.cat([y1, y2], 3).type_as(x)
-
-class CausalSelfAttention(nn.Module):
-
-    def __init__(self, config):
-        super().__init__()
-        self.n_head = config.n_head
-        self.n_embd = config.n_embd
-        self.head_dim = self.n_embd // self.n_head
-        assert self.n_embd % self.n_head == 0
-        self.c_q = nn.Linear(self.n_embd, self.n_embd, bias=False)
-        self.c_k = nn.Linear(self.n_embd, self.n_embd, bias=False)
-        self.c_v = nn.Linear(self.n_embd, self.n_embd, bias=False)
-        # output projection
-        self.c_proj = nn.Linear(self.n_embd, self.n_embd, bias=False)
-        self.c_proj.weight.data.zero_() # zero init suggested by @Grad62304977
-        self.rotary = Rotary(self.head_dim)
-
-    def forward(self, x):
-        B, T, C = x.size() # batch size, sequence length, embedding dimensionality (n_embd)
-        q = self.c_q(x).view(B, T, self.n_head, self.head_dim)
-        k = self.c_k(x).view(B, T, self.n_head, self.head_dim)
-        v = self.c_v(x).view(B, T, self.n_head, self.head_dim)
-        cos, sin = self.rotary(q)
-        q, k = F.rms_norm(q, (q.size(-1),)), F.rms_norm(k, (k.size(-1),)) # QK norm suggested by @Grad62304977
-        q, k = apply_rotary_emb(q, cos, sin), apply_rotary_emb(k, cos, sin)
-        y = F.scaled_dot_product_attention(q.transpose(1, 2), k.transpose(1, 2), v.transpose(1, 2), is_causal=True)
-        y = y.transpose(1, 2).contiguous().view_as(x) # re-assemble all head outputs side by side
-        y = self.c_proj(y)
-        return y
-
-class MLP(nn.Module):
-
-    def __init__(self, config):
-        super().__init__()
-        self.c_fc    = nn.Linear(config.n_embd, 4 * config.n_embd, bias=False)
-        self.c_proj  = nn.Linear(4 * config.n_embd, config.n_embd, bias=False)
-        self.c_proj.weight.data.zero_() # zero init suggested by @Grad62304977
-
-    def forward(self, x):
-        x = self.c_fc(x)
-        x = F.relu(x).square() # https://arxiv.org/abs/2109.08668v2; ~1-2% better than GELU; suggested by @SKYLINEZ007 and @Grad62304977
-        x = self.c_proj(x)
-        return x
-
-class Block(nn.Module):
-
-    def __init__(self, config):
-        super().__init__()
-        self.attn = CausalSelfAttention(config)
-        self.mlp = MLP(config)
-
-    def forward(self, x):
-        x = x + self.attn(F.rms_norm(x, (x.size(-1),)))
-        x = x + self.mlp(F.rms_norm(x, (x.size(-1),)))
-        return x
-
-# -----------------------------------------------------------------------------
-# The main GPT-2 model
-
-@dataclass
-class GPTConfig:
-    vocab_size : int = 50304
-    n_layer : int = 12
-    n_head : int = 6 # head dim 128 suggested by @Grad62304977
-    n_embd : int = 768
-
-class GPT(nn.Module):
-
-    def __init__(self, config):
-        super().__init__()
-        self.config = config
-
-        self.transformer = nn.ModuleDict(dict(
-            wte = nn.Embedding(config.vocab_size, config.n_embd),
-            h = nn.ModuleList([Block(config) for _ in range(config.n_layer)]),
-        ))
-        self.lm_head = nn.Linear(config.n_embd, config.vocab_size, bias=False)
-        self.lm_head.weight.data.zero_() # @Grad62304977
-
-    def forward(self, idx, targets=None, return_logits=True):
-
-        # forward the GPT model itself
-        x = self.transformer.wte(idx) # token embeddings of shape (b, t, n_embd)
-        x = F.rms_norm(x, (x.size(-1),)) # @Grad62304977
-        for block in self.transformer.h:
-            x = block(x)
-        x = F.rms_norm(x, (x.size(-1),))
-
-        if targets is not None:
-            # if we are given some desired targets also calculate the loss
-            logits = self.lm_head(x)
-            logits = logits.float() # use tf32/fp32 for logits
-            loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1), ignore_index=-1)
-        else:
-            # inference-time mini-optimization: only forward the lm_head on the very last position
-            logits = self.lm_head(x[:, [-1], :]) # note: using list [-1] to preserve the time dim
-            logits = logits.float() # use tf32/fp32 for logits
-            loss = None
-
-        # there are performance reasons why not returning logits is prudent, if not needed
-        if not return_logits:
-            logits = None
-
-        return logits, loss
 
 # -----------------------------------------------------------------------------
 # Our own simple Distributed Data Loader
@@ -349,6 +217,10 @@ class Hyperparameters:
     val_tokens : int = 10485760 # how many tokens of validation data? it's important to keep this fixed for consistent comparisons
     save_every : int = 0 # every how many steps to save the checkpoint? 0 for only at the end
 args = Hyperparameters()
+parser = argparse.ArgumentParser(description="Train configurable-depth modded-nanoGPT")
+add_architecture_arguments(parser)
+architecture_args = parser.parse_args()
+model_config = config_from_args(architecture_args, vocab_size=50304)
 
 # set up DDP (distributed data parallel). torchrun sets this env variable
 assert torch.cuda.is_available()
@@ -380,8 +252,16 @@ x, y = train_loader.next_batch()
 
 # there are only 50257 unique GPT-2 tokens; we extend to nearest multiple of 128 for efficiency. suggested to me by @Grad62304977.
 # this originates from Karpathy's experiments.
-num_vocab = 50304
-model = GPT(GPTConfig(vocab_size=num_vocab, n_layer=12, n_head=6, n_embd=768))
+num_vocab = model_config.vocab_size
+model = GPT(model_config)
+actual_parameter_count = sum(p.numel() for p in model.parameters())
+assert actual_parameter_count == model_config.expected_parameter_count()
+if master_process:
+    print(
+        f"architecture: layers={model_config.n_layer} width={model_config.n_embd} "
+        f"heads={model_config.n_head} head_dim={model_config.head_dim} "
+        f"mlp_width={model_config.n_ff} parameters={actual_parameter_count}"
+    )
 model = model.cuda()
 if hasattr(config, "coordinate_descent_tuning"):
     config.coordinate_descent_tuning = True # suggested by @Chillee
@@ -485,7 +365,7 @@ for step in range(args.num_iterations + 1):
         torch.cuda.synchronize()
         training_time_ms += 1000 * (time.time() - t0)
         # save the state of the training process
-        log = dict(step=step, code=code, model=raw_model.state_dict(), optimizers=[opt.state_dict() for opt in optimizers])
+        log = dict(step=step, code=code, model_config=model_config, model=raw_model.state_dict(), optimizers=[opt.state_dict() for opt in optimizers])
         torch.save(log, 'logs/%s/state_step%06d.pt' % (run_id, step))
         # start the clock again
         torch.cuda.synchronize()
