@@ -61,14 +61,19 @@ untouched until the curriculum and stopping decision are complete.
 | 16 / 47 | 177 | 1,000 | 17.7% |
 | 24 / 47 | 74 | 1,000 | 7.4% |
 | 32 / 47 | 7 | 1,000 | 0.7% |
+| 40 / 47 | 791 | 1,000 | 79.1% |
 
 The first published removal checkpoint already falls below both the
 preregistered 99% primary threshold and 95% sensitivity threshold. Thus the
 current shallow-model frontier is bracketed between 0 and 8 removed tokens; the
 epoch-level protocol does not identify which individual token inside that
 interval caused the crossing. Accuracy then declines sharply to 17.7% at 16
-removed tokens, 7.4% at 24, and 0.7% at 32. This is a within-model result only.
-It is not evidence for a causal depth effect until the parameter-matched deep
-model is run with the identical curriculum and examples.
+removed tokens, 7.4% at 24, and 0.7% at 32. Accuracy then rebounds sharply to
+79.1% at 40 removed tokens. The non-monotonic curve means token count alone does
+not explain intermediate performance: the identity and structure of the
+remaining trace suffix, as well as adaptation to each curriculum boundary, may
+matter. This is a within-model result only. It is not evidence for a causal
+depth effect until the parameter-matched deep model is run with the identical
+curriculum and examples.
 
 - [`shallow-4x4-internalized-cot-validation.json`](shallow-4x4-internalized-cot-validation.json)
