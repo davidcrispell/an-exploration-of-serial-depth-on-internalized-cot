@@ -56,6 +56,40 @@ Validate all 10,000 examples, their intermediate arithmetic, and split isolation
 python -m benchmarks.multiplication.validate
 ```
 
+### Baseline and explicit-CoT evaluation
+
+The untreated checkpoint can be evaluated with deterministic greedy decoding at the answer field:
+
+```bash
+python -m benchmarks.multiplication.evaluate \
+  --checkpoint /path/to/state_step004578.pt \
+  --digits 4 5 7 9 11 \
+  --split test \
+  --protocol direct \
+  --output results/multiplication/shallow-base-direct-test.json
+```
+
+Explicit-CoT fine-tuning follows the multiplication setup released with the paper: GPT-2
+tokenization; `input EOS CoT EOS #### answer EOS`; loss masking through the first EOS; AdamW with
+learning rate `5e-5`; effective batch size 32; gradient clipping at 1.0; and seed 3456. The paper's
+GPT-2 multiplication command uses FP32, which is therefore the default here. The training split is
+the authors' Git-LFS file and is intentionally not vendored in this repository.
+
+```bash
+python -m benchmarks.multiplication.train_explicit_cot \
+  --checkpoint /path/to/state_step004578.pt \
+  --train-path /path/to/4_by_4_mult/train.txt \
+  --validation-path benchmarks/multiplication/data/4x4/validation.txt \
+  --test-path benchmarks/multiplication/data/4x4/test.txt \
+  --output-dir /path/to/4x4-explicit-cot \
+  --cache-dir /path/to/token-cache \
+  --digits 4 --epochs 1 --batch-size 32 --accumulate 1 \
+  --lr 5e-5 --max-grad-norm 1.0 --seed 3456
+```
+
+This is a deliberately separate explicit-CoT stage. It establishes that each architecture can
+perform the visible algorithm before the stepwise token-removal curriculum tests internalization.
+
 This is a fast variant of the [PyTorch GPT-2 trainer](https://github.com/karpathy/llm.c/blob/7b929300217ff1a974b63791a228928b39b26409/train_gpt2.py) from
 Andrej Karpathy's [llm.c](https://github.com/karpathy/llm.c) repo, which attains the same final validation loss in:
 * 2.4B tokens instead of 10B

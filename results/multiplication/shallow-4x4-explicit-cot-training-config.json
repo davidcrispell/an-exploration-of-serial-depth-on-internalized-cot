@@ -1,0 +1,21 @@
+{
+  "checkpoint": "logs/43f0b7c9-6e56-4124-aa9a-f0980658af58/state_step004578.pt",
+  "train_path": "/workspace/paper-data/4_by_4_mult/train.txt",
+  "validation_path": "benchmarks/multiplication/data/4x4/validation.txt",
+  "test_path": "benchmarks/multiplication/data/4x4/test.txt",
+  "output_dir": "/workspace/experiment-results/4x4-explicit-cot-fp32",
+  "cache_dir": "/workspace/token-cache",
+  "digits": 4,
+  "epochs": 1,
+  "batch_size": 32,
+  "accumulate": 1,
+  "lr": 5e-05,
+  "max_grad_norm": 1.0,
+  "seed": 3456,
+  "log_every": 100,
+  "eval_examples": 200,
+  "eval_batch_size": 32,
+  "max_steps": null,
+  "compile": false,
+  "bf16": false
+}
