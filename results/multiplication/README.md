@@ -64,6 +64,7 @@ untouched until the curriculum and stopping decision are complete.
 | Epoch 4 | 40 / 47 | 791 | 1,000 | 79.1% |
 | Epoch 5 | 47 / 47 | 651 | 1,000 | 65.1% |
 | Epoch 6 | 47 / 47 | 799 | 1,000 | 79.9% |
+| Epoch 7 | 47 / 47 | 923 | 1,000 | 92.3% |
 
 The first published removal checkpoint already falls below both the
 preregistered 99% primary threshold and 95% sensitivity threshold. Thus the
@@ -75,9 +76,31 @@ removed tokens, 7.4% at 24, and 0.7% at 32. Accuracy then rebounds sharply to
 not explain intermediate performance: the identity and structure of the
 remaining trace suffix, as well as adaptation to each curriculum boundary, may
 matter. At full removal, accuracy is 65.1% immediately after the transition and
-recovers to 79.9% after another fully internalized epoch, but remains below the
-99% stopping target. This is a within-model result only. It is not evidence for
-a causal depth effect until the parameter-matched deep model is run with the
-identical curriculum and examples.
+recovers across two additional fully internalized epochs to 79.9% and then
+92.3%. The final held-out test also scores 923/1,000 (92.3%). This misses both
+the preregistered 99% primary target and 95% sensitivity threshold, so the
+shallow model did not fully preserve its explicit-CoT capability under the
+fixed eight-epoch budget.
+
+The first observed failing checkpoint for both thresholds is 8/47 removed
+tokens, bracketing the frontier between 0 and 8. That label should be read with
+care: the released curriculum advances continuously, so epoch-boundary
+evaluations can occur shortly after a removal transition. The recovery across
+repeated 47/47 evaluations demonstrates this adaptation-time confound directly.
+This is a within-model result only. It is not evidence for a causal depth effect
+until the parameter-matched deep model is run with the identical schedule and
+examples.
+
+The FP32 run used 202,000 optimizer steps and cost approximately $2.16 by
+Runpod balance delta, including setup and evaluation. Wall-clock pod time was
+about 3 hours 40 minutes. The GPU pod was deleted after artifact verification;
+the persistent network volume remains. The 619 MB final checkpoint is stored
+locally under `artifacts/checkpoints/shallow-4x4-internalized-cot/` and excluded
+from Git. SHA-256:
+`a6a23d9de0639b6329bea159cfd320849cd30739d7a731a3f3a98a6cc325f094`.
 
 - [`shallow-4x4-internalized-cot-validation.json`](shallow-4x4-internalized-cot-validation.json)
+- [`shallow-4x4-internalized-cot-test.json`](shallow-4x4-internalized-cot-test.json)
+- [`shallow-4x4-internalized-cot-training-config.json`](shallow-4x4-internalized-cot-training-config.json)
+- [`shallow-4x4-internalized-cot-summary.json`](shallow-4x4-internalized-cot-summary.json)
+- [`4x4-internalized-cot-fp32.log`](4x4-internalized-cot-fp32.log)

@@ -110,6 +110,13 @@ resets AdamW each time the scheduled removal advances, and stops once the whole 
 validation exact-answer accuracy reaches 99%. It keeps a single atomic `latest.pt` checkpoint plus
 the complete epoch-level validation history, avoiding multi-gigabyte checkpoint accumulation.
 
+The completed shallow 4x4 run reached **92.3% exact accuracy at full 47/47 CoT removal** on both
+validation and the held-out 1,000-example test set after eight curriculum epochs. It therefore
+demonstrates substantial but incomplete internalization under the fixed budget. The complete,
+non-monotonic validation curve, configuration, log, cost, and checkpoint hash are in
+[`results/multiplication`](results/multiplication/README.md). A causal serial-depth conclusion still
+requires the identical run on the parameter-matched deep model.
+
 This is a fast variant of the [PyTorch GPT-2 trainer](https://github.com/karpathy/llm.c/blob/7b929300217ff1a974b63791a228928b39b26409/train_gpt2.py) from
 Andrej Karpathy's [llm.c](https://github.com/karpathy/llm.c) repo, which attains the same final validation loss in:
 * 2.4B tokens instead of 10B
