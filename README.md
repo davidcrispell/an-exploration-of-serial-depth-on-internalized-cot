@@ -42,6 +42,20 @@ Run the CPU-only architecture tests with:
 python -m unittest discover -s tests -v
 ```
 
+## Held-out multiplication benchmarks
+
+The canonical validation and test splits from
+[From Explicit CoT to Implicit CoT](https://arxiv.org/abs/2405.14838) are vendored under
+[`benchmarks/multiplication`](benchmarks/multiplication/README.md). The collection contains 1,000
+validation and 1,000 test examples for each of 4x4, 5x5, 7x7, 9x9, and 11x11 multiplication,
+including the explicit reversed-digit long-multiplication traces.
+
+Validate all 10,000 examples, their intermediate arithmetic, and split isolation with:
+
+```bash
+python -m benchmarks.multiplication.validate
+```
+
 This is a fast variant of the [PyTorch GPT-2 trainer](https://github.com/karpathy/llm.c/blob/7b929300217ff1a974b63791a228928b39b26409/train_gpt2.py) from
 Andrej Karpathy's [llm.c](https://github.com/karpathy/llm.c) repo, which attains the same final validation loss in:
 * 2.4B tokens instead of 10B
