@@ -83,6 +83,7 @@ untouched until the curriculum and stopping decision are complete.
 | ---: | ---: | ---: | ---: | ---: |
 | Explicit stage | 0 / 75 | 1,000 | 1,000 | 100.0% |
 | Epoch 0 | 8 / 75 | 915 | 1,000 | 91.5% |
+| Epoch 1 | 16 / 75 | 323 | 1,000 | 32.3% |
 
 As a retention control, the epoch-0 checkpoint was also evaluated with the
 complete ground-truth CoT supplied in the prompt and greedy generation beginning
@@ -90,14 +91,17 @@ at the final-answer field. It scored **999/1,000 (99.9%)**. The single failure
 produced nine correct answer digits before reverting to trace-like syntax instead
 of emitting the tenth digit. This oracle-CoT control shows that the 91.5% result
 mostly reflects difficulty operating with the shortened trace, rather than broad
-catastrophic forgetting of the multiplication task. It does not test whether the
-model can independently regenerate the removed CoT prefix.
+catastrophic forgetting of answer readout when the complete correct trace is
+available. It is an auxiliary oracle control, not the paper's input-only
+curriculum metric, and does not test whether the model can independently
+regenerate the removed CoT prefix.
 
 The first published removal checkpoint is below both the 99% primary threshold
 and 95% sensitivity threshold, bracketing both frontiers between 0 and 8 removed
 tokens. Because removal advances continuously during each epoch, this coarse
 checkpoint does not identify an individual-token boundary and is confounded by
-adaptation time. The curriculum is still running, and a later recovery would be
+adaptation time. Accuracy declined further to 32.3% at 16 removed tokens. The
+curriculum is still running, and a later recovery would be
 scientifically relevant. This is a within-model result only; it cannot establish
 a causal depth effect without the matched deep-model run on identical examples.
 
