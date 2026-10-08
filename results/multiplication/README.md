@@ -85,6 +85,7 @@ untouched until the curriculum and stopping decision are complete.
 | Epoch 0 | 8 / 75 | 915 | 1,000 | 91.5% |
 | Epoch 1 | 16 / 75 | 323 | 1,000 | 32.3% |
 | Epoch 2 | 24 / 75 | 188 | 1,000 | 18.8% |
+| Epoch 3 | 32 / 75 | 672 | 1,000 | 67.2% |
 
 As a retention control, the epoch-0 checkpoint was also evaluated with the
 complete ground-truth CoT supplied in the prompt and greedy generation beginning
@@ -102,9 +103,11 @@ and 95% sensitivity threshold, bracketing both frontiers between 0 and 8 removed
 tokens. Because removal advances continuously during each epoch, this coarse
 checkpoint does not identify an individual-token boundary and is confounded by
 adaptation time. Accuracy declined further to 32.3% at 16 removed tokens and
-18.8% at 24 removed tokens. The
-curriculum is still running, and a later recovery would be
-scientifically relevant. This is a within-model result only; it cannot establish
+18.8% at 24 removed tokens, then rebounded to 67.2% at 32 removed tokens. This
+non-monotonicity makes the identity of the remaining trace suffix and adaptation
+time important confounds; removed-token count alone does not explain the
+intermediate curve. The curriculum is still running. This is a within-model
+result only; it cannot establish
 a causal depth effect without the matched deep-model run on identical examples.
 
 - [`shallow-5x5-internalized-cot-validation.json`](shallow-5x5-internalized-cot-validation.json)
