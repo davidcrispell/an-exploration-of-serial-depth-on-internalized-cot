@@ -92,6 +92,7 @@ untouched until the curriculum and stopping decision are complete.
 | Epoch 7 | 64 / 75 | 2 | 1,000 | 0.2% |
 | Epoch 8 | 72 / 75 | 0 | 1,000 | 0.0% |
 | Epoch 9 (first full removal) | 75 / 75 | 2 | 1,000 | 0.2% |
+| Epoch 10 (full-removal adaptation 1) | 75 / 75 | 4 | 1,000 | 0.4% |
 
 As a retention control, the epoch-0 checkpoint was also evaluated with the
 complete ground-truth CoT supplied in the prompt and greedy generation beginning
@@ -117,7 +118,8 @@ not explain the intermediate curve; accuracy recovered only negligibly to 0.2%
 at 64 removed tokens, returned to 0.0% at 72, and was 0.2% at the first 75/75
 evaluation. Because that full-removal checkpoint did not meet the 99% stopping
 target, the curriculum is continuing through its remaining full-removal
-adaptation epochs. This is a within-model result only; it cannot establish
+adaptation epochs. The first such extra epoch recovered only to 0.4%. This is a
+within-model result only; it cannot establish
 a causal depth effect without the matched deep-model run on identical examples.
 
 - [`shallow-5x5-internalized-cot-validation.json`](shallow-5x5-internalized-cot-validation.json)
