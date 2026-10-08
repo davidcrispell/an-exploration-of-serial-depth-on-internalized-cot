@@ -47,6 +47,31 @@ Git because it is 619 MB. Checkpoint SHA-256:
 - [`shallow-4x4-explicit-cot-training-config.json`](shallow-4x4-explicit-cot-training-config.json)
 - [`4x4-explicit-cot-fp32.log`](4x4-explicit-cot-fp32.log)
 
+## Shallow model after 5x5 explicit-CoT fine-tuning
+
+Starting again from the untreated shallow FineWeb checkpoint—not from either
+4x4 checkpoint—the model was fine-tuned for one full pass over the paper's
+808,000-example 5x5 training split. The run used the same paper-matched FP32
+settings as 4x4: AdamW, learning rate `5e-5`, effective batch size 32, gradient
+clipping at 1.0, and seed 3456. The training set SHA-256 is
+`e41642536746292598fb5fa53bf8ebb01358a161a6ba78892d0579ccc1489253`.
+
+| Split | Correct | Examples | Final-answer exact match |
+| --- | ---: | ---: | ---: |
+| 5x5 validation | 1,000 | 1,000 | 100.0% |
+| 5x5 test | 1,000 | 1,000 | 100.0% |
+
+The explicit checkpoint was produced after 25,250 optimizer steps. Its verified
+SHA-256 is
+`c9a95971305960d4d8152b257088df723f8447c7064bcea35ea90b2a01d585ee`.
+The local artifact is stored under
+`artifacts/checkpoints/shallow-5x5-explicit-cot/` and excluded from Git. The
+75-token internalization curriculum is in progress from this checkpoint.
+
+- [`shallow-5x5-explicit-cot-validation.json`](shallow-5x5-explicit-cot-validation.json)
+- [`shallow-5x5-explicit-cot-test.json`](shallow-5x5-explicit-cot-test.json)
+- [`shallow-5x5-explicit-cot-training-config.json`](shallow-5x5-explicit-cot-training-config.json)
+
 ## Shallow-model CoT internalization curriculum
 
 This run starts from the 100%-accurate explicit-CoT checkpoint and removes the
