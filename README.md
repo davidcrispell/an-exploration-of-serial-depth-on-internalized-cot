@@ -127,10 +127,12 @@ epoch on the 5x5 training set reached **1,000/1,000 validation and 1,000/1,000 t
 At the first internalization checkpoint, removing 8 of 75 CoT tokens reduced validation accuracy
 to **915/1,000 (91.5%)**. When the same checkpoint was instead supplied the complete reference
 CoT and asked only for the final answer, it retained **999/1,000 (99.9%)** accuracy. The run
-then reached **323/1,000 (32.3%)** at 16 of 75 tokens removed. The supplied-CoT result is an
-auxiliary oracle control, not the input-only curriculum metric. At 24 of 75 removed tokens, input-only
-accuracy was **188/1,000 (18.8%)**. The run remains in progress; these
-are within-model observations, not a causal depth result. Intermediate and final results are recorded under
+then reached **323/1,000 (32.3%)** at 16 of 75 tokens removed and **188/1,000
+(18.8%)** at 24. After all 75 tokens were removed and five additional full-removal
+adaptation epochs, final validation accuracy was **6/1,000 (0.6%)** and held-out test accuracy was
+**3/1,000 (0.3%)**. The supplied-CoT result is an auxiliary oracle control, not the input-only
+curriculum metric. Both the 99% and 95% frontiers are bracketed between 0 and 8 removed tokens.
+These are within-model observations, not a causal depth result. Complete results are recorded under
 [`results/multiplication`](results/multiplication/README.md).
 
 This is a fast variant of the [PyTorch GPT-2 trainer](https://github.com/karpathy/llm.c/blob/7b929300217ff1a974b63791a228928b39b26409/train_gpt2.py) from

@@ -96,6 +96,7 @@ untouched until the curriculum and stopping decision are complete.
 | Epoch 11 (full-removal adaptation 2) | 75 / 75 | 2 | 1,000 | 0.2% |
 | Epoch 12 (full-removal adaptation 3) | 75 / 75 | 5 | 1,000 | 0.5% |
 | Epoch 13 (full-removal adaptation 4) | 75 / 75 | 3 | 1,000 | 0.3% |
+| Epoch 14 (full-removal adaptation 5) | 75 / 75 | 6 | 1,000 | 0.6% |
 
 As a retention control, the epoch-0 checkpoint was also evaluated with the
 complete ground-truth CoT supplied in the prompt and greedy generation beginning
@@ -120,16 +121,34 @@ accuracy then reached 0.0% at 56 removed tokens. Removed-token count alone does
 not explain the intermediate curve; accuracy recovered only negligibly to 0.2%
 at 64 removed tokens, returned to 0.0% at 72, and was 0.2% at the first 75/75
 evaluation. Because that full-removal checkpoint did not meet the 99% stopping
-target, the curriculum is continuing through its remaining full-removal
-adaptation epochs. The first such extra epoch recovered only to 0.4%. This is a
-small recovery and did not persist monotonically: accuracy returned to 0.2% after
-adaptation epoch 2, reached 0.5% after adaptation epoch 3, and slipped to 0.3%
-after adaptation epoch 4. This is a within-model result only; it cannot establish
-a causal depth effect without the matched deep-model run on identical examples.
+target, the curriculum used all five remaining full-removal adaptation epochs.
+Accuracy was 0.4%, 0.2%, 0.5%, 0.3%, and 0.6% across those epochs. The final
+held-out test scored **3/1,000 (0.3%)**. Thus the shallow model learned the
+explicit algorithm perfectly but did not preserve it after the full 75-token
+trace was hidden under this curriculum and training budget.
+
+The first observed failing checkpoint for both the 99% primary threshold and
+95% sensitivity threshold is 8/75 removed tokens, bracketing each frontier
+between 0 and 8. The curve is strongly non-monotonic, and every checkpoint also
+has a different amount of adaptation time, so removed-token count alone should
+not be treated as a clean difficulty axis. This is a within-model result only;
+it cannot establish a causal depth effect without the matched deep-model run on
+identical examples and schedule.
+
+The full pipeline used 378,750 internalization optimizer steps. It ran for about
+8 hours 21 minutes from pod creation through final testing (about 8 hours 23
+minutes through pod deletion) and cost **$4.949346536** by Runpod balance delta,
+including setup, explicit-CoT training, evaluation, internalization, and storage.
+The GPU pod was deleted after artifact verification; network volume
+`vpzu3qptxw` remains. The 648.8 MB final checkpoint is stored locally under
+`artifacts/checkpoints/shallow-5x5-internalized-cot/` and excluded from Git.
+SHA-256: `cce7abad55f8ebb545dd2f8f29bb3b3cdbe5e39f99b7771552497ab6fdb4c3fc`.
 
 - [`shallow-5x5-internalized-cot-validation.json`](shallow-5x5-internalized-cot-validation.json)
+- [`shallow-5x5-internalized-cot-test.json`](shallow-5x5-internalized-cot-test.json)
 - [`shallow-5x5-internalized-cot-training-config.json`](shallow-5x5-internalized-cot-training-config.json)
 - [`shallow-5x5-internalized-cot-progress.json`](shallow-5x5-internalized-cot-progress.json)
+- [`shallow-5x5-internalized-cot-summary.json`](shallow-5x5-internalized-cot-summary.json)
 - [`shallow-5x5-internalized-cot-8-removed-explicit-cot-validation.json`](shallow-5x5-internalized-cot-8-removed-explicit-cot-validation.json)
 
 ## Shallow-model 4x4 CoT internalization curriculum

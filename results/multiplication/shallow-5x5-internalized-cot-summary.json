@@ -1,0 +1,64 @@
+{
+  "experiment": "shallow 5x5 stepwise CoT internalization",
+  "status": "complete",
+  "explicit_cot": {
+    "validation": {
+      "correct": 1000,
+      "examples": 1000,
+      "accuracy": 1.0
+    },
+    "test": {
+      "correct": 1000,
+      "examples": 1000,
+      "accuracy": 1.0
+    }
+  },
+  "internalized_cot": {
+    "removed_tokens": 75,
+    "total_cot_tokens": 75,
+    "final_validation": {
+      "correct": 6,
+      "examples": 1000,
+      "accuracy": 0.006
+    },
+    "final_test": {
+      "correct": 3,
+      "examples": 1000,
+      "accuracy": 0.003
+    },
+    "optimizer_steps": 378750,
+    "curriculum_epochs": 15
+  },
+  "frontiers": {
+    "first_observed_below_99_percent": {
+      "removed_tokens": 8,
+      "frontier_bracket": [0, 8]
+    },
+    "first_observed_below_95_percent": {
+      "removed_tokens": 8,
+      "frontier_bracket": [0, 8]
+    }
+  },
+  "runtime": {
+    "pod_created_utc": "2026-10-08T01:58:27.689Z",
+    "final_test_completed_utc": "2026-10-08T10:19:45Z",
+    "pipeline_wall_clock_seconds": 30077.311,
+    "pipeline_wall_clock_human": "8h 21m 17s",
+    "pod_wall_clock_human_approximately": "8h 23m 10s"
+  },
+  "cost": {
+    "initial_balance_usd": 11.021801037,
+    "final_balance_usd": 6.072454501,
+    "balance_delta_usd": 4.949346536,
+    "post_run_spend_rate_usd_per_hour": 0.002
+  },
+  "artifacts": {
+    "internalized_checkpoint_sha256": "cce7abad55f8ebb545dd2f8f29bb3b3cdbe5e39f99b7771552497ab6fdb4c3fc",
+    "explicit_checkpoint_sha256": "c9a95971305960d4d8152b257088df723f8447c7064bcea35ea90b2a01d585ee",
+    "local_internalized_checkpoint": "artifacts/checkpoints/shallow-5x5-internalized-cot/latest.pt",
+    "local_explicit_checkpoint": "artifacts/checkpoints/shallow-5x5-explicit-cot/explicit_cot_epoch_000.pt",
+    "network_volume_retained": "vpzu3qptxw"
+  },
+  "interpretation": "The shallow model learned explicit 5x5 multiplication perfectly but did not preserve that capability after the full reasoning trace was removed under this curriculum and budget.",
+  "caveat": "This is a within-model result. A causal serial-depth conclusion requires a parameter-matched deep-model run on identical examples and schedule."
+}
