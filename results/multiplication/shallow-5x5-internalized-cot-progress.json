@@ -52,6 +52,14 @@
       "correct": 104,
       "examples": 1000,
       "accuracy": 0.104
+    },
+    {
+      "epoch": 6,
+      "global_step": 176750,
+      "removed_tokens": 56,
+      "correct": 0,
+      "examples": 1000,
+      "accuracy": 0.0
     }
   ],
   "explicit_cot_provided_control": {
