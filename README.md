@@ -22,6 +22,29 @@ the original model:
 ./run.sh
 ```
 
+### Continuing a completed pretraining run
+
+The speedrun schedule cools its learning rate to zero at the final update. A
+continuation therefore starts a new, lower learning-rate phase rather than
+extending the exhausted scheduler. The following example uses unseen shards
+25–40, resets optimizer state, validates every 125 updates, keeps one rolling
+checkpoint, and stops early when validation loss reaches 3.25:
+
+```bash
+python data/cached_fineweb10B.py 40
+./run.sh \
+  --layers 6 --width 1024 --heads 8 --mlp-width 2768 \
+  --resume artifacts/checkpoints/shallow-fineweb/state_step004578.pt \
+  --train-shard-offset 24 \
+  --num-iterations 3000 --warmup-iters 100 --warmdown-iters 1000 \
+  --lr-scale 0.2 --val-loss-every 125 --save-every 500 \
+  --target-val-loss 3.25 --output-dir results/shallow-fineweb-continuation
+```
+
+The optimizer is intentionally reset because the original distributed Muon
+checkpoint contains only rank zero's momentum shards. The parent model weights
+are loaded exactly; this restart is documented as a distinct training phase.
+
 An exactly parameter-matched shallow/deep pair, counting every trainable parameter in the untied
 embedding/head model, is:
 

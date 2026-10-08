@@ -4,7 +4,10 @@ with open(sys.argv[0]) as f:
     code = f.read() # read the code of this file ASAP, for logging
 with open(os.path.join(os.path.dirname(__file__), "model.py")) as f:
     code += "\n\n# ===== model.py =====\n" + f.read()
+with open(os.path.join(os.path.dirname(__file__), "training_utils.py")) as f:
+    code += "\n\n# ===== training_utils.py =====\n" + f.read()
 import argparse
+import json
 import uuid
 import glob
 import time
@@ -16,7 +19,8 @@ import torch.distributed as dist
 import torch._inductor.config as config
 from torch.nn.parallel import DistributedDataParallel as DDP
 
-from model import GPT, add_architecture_arguments, config_from_args
+from model import GPT, GPTConfig, add_architecture_arguments, config_from_args
+from training_utils import linear_warmup_warmdown_factor, strip_compiled_prefix
 
 # -----------------------------------------------------------------------------
 # Muon optimizer
@@ -152,14 +156,14 @@ def _load_data_shard(filename):
     return tokens
 
 class DistributedDataLoader:
-    def __init__(self, filename_pattern, B, T, process_rank, num_processes):
+    def __init__(self, filename_pattern, B, T, process_rank, num_processes, file_offset=0):
         self.process_rank = process_rank
         self.num_processes = num_processes
         self.B = B
         self.T = T
 
         # glob files that match the pattern
-        self.files = sorted(glob.glob(filename_pattern))
+        self.files = sorted(glob.glob(filename_pattern))[file_offset:]
         assert len(self.files) > 0, f"did not find any files that match the pattern {filename_pattern}"
 
         # load and validate all data shards, count number of tokens in total
@@ -219,8 +223,52 @@ class Hyperparameters:
 args = Hyperparameters()
 parser = argparse.ArgumentParser(description="Train configurable-depth modded-nanoGPT")
 add_architecture_arguments(parser)
+parser.add_argument("--resume", help="model checkpoint to continue from; optimizer state is reset")
+parser.add_argument("--num-iterations", type=int, default=args.num_iterations)
+parser.add_argument("--warmup-iters", type=int, default=args.warmup_iters)
+parser.add_argument("--warmdown-iters", type=int, default=args.warmdown_iters)
+parser.add_argument("--lr-scale", type=float, default=1.0)
+parser.add_argument("--target-val-loss", type=float)
+parser.add_argument("--val-loss-every", type=int, default=args.val_loss_every)
+parser.add_argument("--save-every", type=int, default=args.save_every)
+parser.add_argument("--input-bin", default=args.input_bin)
+parser.add_argument("--input-val-bin", default=args.input_val_bin)
+parser.add_argument("--train-shard-offset", type=int, default=0)
+parser.add_argument("--output-dir")
 architecture_args = parser.parse_args()
 model_config = config_from_args(architecture_args, vocab_size=50304)
+args.num_iterations = architecture_args.num_iterations
+args.warmup_iters = architecture_args.warmup_iters
+args.warmdown_iters = architecture_args.warmdown_iters
+args.val_loss_every = architecture_args.val_loss_every
+args.save_every = architecture_args.save_every
+args.input_bin = architecture_args.input_bin
+args.input_val_bin = architecture_args.input_val_bin
+if architecture_args.lr_scale <= 0:
+    parser.error("--lr-scale must be positive")
+if architecture_args.train_shard_offset < 0:
+    parser.error("--train-shard-offset must be nonnegative")
+linear_warmup_warmdown_factor(
+    0,
+    num_iterations=args.num_iterations,
+    warmup_iters=args.warmup_iters,
+    warmdown_iters=args.warmdown_iters,
+)
+
+resume_payload = None
+parent_step = 0
+if architecture_args.resume:
+    torch.serialization.add_safe_globals([GPTConfig])
+    resume_payload = torch.load(
+        architecture_args.resume, map_location="cpu", weights_only=True
+    )
+    checkpoint_config = resume_payload.get("model_config")
+    if checkpoint_config != model_config:
+        parser.error(
+            f"checkpoint architecture {checkpoint_config!r} does not match "
+            f"requested architecture {model_config!r}"
+        )
+    parent_step = int(resume_payload["step"])
 
 # set up DDP (distributed data parallel). torchrun sets this env variable
 assert torch.cuda.is_available()
@@ -243,17 +291,26 @@ assert args.batch_size % (B * ddp_world_size) == 0
 train_accumulation_steps = args.batch_size // (B * ddp_world_size)
 
 # load tokens
-train_loader = DistributedDataLoader(args.input_bin, B, T, ddp_rank, ddp_world_size)
+train_loader = DistributedDataLoader(
+    args.input_bin,
+    B,
+    T,
+    ddp_rank,
+    ddp_world_size,
+    file_offset=architecture_args.train_shard_offset,
+)
 val_loader = DistributedDataLoader(args.input_val_bin, B, T, ddp_rank, ddp_world_size)
 if master_process:
     print(f"Training DataLoader: total number of tokens: {train_loader.ntok_total} across {len(train_loader.files)} files")
     print(f"Validation DataLoader: total number of tokens: {val_loader.ntok_total} across {len(val_loader.files)} files")
-x, y = train_loader.next_batch()
 
 # there are only 50257 unique GPT-2 tokens; we extend to nearest multiple of 128 for efficiency. suggested to me by @Grad62304977.
 # this originates from Karpathy's experiments.
 num_vocab = model_config.vocab_size
 model = GPT(model_config)
+if resume_payload is not None:
+    model.load_state_dict(strip_compiled_prefix(resume_payload["model"]), strict=True)
+    del resume_payload
 actual_parameter_count = sum(p.numel() for p in model.parameters())
 assert actual_parameter_count == model_config.expected_parameter_count()
 if master_process:
@@ -279,35 +336,48 @@ enable_mem_efficient_sdp(False)
 enable_math_sdp(False)
 
 # init the optimizer(s)
-optimizer1 = torch.optim.Adam([raw_model.transformer.wte.weight], lr=0.3,   betas=(0.9, 0.95), fused=True)
-optimizer2 = torch.optim.Adam([raw_model.lm_head.weight],         lr=0.002, betas=(0.9, 0.95), fused=True)
-optimizer3 = Muon(raw_model.transformer.h.parameters(),           lr=0.02,  momentum=0.95)
+optimizer1 = torch.optim.Adam([raw_model.transformer.wte.weight], lr=0.3 * architecture_args.lr_scale,   betas=(0.9, 0.95), fused=True)
+optimizer2 = torch.optim.Adam([raw_model.lm_head.weight],         lr=0.002 * architecture_args.lr_scale, betas=(0.9, 0.95), fused=True)
+optimizer3 = Muon(raw_model.transformer.h.parameters(),           lr=0.02 * architecture_args.lr_scale,  momentum=0.95)
 optimizers = [optimizer1, optimizer2, optimizer3]
 # learning rate decay scheduler (linear warmup and warmdown)
 def get_lr(it):
-    assert it <= args.num_iterations
-    # 1) linear warmup for warmup_iters steps
-    if it < args.warmup_iters:
-        return (it+1) / args.warmup_iters
-    # 2) constant lr for a while
-    elif it < args.num_iterations - args.warmdown_iters:
-        return 1.0
-    # 3) linear warmdown
-    else:
-        decay_ratio = (args.num_iterations - it) / args.warmdown_iters
-        return decay_ratio
+    return linear_warmup_warmdown_factor(
+        it,
+        num_iterations=args.num_iterations,
+        warmup_iters=args.warmup_iters,
+        warmdown_iters=args.warmdown_iters,
+    )
 schedulers = [torch.optim.lr_scheduler.LambdaLR(opt, get_lr) for opt in optimizers]
 
 # begin logging
 if master_process:
     run_id = str(uuid.uuid4())
-    logdir = 'logs/%s/' % run_id
+    logdir = architecture_args.output_dir or ('logs/%s/' % run_id)
     os.makedirs(logdir, exist_ok=True)
-    logfile = 'logs/%s.txt' % run_id
+    logfile = os.path.join(logdir, "train.log") if architecture_args.output_dir else 'logs/%s.txt' % run_id
     # create the log file
     with open(logfile, "w") as f:
         # begin the log by printing this file (the Python code)
         f.write('='*100 + '\n')
+        f.write(
+            json.dumps(
+                {
+                    "resume": architecture_args.resume,
+                    "parent_step": parent_step,
+                    "optimizer_state": "reset",
+                    "num_iterations": args.num_iterations,
+                    "warmup_iters": args.warmup_iters,
+                    "warmdown_iters": args.warmdown_iters,
+                    "lr_scale": architecture_args.lr_scale,
+                    "target_val_loss": architecture_args.target_val_loss,
+                    "train_shard_offset": architecture_args.train_shard_offset,
+                    "model_config": vars(model_config),
+                },
+                sort_keys=True,
+            )
+            + "\n"
+        )
         f.write(code)
         f.write('='*100 + '\n')
         # log information about the hardware/software environment this is running on
@@ -317,6 +387,30 @@ if master_process:
         result = subprocess.run(['nvidia-smi'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         f.write(f'{result.stdout}\n')
         f.write('='*100 + '\n')
+    if architecture_args.output_dir:
+        with open(os.path.join(logdir, "training_config.json"), "w") as f:
+            json.dump(
+                {
+                    "resume": architecture_args.resume,
+                    "parent_step": parent_step,
+                    "optimizer_state": "reset",
+                    "num_iterations": args.num_iterations,
+                    "warmup_iters": args.warmup_iters,
+                    "warmdown_iters": args.warmdown_iters,
+                    "lr_scale": architecture_args.lr_scale,
+                    "target_val_loss": architecture_args.target_val_loss,
+                    "val_loss_every": args.val_loss_every,
+                    "save_every": args.save_every,
+                    "input_bin": args.input_bin,
+                    "input_val_bin": args.input_val_bin,
+                    "train_shard_offset": architecture_args.train_shard_offset,
+                    "model_config": vars(model_config),
+                },
+                f,
+                indent=2,
+                sort_keys=True,
+            )
+            f.write("\n")
 
 training_time_ms = 0
 # start the clock
@@ -324,8 +418,11 @@ torch.cuda.synchronize()
 t0 = time.time()
 # begin training
 train_loader.reset()
+x, y = train_loader.next_batch()
+last_val_loss = None
 for step in range(args.num_iterations + 1):
-    last_step = (step == args.num_iterations)
+    scheduled_last_step = (step == args.num_iterations)
+    target_reached = False
     # This effectively ignores timing first 10 steps, which are slower for weird reasons.
     # Alternately, and slightly more correctly in terms of benchmarking, we could do 10
     # steps with dummy data first, and then re-initialize the model and reset the loader.
@@ -335,7 +432,7 @@ for step in range(args.num_iterations + 1):
     timed_steps = float('nan') if step <= 11 else (step - 10) + 1 # <= 11 to avoid bug in val
 
     # once in a while evaluate the validation dataset
-    if (last_step or (args.val_loss_every > 0 and step % args.val_loss_every == 0)):
+    if (scheduled_last_step or (args.val_loss_every > 0 and step % args.val_loss_every == 0)):
         # stop the clock
         torch.cuda.synchronize()
         training_time_ms += 1000 * (time.time() - t0)
@@ -351,22 +448,47 @@ for step in range(args.num_iterations + 1):
                 del loss
         dist.all_reduce(val_loss, op=dist.ReduceOp.AVG)
         val_loss /= val_steps
+        last_val_loss = float(val_loss.item())
         # log val loss to console and to logfile
         if master_process:
-            print(f'step:{step}/{args.num_iterations} val_loss:{val_loss:.4f} train_time:{training_time_ms:.0f}ms step_avg:{training_time_ms/(timed_steps-1):.2f}ms')
+            print(f'step:{step}/{args.num_iterations} total_step:{parent_step + step} val_loss:{val_loss:.4f} train_time:{training_time_ms:.0f}ms step_avg:{training_time_ms/(timed_steps-1):.2f}ms')
             with open(logfile, "a") as f:
-                f.write(f'step:{step}/{args.num_iterations} val_loss:{val_loss:.4f} train_time:{training_time_ms:.0f}ms step_avg:{training_time_ms/(timed_steps-1):.2f}ms\n')
+                f.write(f'step:{step}/{args.num_iterations} total_step:{parent_step + step} val_loss:{val_loss:.4f} train_time:{training_time_ms:.0f}ms step_avg:{training_time_ms/(timed_steps-1):.2f}ms\n')
+        target_reached = (
+            architecture_args.target_val_loss is not None
+            and val_loss.item() <= architecture_args.target_val_loss
+        )
         # start the clock again
         torch.cuda.synchronize()
         t0 = time.time()
 
-    if master_process and (last_step or (args.save_every > 0 and step % args.save_every == 0)):
+    last_step = scheduled_last_step or target_reached
+    if master_process and (
+        last_step or (args.save_every > 0 and step > 0 and step % args.save_every == 0)
+    ):
         # stop the clock
         torch.cuda.synchronize()
         training_time_ms += 1000 * (time.time() - t0)
         # save the state of the training process
-        log = dict(step=step, code=code, model_config=model_config, model=raw_model.state_dict(), optimizers=[opt.state_dict() for opt in optimizers])
-        torch.save(log, 'logs/%s/state_step%06d.pt' % (run_id, step))
+        log = dict(
+            step=parent_step + step,
+            continuation_step=step,
+            parent_step=parent_step,
+            parent_checkpoint=architecture_args.resume,
+            optimizer_state="reset_at_continuation_start" if architecture_args.resume else "fresh",
+            validation_loss=last_val_loss,
+            target_val_loss=architecture_args.target_val_loss,
+            code=code,
+            model_config=model_config,
+            model=raw_model.state_dict(),
+            optimizers=[opt.state_dict() for opt in optimizers],
+        )
+        checkpoint_path = (
+            os.path.join(logdir, "latest.pt")
+            if architecture_args.output_dir
+            else 'logs/%s/state_step%06d.pt' % (run_id, parent_step + step)
+        )
+        torch.save(log, checkpoint_path)
         # start the clock again
         torch.cuda.synchronize()
         t0 = time.time()
@@ -407,9 +529,9 @@ for step in range(args.num_iterations + 1):
     #dist.all_reduce(train_loss, op=dist.ReduceOp.AVG) # all-reducing the training loss would be more correct in terms of logging, but slower
     if master_process:
         approx_time = training_time_ms + 1000 * (time.time() - t0)
-        print(f"step:{step+1}/{args.num_iterations} train_loss:{train_loss.item():.4f} train_time:{approx_time:.0f}ms step_avg:{approx_time/timed_steps:.2f}ms")
+        print(f"step:{step+1}/{args.num_iterations} total_step:{parent_step + step + 1} train_loss:{train_loss.item():.4f} train_time:{approx_time:.0f}ms step_avg:{approx_time/timed_steps:.2f}ms")
         with open(logfile, "a") as f:
-            f.write(f"step:{step+1}/{args.num_iterations} train_loss:{train_loss.item():.4f} train_time:{approx_time:.0f}ms step_avg:{approx_time/timed_steps:.2f}ms\n")
+            f.write(f"step:{step+1}/{args.num_iterations} total_step:{parent_step + step + 1} train_loss:{train_loss.item():.4f} train_time:{approx_time:.0f}ms step_avg:{approx_time/timed_steps:.2f}ms\n")
 
 if master_process:
     print(f"peak memory consumption: {torch.cuda.max_memory_allocated() // 1024 // 1024} MiB")
