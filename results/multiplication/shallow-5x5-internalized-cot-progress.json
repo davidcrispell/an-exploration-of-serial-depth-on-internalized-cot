@@ -116,6 +116,16 @@
       "accuracy": 0.005,
       "fully_internalized": true,
       "full_removal_adaptation_epoch": 3
+    },
+    {
+      "epoch": 13,
+      "global_step": 353500,
+      "removed_tokens": 75,
+      "correct": 3,
+      "examples": 1000,
+      "accuracy": 0.003,
+      "fully_internalized": true,
+      "full_removal_adaptation_epoch": 4
     }
   ],
   "explicit_cot_provided_control": {

@@ -95,6 +95,7 @@ untouched until the curriculum and stopping decision are complete.
 | Epoch 10 (full-removal adaptation 1) | 75 / 75 | 4 | 1,000 | 0.4% |
 | Epoch 11 (full-removal adaptation 2) | 75 / 75 | 2 | 1,000 | 0.2% |
 | Epoch 12 (full-removal adaptation 3) | 75 / 75 | 5 | 1,000 | 0.5% |
+| Epoch 13 (full-removal adaptation 4) | 75 / 75 | 3 | 1,000 | 0.3% |
 
 As a retention control, the epoch-0 checkpoint was also evaluated with the
 complete ground-truth CoT supplied in the prompt and greedy generation beginning
@@ -122,8 +123,8 @@ evaluation. Because that full-removal checkpoint did not meet the 99% stopping
 target, the curriculum is continuing through its remaining full-removal
 adaptation epochs. The first such extra epoch recovered only to 0.4%. This is a
 small recovery and did not persist monotonically: accuracy returned to 0.2% after
-adaptation epoch 2 and reached 0.5% after adaptation epoch 3. This is a
-within-model result only; it cannot establish
+adaptation epoch 2, reached 0.5% after adaptation epoch 3, and slipped to 0.3%
+after adaptation epoch 4. This is a within-model result only; it cannot establish
 a causal depth effect without the matched deep-model run on identical examples.
 
 - [`shallow-5x5-internalized-cot-validation.json`](shallow-5x5-internalized-cot-validation.json)
