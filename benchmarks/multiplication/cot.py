@@ -47,6 +47,15 @@ def direct_answer_target(example: MultiplicationExample, eot: str) -> str:
     return f" {example.answer} {eot}"
 
 
+def provided_cot_prompt(example: MultiplicationExample, eot: str) -> str:
+    """Supply the complete reference CoT and stop immediately before the answer."""
+    return f" {example.source} {eot} {example.cot} {eot} ####"
+
+
+def provided_cot_target(example: MultiplicationExample, eot: str) -> str:
+    return f" {example.answer} {eot}"
+
+
 def encode_explicit_example(tokenizer, line: str) -> tuple[list[int], int]:
     example = parse_example(line)
     eot = tokenizer.decode([tokenizer.eot_token])

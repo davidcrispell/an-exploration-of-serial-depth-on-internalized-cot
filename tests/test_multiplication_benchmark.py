@@ -9,6 +9,10 @@ from benchmarks.multiplication.cot import (
     compute_removal_distribution,
     cot_token_count,
     encode_explicit_example,
+    explicit_text,
+    parse_example,
+    provided_cot_prompt,
+    provided_cot_target,
     remove_cot_prefix_batch,
     shifted_inputs_and_labels,
     strip_compile_prefix,
@@ -75,6 +79,14 @@ class CoTFormattingTests(unittest.TestCase):
             answer,
         )
         self.assertTrue(answer_matches(self.tokenizer, answer, "7 8 0 3"))
+
+    def test_provided_cot_prompt_reconstructs_explicit_example(self):
+        example = parse_example(self.line)
+        eot = self.tokenizer.decode([self.tokenizer.eot_token])
+        self.assertEqual(
+            provided_cot_prompt(example, eot) + provided_cot_target(example, eot),
+            explicit_text(example, eot),
+        )
 
     def test_strip_compile_prefix(self):
         tensor = torch.tensor([1])

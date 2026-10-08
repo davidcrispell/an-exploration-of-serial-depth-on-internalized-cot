@@ -21,6 +21,8 @@ from benchmarks.multiplication.cot import (
     explicit_text,
     input_prompt,
     parse_example,
+    provided_cot_prompt,
+    provided_cot_target,
     read_examples,
     strip_compile_prefix,
 )
@@ -106,6 +108,19 @@ def evaluate_size(
         if any(len(target) != max_new_tokens for target in targets):
             raise ValueError("direct-answer targets have inconsistent lengths")
         marker = None
+    elif protocol == "cot_provided":
+        prompts = [
+            tokenizer.encode(provided_cot_prompt(example, eot), allowed_special=allowed_special)
+            for example in examples
+        ]
+        targets = [
+            tokenizer.encode(provided_cot_target(example, eot), allowed_special=allowed_special)
+            for example in examples
+        ]
+        max_new_tokens = len(targets[0])
+        if any(len(target) != max_new_tokens for target in targets):
+            raise ValueError("provided-CoT answer targets have inconsistent lengths")
+        marker = None
     else:
         prompts = [
             tokenizer.encode(input_prompt(example, eot), allowed_special=allowed_special)
@@ -123,6 +138,7 @@ def evaluate_size(
 
     correct = 0
     samples: list[dict] = []
+    failures: list[dict] = []
     started = time.perf_counter()
     offset = 0
     for prompt_batch in batched(prompts, batch_size):
@@ -138,22 +154,32 @@ def evaluate_size(
             if protocol == "direct":
                 prediction = generated
                 is_correct = prediction == target
+            elif protocol == "cot_provided":
+                prediction = (
+                    generated[: generated.index(tokenizer.eot_token)]
+                    if tokenizer.eot_token in generated
+                    else generated
+                )
+                is_correct = answer_matches(
+                    tokenizer, prediction, examples[offset].answer
+                )
             else:
                 prediction = answer_tokens_from_explicit_generation(
                     generated, marker, tokenizer.eot_token
                 )
                 is_correct = answer_matches(tokenizer, prediction, examples[offset].answer)
             correct += int(is_correct)
+            record = {
+                "source": examples[offset].source,
+                "target": examples[offset].answer,
+                "prediction": None if prediction is None else safe_decode(tokenizer, prediction),
+                "raw_generation": safe_decode(tokenizer, generated),
+                "correct": is_correct,
+            }
             if len(samples) < 10:
-                samples.append(
-                    {
-                        "source": examples[offset].source,
-                        "target": examples[offset].answer,
-                        "prediction": None if prediction is None else safe_decode(tokenizer, prediction),
-                        "raw_generation": safe_decode(tokenizer, generated),
-                        "correct": is_correct,
-                    }
-                )
+                samples.append(record)
+            if not is_correct and len(failures) < 10:
+                failures.append(record)
             offset += 1
 
     elapsed = time.perf_counter() - started
@@ -167,6 +193,7 @@ def evaluate_size(
         "seconds": elapsed,
         "examples_per_second": len(examples) / elapsed,
         "samples": samples,
+        "failures": failures,
     }
 
 
@@ -184,7 +211,11 @@ def main() -> None:
     parser.add_argument("--data-root", type=Path, default=Path(__file__).with_name("data"))
     parser.add_argument("--digits", type=int, nargs="+", default=[4, 5, 7, 9, 11])
     parser.add_argument("--split", choices=["validation", "test"], default="validation")
-    parser.add_argument("--protocol", choices=["direct", "explicit"], default="direct")
+    parser.add_argument(
+        "--protocol",
+        choices=["direct", "explicit", "cot_provided"],
+        default="direct",
+    )
     parser.add_argument("--batch-size", type=int, default=64)
     parser.add_argument("--limit", type=int)
     parser.add_argument("--seed", type=int, default=3456)

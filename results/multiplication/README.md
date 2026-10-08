@@ -84,6 +84,15 @@ untouched until the curriculum and stopping decision are complete.
 | Explicit stage | 0 / 75 | 1,000 | 1,000 | 100.0% |
 | Epoch 0 | 8 / 75 | 915 | 1,000 | 91.5% |
 
+As a retention control, the epoch-0 checkpoint was also evaluated with the
+complete ground-truth CoT supplied in the prompt and greedy generation beginning
+at the final-answer field. It scored **999/1,000 (99.9%)**. The single failure
+produced nine correct answer digits before reverting to trace-like syntax instead
+of emitting the tenth digit. This oracle-CoT control shows that the 91.5% result
+mostly reflects difficulty operating with the shortened trace, rather than broad
+catastrophic forgetting of the multiplication task. It does not test whether the
+model can independently regenerate the removed CoT prefix.
+
 The first published removal checkpoint is below both the 99% primary threshold
 and 95% sensitivity threshold, bracketing both frontiers between 0 and 8 removed
 tokens. Because removal advances continuously during each epoch, this coarse
@@ -95,6 +104,7 @@ a causal depth effect without the matched deep-model run on identical examples.
 - [`shallow-5x5-internalized-cot-validation.json`](shallow-5x5-internalized-cot-validation.json)
 - [`shallow-5x5-internalized-cot-training-config.json`](shallow-5x5-internalized-cot-training-config.json)
 - [`shallow-5x5-internalized-cot-progress.json`](shallow-5x5-internalized-cot-progress.json)
+- [`shallow-5x5-internalized-cot-8-removed-explicit-cot-validation.json`](shallow-5x5-internalized-cot-8-removed-explicit-cot-validation.json)
 
 ## Shallow-model 4x4 CoT internalization curriculum
 
