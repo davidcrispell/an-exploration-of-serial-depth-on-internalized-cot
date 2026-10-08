@@ -136,13 +136,15 @@ These are within-model observations, not a causal depth result. Complete results
 [`results/multiplication`](results/multiplication/README.md).
 
 As an out-of-domain capability check, Shallow 1 scored **1,322/5,153 (25.65%)**
-on LAMBADA OpenAI while the released OpenAI GPT-2 Small checkpoint scored
-**1,678/5,153 (32.56%)** under the identical FP32 scorer. The paired gap is
-6.91 percentage points (95% paired-bootstrap interval: 5.69–8.09), so these two
-models are not capability-equivalent on language completion. This comparison
-does not isolate depth because their corpora, architecture details, parameter
-accounting, and optimization differ. Results and the reproducible evaluator are
-under [`results/lambada`](results/lambada/README.md) and
+on LAMBADA OpenAI. A community-uploaded 12-layer modded-nanoGPT checkpoint scored
+**1,628/5,153 (31.59%)**, and OpenAI GPT-2 Small scored **1,678/5,153
+(32.56%)** under the identical FP32 scorer. The community model leads Shallow 1
+by 5.94 percentage points (95% paired-bootstrap interval: 4.87–7.03). It is
+almost exactly parameter-matched—162,201,636 versus 162,201,600 parameters—but
+has lower FineWeb validation loss (3.2766 versus 3.3411) and uses additional
+architecture and optimization changes. This is a useful capability mismatch,
+not a causal depth result. Results and the reproducible evaluator are under
+[`results/lambada`](results/lambada/README.md) and
 [`benchmarks/lambada`](benchmarks/lambada/evaluate.py).
 
 This is a fast variant of the [PyTorch GPT-2 trainer](https://github.com/karpathy/llm.c/blob/7b929300217ff1a974b63791a228928b39b26409/train_gpt2.py) from

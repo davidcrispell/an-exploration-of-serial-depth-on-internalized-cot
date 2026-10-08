@@ -1,4 +1,4 @@
-"""Evaluate Shallow 1 or Hugging Face GPT-2 Small on LAMBADA OpenAI.
+"""Evaluate project checkpoints or Hugging Face GPT-2 Small on LAMBADA OpenAI.
 
 This follows lm-evaluation-harness task version 1.0: the context is every
 space-separated token except the last, the target is the final token with its
@@ -29,11 +29,20 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from model import GPT  # noqa: E402
+from model import GPTConfig  # noqa: E402
+from benchmarks.lambada.community_model import (  # noqa: E402
+    CommunityDeepGPT,
+    SoftcappedLMHead,
+)
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model", choices=("shallow-1", "gpt2-small"), required=True)
+    parser.add_argument(
+        "--model",
+        choices=("shallow-1", "community-deep-3242", "gpt2-small"),
+        required=True,
+    )
     parser.add_argument(
         "--checkpoint",
         type=Path,
@@ -124,6 +133,57 @@ def load_gpt2(device: torch.device):
         },
     }
     return model, hidden, model.lm_head, metadata
+
+
+def load_community_deep(checkpoint: Path, device: torch.device):
+    payload = torch.load(checkpoint, map_location="cpu", weights_only=True)
+    if payload.get("step") != 3242:
+        raise ValueError(f"expected checkpoint step 3242, found {payload.get('step')}")
+    config = GPTConfig(
+        vocab_size=50304,
+        n_layer=12,
+        n_head=6,
+        n_embd=768,
+        n_ff=3072,
+    )
+    model = CommunityDeepGPT(config)
+    state = {
+        key.removeprefix("_orig_mod."): value
+        for key, value in payload["model"].items()
+    }
+    model.load_state_dict(state, strict=True)
+    model.eval().to(device)
+
+    def hidden(input_ids: torch.Tensor, attention_mask: torch.Tensor) -> torch.Tensor:
+        del attention_mask
+        return model.hidden(input_ids)
+
+    metadata = {
+        "name": "Community Deep 3242",
+        "architecture": {
+            "layers": config.n_layer,
+            "width": config.n_embd,
+            "heads": config.n_head,
+            "mlp_width": config.n_ff,
+            "parameters": sum(p.numel() for p in model.parameters()),
+            "features": [
+                "cross-layer value sharing",
+                "learned residual mixing",
+                "logit soft-cap 30",
+            ],
+        },
+        "training_step": payload["step"],
+        "reported_fineweb_validation_loss": 3.2766,
+        "checkpoint": str(checkpoint.resolve()),
+        "checkpoint_sha256": sha256(checkpoint),
+        "source": {
+            "hub_repo": "Fizzarolli/modded-nanogpt-logs",
+            "hub_revision": "fc7790cb0e5eeca2716186aa627842baa3399044",
+            "hub_path": "abba5381-1376-415f-a331-a869506e243d/state_step003242.pt",
+            "provenance": "community upload; not the official 10.8-minute checkpoint",
+        },
+    }
+    return model, hidden, SoftcappedLMHead(model.lm_head), metadata
 
 
 def tokenize_examples(tokenizer, rows: list[str], max_length: int = 1024):
@@ -256,6 +316,10 @@ def main() -> None:
 
     if args.model == "shallow-1":
         model, hidden_fn, lm_head, model_metadata = load_shallow(
+            args.checkpoint, device
+        )
+    elif args.model == "community-deep-3242":
+        model, hidden_fn, lm_head, model_metadata = load_community_deep(
             args.checkpoint, device
         )
     else:
