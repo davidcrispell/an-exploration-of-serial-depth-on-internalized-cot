@@ -87,6 +87,7 @@ untouched until the curriculum and stopping decision are complete.
 | Epoch 2 | 24 / 75 | 188 | 1,000 | 18.8% |
 | Epoch 3 | 32 / 75 | 672 | 1,000 | 67.2% |
 | Epoch 4 | 40 / 75 | 146 | 1,000 | 14.6% |
+| Epoch 5 | 48 / 75 | 104 | 1,000 | 10.4% |
 
 As a retention control, the epoch-0 checkpoint was also evaluated with the
 complete ground-truth CoT supplied in the prompt and greedy generation beginning
@@ -105,8 +106,8 @@ tokens. Because removal advances continuously during each epoch, this coarse
 checkpoint does not identify an individual-token boundary and is confounded by
 adaptation time. Accuracy declined further to 32.3% at 16 removed tokens and
 18.8% at 24 removed tokens, rebounded to 67.2% at 32 removed tokens, and then
-fell to 14.6% at 40 removed tokens. This non-monotonicity makes the identity of
-the remaining trace suffix and adaptation time important confounds;
+fell to 14.6% at 40 removed tokens and 10.4% at 48. This non-monotonicity makes
+the identity of the remaining trace suffix and adaptation time important confounds;
 removed-token count alone does not explain the intermediate curve. The
 curriculum is still running. This is a within-model result only; it cannot
 establish
