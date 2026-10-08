@@ -96,6 +96,26 @@
       "accuracy": 0.004,
       "fully_internalized": true,
       "full_removal_adaptation_epoch": 1
+    },
+    {
+      "epoch": 11,
+      "global_step": 303000,
+      "removed_tokens": 75,
+      "correct": 2,
+      "examples": 1000,
+      "accuracy": 0.002,
+      "fully_internalized": true,
+      "full_removal_adaptation_epoch": 2
+    },
+    {
+      "epoch": 12,
+      "global_step": 328250,
+      "removed_tokens": 75,
+      "correct": 5,
+      "examples": 1000,
+      "accuracy": 0.005,
+      "fully_internalized": true,
+      "full_removal_adaptation_epoch": 3
     }
   ],
   "explicit_cot_provided_control": {
