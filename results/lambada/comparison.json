@@ -1,0 +1,50 @@
+{
+  "benchmark": "lambada_openai",
+  "task_version": "1.0",
+  "examples": 5153,
+  "shallow_1": {
+    "correct": 1322,
+    "accuracy": 0.25654958276732,
+    "perplexity": 70.34092329188645,
+    "target_token_perplexity": 28.063764270429022,
+    "elapsed_seconds": 54.06782908301102,
+    "logical_input_tokens_per_second": 7861.9209834997055
+  },
+  "gpt2_small": {
+    "correct": 1678,
+    "accuracy": 0.32563555210556955,
+    "perplexity": 40.05541900071916,
+    "target_token_perplexity": 18.048032958245134,
+    "elapsed_seconds": 79.23294766701292,
+    "logical_input_tokens_per_second": 5364.902007513882
+  },
+  "paired_comparison": {
+    "gpt2_minus_shallow_accuracy": 0.06908596933824956,
+    "paired_bootstrap_95_percent_ci": [
+      0.05686008150591888,
+      0.08092373374733165
+    ],
+    "bootstrap_replicates": 20000,
+    "bootstrap_seed": 3456,
+    "gpt2_only_correct": 679,
+    "shallow_only_correct": 323,
+    "both_correct": 999,
+    "both_wrong": 3152,
+    "mcnemar_exact_two_sided_p": 8.617269281655434e-30
+  },
+  "runtime": {
+    "hardware": "MacBook Air, Apple M4, 8 GPU cores, 16 GB unified memory",
+    "device": "mps",
+    "dtype": "float32",
+    "batch_size": 16,
+    "shallow_throughput_ratio_over_gpt2": 1.465436082986901,
+    "batch_one_128_example_probe": {
+      "shallow_1_logical_input_tokens_per_second": 1774.7785182681844,
+      "gpt2_small_logical_input_tokens_per_second": 2065.331128885572,
+      "shallow_1_examples_per_second": 21.209191516975782,
+      "gpt2_small_examples_per_second": 24.681391513150334
+    }
+  },
+  "interpretation": "Shallow 1 is materially worse than OpenAI GPT-2 Small on LAMBADA completion accuracy, despite being faster for this batched workload. This comparison does not isolate depth because the models differ in pretraining corpus, architecture, parameter accounting, and optimization.",
+  "causal_caveat": "The serial-depth experiment still requires the parameter-matched 12-layer modded-nanoGPT Deep 1 checkpoint evaluated on these identical examples."
+}

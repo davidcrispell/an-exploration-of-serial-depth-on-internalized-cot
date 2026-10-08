@@ -135,6 +135,16 @@ curriculum metric. Both the 99% and 95% frontiers are bracketed between 0 and 8 
 These are within-model observations, not a causal depth result. Complete results are recorded under
 [`results/multiplication`](results/multiplication/README.md).
 
+As an out-of-domain capability check, Shallow 1 scored **1,322/5,153 (25.65%)**
+on LAMBADA OpenAI while the released OpenAI GPT-2 Small checkpoint scored
+**1,678/5,153 (32.56%)** under the identical FP32 scorer. The paired gap is
+6.91 percentage points (95% paired-bootstrap interval: 5.69–8.09), so these two
+models are not capability-equivalent on language completion. This comparison
+does not isolate depth because their corpora, architecture details, parameter
+accounting, and optimization differ. Results and the reproducible evaluator are
+under [`results/lambada`](results/lambada/README.md) and
+[`benchmarks/lambada`](benchmarks/lambada/evaluate.py).
+
 This is a fast variant of the [PyTorch GPT-2 trainer](https://github.com/karpathy/llm.c/blob/7b929300217ff1a974b63791a228928b39b26409/train_gpt2.py) from
 Andrej Karpathy's [llm.c](https://github.com/karpathy/llm.c) repo, which attains the same final validation loss in:
 * 2.4B tokens instead of 10B
