@@ -89,6 +89,7 @@ untouched until the curriculum and stopping decision are complete.
 | Epoch 4 | 40 / 75 | 146 | 1,000 | 14.6% |
 | Epoch 5 | 48 / 75 | 104 | 1,000 | 10.4% |
 | Epoch 6 | 56 / 75 | 0 | 1,000 | 0.0% |
+| Epoch 7 | 64 / 75 | 2 | 1,000 | 0.2% |
 
 As a retention control, the epoch-0 checkpoint was also evaluated with the
 complete ground-truth CoT supplied in the prompt and greedy generation beginning
@@ -110,7 +111,8 @@ adaptation time. Accuracy declined further to 32.3% at 16 removed tokens and
 fell to 14.6% at 40 removed tokens and 10.4% at 48. This non-monotonicity makes
 the identity of the remaining trace suffix and adaptation time important confounds;
 accuracy then reached 0.0% at 56 removed tokens. Removed-token count alone does
-not explain the intermediate curve. The
+not explain the intermediate curve; accuracy recovered only negligibly to 0.2%
+at 64 removed tokens. The
 curriculum is still running. This is a within-model result only; it cannot
 establish
 a causal depth effect without the matched deep-model run on identical examples.
