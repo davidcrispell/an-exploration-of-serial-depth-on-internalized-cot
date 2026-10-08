@@ -117,6 +117,11 @@ non-monotonic validation curve, configuration, log, cost, and checkpoint hash ar
 [`results/multiplication`](results/multiplication/README.md). A causal serial-depth conclusion still
 requires the identical run on the parameter-matched deep model.
 
+Without any additional training, that checkpoint scored **0/1,000 on held-out 5x5
+multiplication**, while a same-session FP32 4x4 control reproduced **923/1,000**. Representative
+5x5 generations retain the learned eight-digit 4x4 answer shape instead of producing the required
+ten digits. This is a zero-shot length-generalization result, not a 5x5 fine-tuning result.
+
 This is a fast variant of the [PyTorch GPT-2 trainer](https://github.com/karpathy/llm.c/blob/7b929300217ff1a974b63791a228928b39b26409/train_gpt2.py) from
 Andrej Karpathy's [llm.c](https://github.com/karpathy/llm.c) repo, which attains the same final validation loss in:
 * 2.4B tokens instead of 10B

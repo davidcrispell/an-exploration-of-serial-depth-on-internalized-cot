@@ -104,3 +104,25 @@ from Git. SHA-256:
 - [`shallow-4x4-internalized-cot-training-config.json`](shallow-4x4-internalized-cot-training-config.json)
 - [`shallow-4x4-internalized-cot-summary.json`](shallow-4x4-internalized-cot-summary.json)
 - [`4x4-internalized-cot-fp32.log`](4x4-internalized-cot-fp32.log)
+
+### Out-of-distribution 5x5 test
+
+The final fully internalized checkpoint was evaluated without further training
+on the deterministic 1,000-example 5x5 test split. Evaluation used the same
+paper-format prompt, greedy decoding, FP32 parameters, and final-answer exact
+match as the original 4x4 result. A same-session 4x4 control exactly reproduced
+the published score.
+
+| Test split | Correct | Examples | Exact-match accuracy |
+| --- | ---: | ---: | ---: |
+| 4x4 control | 923 | 1,000 | 92.3% |
+| 5x5 transfer | 0 | 1,000 | 0.0% |
+
+Representative 5x5 generations emit an eight-digit answer—the output shape
+learned from 4x4 multiplication—where the benchmark target contains ten digits.
+The predicted low-order digits also diverge from the target, so this is not just
+a harmless padding or parsing mismatch. This result measures zero-shot transfer
+from 4x4 to 5x5; it does not measure how readily the model could learn 5x5
+multiplication with additional fine-tuning.
+
+- [`shallow-4x4-internalized-cot-5x5-test.json`](shallow-4x4-internalized-cot-5x5-test.json)
