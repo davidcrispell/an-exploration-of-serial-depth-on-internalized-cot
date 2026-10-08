@@ -68,6 +68,24 @@
       "correct": 2,
       "examples": 1000,
       "accuracy": 0.002
+    },
+    {
+      "epoch": 8,
+      "global_step": 227250,
+      "removed_tokens": 72,
+      "correct": 0,
+      "examples": 1000,
+      "accuracy": 0.0
+    },
+    {
+      "epoch": 9,
+      "global_step": 252500,
+      "removed_tokens": 75,
+      "correct": 2,
+      "examples": 1000,
+      "accuracy": 0.002,
+      "fully_internalized": true,
+      "full_removal_adaptation_epoch": 0
     }
   ],
   "explicit_cot_provided_control": {
