@@ -128,7 +128,8 @@ At the first internalization checkpoint, removing 8 of 75 CoT tokens reduced val
 to **915/1,000 (91.5%)**. When the same checkpoint was instead supplied the complete reference
 CoT and asked only for the final answer, it retained **999/1,000 (99.9%)** accuracy. The run
 then reached **323/1,000 (32.3%)** at 16 of 75 tokens removed. The supplied-CoT result is an
-auxiliary oracle control, not the input-only curriculum metric. The run remains in progress; these
+auxiliary oracle control, not the input-only curriculum metric. At 24 of 75 removed tokens, input-only
+accuracy was **188/1,000 (18.8%)**. The run remains in progress; these
 are within-model observations, not a causal depth result. Intermediate and final results are recorded under
 [`results/multiplication`](results/multiplication/README.md).
 
