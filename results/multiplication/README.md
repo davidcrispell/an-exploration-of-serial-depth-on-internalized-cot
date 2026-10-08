@@ -72,7 +72,31 @@ The local artifact is stored under
 - [`shallow-5x5-explicit-cot-test.json`](shallow-5x5-explicit-cot-test.json)
 - [`shallow-5x5-explicit-cot-training-config.json`](shallow-5x5-explicit-cot-training-config.json)
 
-## Shallow-model CoT internalization curriculum
+## Shallow-model 5x5 CoT internalization curriculum
+
+This run starts from the 100%-accurate 5x5 explicit-CoT checkpoint and removes
+the leftmost reasoning tokens at eight tokens per epoch. The training remains
+paper-matched FP32 with effective batch size 32. The held-out test split remains
+untouched until the curriculum and stopping decision are complete.
+
+| Curriculum checkpoint | Removed CoT tokens | Correct | Validation examples | Exact-match accuracy |
+| ---: | ---: | ---: | ---: | ---: |
+| Explicit stage | 0 / 75 | 1,000 | 1,000 | 100.0% |
+| Epoch 0 | 8 / 75 | 915 | 1,000 | 91.5% |
+
+The first published removal checkpoint is below both the 99% primary threshold
+and 95% sensitivity threshold, bracketing both frontiers between 0 and 8 removed
+tokens. Because removal advances continuously during each epoch, this coarse
+checkpoint does not identify an individual-token boundary and is confounded by
+adaptation time. The curriculum is still running, and a later recovery would be
+scientifically relevant. This is a within-model result only; it cannot establish
+a causal depth effect without the matched deep-model run on identical examples.
+
+- [`shallow-5x5-internalized-cot-validation.json`](shallow-5x5-internalized-cot-validation.json)
+- [`shallow-5x5-internalized-cot-training-config.json`](shallow-5x5-internalized-cot-training-config.json)
+- [`shallow-5x5-internalized-cot-progress.json`](shallow-5x5-internalized-cot-progress.json)
+
+## Shallow-model 4x4 CoT internalization curriculum
 
 This run starts from the 100%-accurate explicit-CoT checkpoint and removes the
 leftmost reasoning tokens at the paper's rate of eight tokens per epoch. The

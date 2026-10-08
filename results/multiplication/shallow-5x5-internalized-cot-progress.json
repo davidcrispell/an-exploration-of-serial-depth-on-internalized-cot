@@ -1,0 +1,26 @@
+{
+  "experiment": "shallow 5x5 stepwise CoT internalization",
+  "status": "in_progress",
+  "explicit_validation_accuracy": 1.0,
+  "explicit_test_accuracy": 1.0,
+  "cot_tokens": 75,
+  "completed_checkpoints": [
+    {
+      "epoch": 0,
+      "global_step": 25250,
+      "removed_tokens": 8,
+      "correct": 915,
+      "examples": 1000,
+      "accuracy": 0.915
+    }
+  ],
+  "first_observed_below_99_percent": {
+    "removed_tokens": 8,
+    "frontier_bracket": [0, 8]
+  },
+  "first_observed_below_95_percent": {
+    "removed_tokens": 8,
+    "frontier_bracket": [0, 8]
+  },
+  "caveat": "Within-model checkpoint only; a causal depth effect requires a matched deep-model run on identical examples."
+}

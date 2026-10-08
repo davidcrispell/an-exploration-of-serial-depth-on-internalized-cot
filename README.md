@@ -124,8 +124,10 @@ ten digits. This is a zero-shot length-generalization result, not a 5x5 fine-tun
 
 Starting instead from the untreated shallow FineWeb checkpoint, one paper-matched explicit-CoT
 epoch on the 5x5 training set reached **1,000/1,000 validation and 1,000/1,000 test accuracy**.
-The corresponding 75-token stepwise internalization run is in progress; intermediate and final
-results are recorded under [`results/multiplication`](results/multiplication/README.md).
+At the first internalization checkpoint, removing 8 of 75 CoT tokens reduced validation accuracy
+to **915/1,000 (91.5%)**. The run remains in progress; this is a within-model observation, not a
+causal depth result. Intermediate and final results are recorded under
+[`results/multiplication`](results/multiplication/README.md).
 
 This is a fast variant of the [PyTorch GPT-2 trainer](https://github.com/karpathy/llm.c/blob/7b929300217ff1a974b63791a228928b39b26409/train_gpt2.py) from
 Andrej Karpathy's [llm.c](https://github.com/karpathy/llm.c) repo, which attains the same final validation loss in:
