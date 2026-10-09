@@ -93,3 +93,7 @@ Validation then improved modestly to 3.3181 at continuation step 375 and
 3.3175735 at step 500. This reverses part of the initial jump, but step 500
 remains 0.0083458 above the 3.3092277 parent loss and 0.0675735 above the 3.25
 target. The step-500 rolling checkpoint was load-verified.
+
+The gradual recovery continued to 3.3165 at step 625 and 3.3160462 at step
+750. Step 750 is still 0.0068185 above the parent and 0.0660462 above the
+target. Its checkpoint was load-verified with the restored optimizer state.
