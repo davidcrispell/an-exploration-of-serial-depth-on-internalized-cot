@@ -1,6 +1,6 @@
 {
   "date": "2026-10-08",
-  "status": "running",
+  "status": "completed_budget_stop",
   "parent_checkpoint_sha256": "27964d91b2a36700340db5a89227dcdb8f226ee2f7404d6ef06d235480a82b6b",
   "parent_step": 6578,
   "parent_validation_loss": 3.309227705001831,
@@ -16,6 +16,7 @@
     "warmdown_updates": 0,
     "steps_cap": 2200,
     "target_validation_loss": 3.25,
+    "target_reached": false,
     "effective_batch_sequences": 512,
     "sequence_length": 1024,
     "train_shards": "36-50",
@@ -31,6 +32,11 @@
         "logs_path": "/workspace/experiment-results/shallow1-fineweb-constant-lr/failed-attempt-001"
       }
     ],
+    "recovery_checkpoint": {
+      "continuation_step": 1875,
+      "local_path": "artifacts/checkpoints/shallow1-fineweb-constant-lr/step-01875.pt",
+      "sha256": "9c73f0cf6a817d7782976362640f3b680bf320adb6b13caac215757f90d11cdc"
+    },
     "validation_checkpoints": [
       {
         "continuation_step": 0,
@@ -114,8 +120,46 @@
         "total_step": 8203,
         "validation_loss": 3.3088481426239014,
         "checkpoint_load_verified": true
+      },
+      {
+        "continuation_step": 1750,
+        "total_step": 8328,
+        "validation_loss": 3.3079,
+        "precision_note": "rounded to four decimals in train.log"
+      },
+      {
+        "continuation_step": 1875,
+        "total_step": 8453,
+        "validation_loss": 3.3071770668029785,
+        "checkpoint_load_verified": true
+      },
+      {
+        "continuation_step": 2000,
+        "total_step": 8578,
+        "validation_loss": 3.3061,
+        "precision_note": "rounded to four decimals in train.log"
+      },
+      {
+        "continuation_step": 2125,
+        "total_step": 8703,
+        "validation_loss": 3.3054311275482178,
+        "checkpoint_load_verified": true
       }
     ],
+    "final_continuation_step": 2125,
+    "final_total_step": 8703,
+    "final_validation_loss": 3.3054311275482178,
+    "additional_training_tokens": 1114112000,
+    "training_timer_seconds": 3217.113,
+    "stop_reason": "stopped immediately after the step-2125 validation checkpoint to preserve the remaining Runpod balance",
+    "final_balance_usd": 0.2905737743,
+    "observed_balance_delta_usd": 3.0282304941,
+    "final_checkpoint": {
+      "local_path": "artifacts/checkpoints/shallow1-fineweb-constant-lr/latest.pt",
+      "sha256": "3ebb9d8a6189390c779e499957d3b44e4e9a1ae13a41ac8f91f61749beabf27c",
+      "size_bytes": 1709766045
+    },
+    "pod_deleted": true,
     "network_volume_retained": "vpzu3qptxw"
   }
 }

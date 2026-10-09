@@ -112,3 +112,28 @@ At continuation step 1,625, validation loss reached 3.3088481. This is the
 first constant-rate checkpoint to improve on the 3.3092277 parent loss, by
 0.0003796, while remaining 0.0588481 above the 3.25 target. The checkpoint was
 load-verified.
+
+Validation loss continued down to 3.3079 at step 1,750 and 3.3071771 at step
+1,875. The latter is 0.0020506 below the parent and 0.0571771 above the target.
+Its load-verified checkpoint was copied to the local Git-ignored artifacts
+directory before the Runpod balance entered its final safety margin; the local
+file has SHA256
+`9c73f0cf6a817d7782976362640f3b680bf320adb6b13caac215757f90d11cdc`.
+
+The final two validations were 3.3061 at step 2,000 and **3.3054311 at step
+2,125**. Step 2,125 is 0.0037966 below the parent loss, but still 0.0554311
+above the 3.25 target. With the account entering its safety margin, a live
+guard stopped the trainer immediately after that validation and rolling
+checkpoint were written; the resulting SIGINT traceback in `launcher.log` is
+therefore an intentional budget stop, not a training failure. The run processed
+1,114,112,000 additional tokens, and its training timer recorded 3,217.113
+seconds (53m 37s), excluding compilation, validation, checkpoint I/O, and the
+earlier failed launch.
+
+The verified final checkpoint, configuration, and logs are stored locally in
+`artifacts/checkpoints/shallow1-fineweb-constant-lr/`. `latest.pt` is
+1,709,766,045 bytes with SHA256
+`3ebb9d8a6189390c779e499957d3b44e4e9a1ae13a41ac8f91f61749beabf27c`.
+The observed balance delta from the phase's initial $3.3188042684 was
+**$3.0282304941**, leaving $0.2905737743. GPU pod `v65fbs8pswgrui` was deleted;
+network volume `vpzu3qptxw` was retained.

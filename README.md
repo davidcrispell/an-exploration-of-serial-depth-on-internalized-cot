@@ -191,6 +191,16 @@ not a causal depth result. Results and the reproducible evaluator are under
 [`results/lambada`](results/lambada/README.md) and
 [`benchmarks/lambada`](benchmarks/lambada/evaluate.py).
 
+A subsequent constant-rate FineWeb continuation restored Shallow 1's complete
+optimizer state and used zero warmup and zero warmdown. After 2,125 updates,
+validation loss reached **3.30543**, improving on its 3.30923 parent but not
+reaching the 3.25 target before the budget guard stopped the run. This remains
+above the community deep checkpoint's 3.2766. The continuation checkpoint has
+not yet been evaluated on LAMBADA or used for the multiplication curriculum,
+so the benchmark and internalization results above continue to describe the
+original Shallow 1 checkpoint. Full curves and recovery details are in
+[`results/pretraining`](results/pretraining/README.md).
+
 ### Broad capability versus internalized computation
 
 The LAMBADA comparison puts Shallow 1 and GPT-2 Small in the same broad
