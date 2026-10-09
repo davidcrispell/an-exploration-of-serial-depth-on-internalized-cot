@@ -1,5 +1,6 @@
 {
   "date": "2026-10-08",
+  "status": "complete",
   "parent_checkpoint_sha256": "c5e54086d9ef419f2c43591eca0887bd5ed5e8fed52dd3a329363f807a3f49e0",
   "parent_step": 4578,
   "parent_validation_loss": 3.3411,
@@ -87,8 +88,56 @@
         "continuation_step": 1625,
         "total_step": 6203,
         "validation_loss": 3.3223
+      },
+      {
+        "continuation_step": 1750,
+        "total_step": 6328,
+        "validation_loss": 3.317
+      },
+      {
+        "continuation_step": 1875,
+        "total_step": 6453,
+        "validation_loss": 3.312
+      },
+      {
+        "continuation_step": 2000,
+        "total_step": 6578,
+        "validation_loss": 3.309227705001831
       }
-    ]
+    ],
+    "final": {
+      "continuation_steps": 2000,
+      "total_step": 6578,
+      "training_tokens": 1048576000,
+      "validation_loss": 3.309227705001831,
+      "target_reached": false,
+      "improvement_from_parent": 0.031872294998169,
+      "distance_above_target": 0.059227705001831,
+      "distance_above_community_deep_3242": 0.032627705001831
+    },
+    "runtime": {
+      "pod_created_utc": "2026-10-09T00:37:30.475Z",
+      "final_checkpoint_utc": "2026-10-09T01:38:56Z",
+      "training_timer_seconds": 3041.318,
+      "training_timer_human": "50m 41s",
+      "pod_to_final_checkpoint_seconds": 3685.525,
+      "pod_to_final_checkpoint_human": "1h 01m 26s",
+      "pod_to_deletion_human_approximately": "1h 04m"
+    },
+    "cost": {
+      "initial_balance_usd": 5.9733499072,
+      "balance_at_teardown_usd": 3.4739983601,
+      "observed_balance_delta_usd": 2.4993515471,
+      "pod_deleted": true,
+      "network_volume_retained": "vpzu3qptxw"
+    },
+    "artifact": {
+      "local_checkpoint": "artifacts/checkpoints/shallow1-fineweb-continuation/latest.pt",
+      "checkpoint_sha256": "27964d91b2a36700340db5a89227dcdb8f226ee2f7404d6ef06d235480a82b6b",
+      "local_training_config": "artifacts/checkpoints/shallow1-fineweb-continuation/training_config.json",
+      "local_train_log": "artifacts/checkpoints/shallow1-fineweb-continuation/train.log",
+      "local_launcher_log": "artifacts/checkpoints/shallow1-fineweb-continuation/launcher.log"
+    }
   },
   "local_mps_probe": {
     "hardware": "MacBook Air, Apple M4, 8 GPU cores, 16 GB unified memory",

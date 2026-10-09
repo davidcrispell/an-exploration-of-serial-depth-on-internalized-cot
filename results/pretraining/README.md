@@ -7,11 +7,11 @@ have SHA256
 Optimizer state is reset because the original distributed checkpoint preserves
 only rank zero's Muon momentum shards.
 
-The active Runpod phase uses one RTX PRO 6000 Blackwell Server Edition GPU,
+The completed Runpod phase used one RTX PRO 6000 Blackwell Server Edition GPU,
 unseen FineWeb shards 25-35, an effective batch of 512 sequences of 1,024
 tokens, 100 warmup updates, 500 warmdown updates, and a 0.2 learning-rate
-scale. It is capped at 2,000 updates and stops early at validation loss 3.25.
-Validation runs every 125 updates and `latest.pt` is overwritten every 250
+scale. It was capped at 2,000 updates with an early-stop target of validation
+loss 3.25. Validation ran every 125 updates and `latest.pt` was overwritten every 250
 updates.
 
 ## Local feasibility probe
@@ -40,4 +40,22 @@ step 1,000, 3.3307 at step 1,125, and 3.3288 at step 1,250. The latest point is
 0.0123 below the parent and 0.0788 above the target. Validation loss then
 reached 3.3280 at step 1,375, 3.3265 at step 1,500, and 3.3223 at step 1,625.
 The final 500-update cooldown begins at step 1,500; the latest checkpoint is
-0.0188 below the parent and 0.0723 above the target.
+0.0188 below the parent and 0.0723 above the target. The last three validation
+losses were 3.3170 at step 1,750, 3.3120 at step 1,875, and **3.3092277 at step
+2,000**. The continuation therefore improved the parent by 0.0318723 but ended
+0.0592277 above the 3.25 target and 0.0326277 above the community Deep 3242
+checkpoint's reported 3.2766. It processed 1,048,576,000 additional training
+tokens.
+
+The measured training timer was 3,041.318 seconds (50m 41s), excluding initial
+compilation, validation, and checkpoint I/O. Pod creation through the final
+checkpoint took 1h 01m 26s, and artifact recovery plus pod deletion brought the
+total billed lifecycle to approximately 1h 04m. The observed Runpod balance
+delta was **$2.4993515471**. The GPU pod was deleted and network volume
+`vpzu3qptxw` was retained.
+
+The verified final checkpoint is stored locally at
+`artifacts/checkpoints/shallow1-fineweb-continuation/latest.pt` with SHA256
+`27964d91b2a36700340db5a89227dcdb8f226ee2f7404d6ef06d235480a82b6b`.
+The checkpoint, training configuration, and full logs are Git-ignored; compact
+metrics are tracked in `shallow1-continuation-start.json`.
