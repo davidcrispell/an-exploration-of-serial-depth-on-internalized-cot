@@ -81,3 +81,10 @@ removed, the logs were preserved under
 and the run restarted from the verified step-6,578 parent with identical
 optimizer and schedule settings. Active rolling checkpoints now write to the
 pod's otherwise-empty local disk at `/root/shallow1-fineweb-constant-lr`.
+
+The restarted run recorded validation losses of 3.3194 at continuation step
+125 and 3.3201711 at step 250. The step-250 rolling checkpoint loads
+successfully with model and optimizer state. Both measurements are above the
+3.3092277 parent loss, so the immediate full-rate response is a small
+regression; two points are not enough to determine whether the constant-rate
+phase will reverse direction later.
