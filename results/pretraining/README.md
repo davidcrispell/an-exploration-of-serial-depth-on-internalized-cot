@@ -107,3 +107,8 @@ Validation loss subsequently reached 3.3132, 3.3129, 3.3125, and 3.3103549 at
 steps 1,125, 1,250, 1,375, and 1,500. The latest value is only 0.0011272
 above the 3.3092277 parent, although it remains 0.0603549 above the 3.25
 target. The step-1,500 checkpoint was load-verified.
+
+At continuation step 1,625, validation loss reached 3.3088481. This is the
+first constant-rate checkpoint to improve on the 3.3092277 parent loss, by
+0.0003796, while remaining 0.0588481 above the 3.25 target. The checkpoint was
+load-verified.
