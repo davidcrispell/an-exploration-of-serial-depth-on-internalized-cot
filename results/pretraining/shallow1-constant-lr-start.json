@@ -19,6 +19,18 @@
     "effective_batch_sequences": 512,
     "sequence_length": 1024,
     "train_shards": "36-50",
+    "active_output_path": "/root/shallow1-fineweb-constant-lr",
+    "restart_note": "The first attempt reached continuation step 125 (validation loss 3.3195), but its rolling checkpoint was truncated when the network volume hit its quota. The unreadable partial checkpoint was removed, its logs were preserved, and the active run restarted from the verified parent checkpoint with identical constant-LR settings while writing checkpoints to pod-local storage.",
+    "failed_attempts": [
+      {
+        "attempt": 1,
+        "last_completed_validation_step": 125,
+        "total_step": 6703,
+        "validation_loss": 3.3195,
+        "checkpoint_status": "unreadable_truncated_write",
+        "logs_path": "/workspace/experiment-results/shallow1-fineweb-constant-lr/failed-attempt-001"
+      }
+    ],
     "validation_checkpoints": [
       {
         "continuation_step": 0,

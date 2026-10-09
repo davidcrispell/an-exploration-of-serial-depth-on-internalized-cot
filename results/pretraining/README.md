@@ -70,3 +70,14 @@ is constant and nonzero for every optimizer update. It uses unseen FineWeb
 shards 36-50, validates and overwrites its rolling checkpoint every 125
 updates, stops early at validation loss 3.25, and has a budget-safe maximum of
 2,200 updates. Step-zero validation reproduced the parent loss of 3.3092.
+
+The first launch reached continuation step 125 with validation loss 3.3195,
+then failed while writing its rolling checkpoint because the 20 GB network
+volume had reached its quota. PyTorch could not load the resulting truncated
+file, so that observation is retained only as a failed-attempt diagnostic and
+is not part of the active run's learning curve. The partial checkpoint was
+removed, the logs were preserved under
+`/workspace/experiment-results/shallow1-fineweb-constant-lr/failed-attempt-001`,
+and the run restarted from the verified step-6,578 parent with identical
+optimizer and schedule settings. Active rolling checkpoints now write to the
+pod's otherwise-empty local disk at `/root/shallow1-fineweb-constant-lr`.
