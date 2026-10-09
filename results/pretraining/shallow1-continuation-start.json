@@ -42,6 +42,21 @@
         "continuation_step": 500,
         "total_step": 5078,
         "validation_loss": 3.339
+      },
+      {
+        "continuation_step": 625,
+        "total_step": 5203,
+        "validation_loss": 3.3368
+      },
+      {
+        "continuation_step": 750,
+        "total_step": 5328,
+        "validation_loss": 3.3348
+      },
+      {
+        "continuation_step": 875,
+        "total_step": 5453,
+        "validation_loss": 3.3335
       }
     ]
   },
