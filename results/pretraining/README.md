@@ -137,3 +137,32 @@ The verified final checkpoint, configuration, and logs are stored locally in
 The observed balance delta from the phase's initial $3.3188042684 was
 **$3.0282304941**, leaving $0.2905737743. GPU pod `v65fbs8pswgrui` was deleted;
 network volume `vpzu3qptxw` was retained.
+
+## Deep 1 matched-loss control
+
+Deep 1 was trained from scratch with the same fork, FineWeb binary data,
+tokenizer, global batch of 512 sequences, sequence length 1,024, and learning-rate
+schedule used for the original Shallow 1 run. Its architecture is 12 layers,
+width 768, 6 attention heads, and MLP width 3,072. It contains exactly
+**162,201,600 parameters**, identical to Shallow 1 rather than merely rounded to
+the same parameter scale.
+
+Before launch, the loss-matching rule was fixed as an absolute FineWeb validation
+loss difference of at most 0.002 from Shallow 1's 3.3054311275. Validation and a
+rolling checkpoint were produced every 25 updates, and the trainer stopped at the
+first validation at or below 3.3074311275. It stopped at step 4,200 with exact
+validation loss **3.3050160408**. The deep-minus-shallow difference is
+**-0.0004150867**, so the preregistered match succeeded by a comfortable margin.
+The pair also has zero parameter-count difference.
+
+The run processed 2,202,009,600 training tokens. Its measured training timer was
+8,044.599 seconds (2h 14m 05s); dense validation and repeated 1.6 GB rolling
+checkpoint writes increased total pod lifetime to approximately 3h 07m. The
+Runpod balance delta was **$7.6257225656**. The GPU pod was deleted after artifact
+verification and network volume `vpzu3qptxw` was retained.
+
+The load-verified checkpoint is stored locally at
+`artifacts/checkpoints/deep1-fineweb-matched/latest.pt`, with SHA256
+`b7d1e1c596839a8d3da0fd27eea21ad9f4f9b9537d5a0dd527190594fd14b300`.
+Checkpoint weights and full logs are Git-ignored; compact configuration, cost,
+and validation-curve data are tracked in [`deep1-matched.json`](deep1-matched.json).

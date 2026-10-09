@@ -1,0 +1,77 @@
+{
+  "date": "2026-10-09",
+  "status": "complete_matched_loss",
+  "comparison": {
+    "shallow_1_validation_loss": 3.3054311275482178,
+    "deep_1_validation_loss": 3.305016040802002,
+    "deep_minus_shallow": -0.0004150867462158203,
+    "absolute_loss_difference": 0.0004150867462158203,
+    "preregistered_tolerance": 0.002,
+    "match_succeeded": true
+  },
+  "architecture": {
+    "layers": 12,
+    "width": 768,
+    "heads": 6,
+    "head_dimension": 128,
+    "mlp_width": 3072,
+    "vocabulary_size": 50304,
+    "parameters": 162201600,
+    "parameter_difference_from_shallow_1": 0
+  },
+  "training": {
+    "step": 4200,
+    "training_tokens": 2202009600,
+    "effective_batch_sequences": 512,
+    "sequence_length": 1024,
+    "warmup_updates": 0,
+    "scheduled_warmdown_updates": 1308,
+    "maximum_updates": 4578,
+    "validation_interval": 25,
+    "checkpoint_interval": 25,
+    "early_stop_threshold": 3.3074311275482178,
+    "training_timer_seconds": 8044.599,
+    "training_timer_human": "2h 14m 05s"
+  },
+  "validation_curve_compact": [
+    {"step": 0, "loss": 10.8258},
+    {"step": 250, "loss": 4.2158},
+    {"step": 500, "loss": 3.8746},
+    {"step": 750, "loss": 3.7411},
+    {"step": 1000, "loss": 3.6597},
+    {"step": 1250, "loss": 3.6041},
+    {"step": 1500, "loss": 3.5609},
+    {"step": 1750, "loss": 3.5282},
+    {"step": 2000, "loss": 3.4987},
+    {"step": 2250, "loss": 3.4797},
+    {"step": 2500, "loss": 3.4591},
+    {"step": 2750, "loss": 3.4437},
+    {"step": 3000, "loss": 3.4290},
+    {"step": 3250, "loss": 3.4130},
+    {"step": 3500, "loss": 3.3851},
+    {"step": 3750, "loss": 3.3555},
+    {"step": 4000, "loss": 3.3261},
+    {"step": 4200, "loss": 3.305016040802002}
+  ],
+  "runpod": {
+    "pod_id": "zl4rzzq83q38c9",
+    "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+    "hourly_price_usd": 2.49,
+    "initial_balance_usd": 25.076041825,
+    "balance_after_teardown_usd": 17.4503192594,
+    "observed_balance_delta_usd": 7.6257225656,
+    "pod_created_utc": "2026-10-09T18:10:05.294Z",
+    "pod_deleted_utc": "2026-10-09T21:17:15Z",
+    "pod_lifecycle_human": "3h 07m 10s",
+    "pod_deleted": true,
+    "network_volume_retained": "vpzu3qptxw"
+  },
+  "artifact": {
+    "local_checkpoint": "artifacts/checkpoints/deep1-fineweb-matched/latest.pt",
+    "checkpoint_sha256": "b7d1e1c596839a8d3da0fd27eea21ad9f4f9b9537d5a0dd527190594fd14b300",
+    "checkpoint_size_bytes": 1606768433,
+    "training_config": "artifacts/checkpoints/deep1-fineweb-matched/training_config.json",
+    "train_log": "artifacts/checkpoints/deep1-fineweb-matched/train.log",
+    "launcher_log": "artifacts/checkpoints/deep1-fineweb-matched/launcher.log"
+  }
+}
