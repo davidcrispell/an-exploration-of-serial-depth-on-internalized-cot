@@ -10,6 +10,16 @@
     "elapsed_seconds": 54.06782908301102,
     "logical_input_tokens_per_second": 7861.9209834997055
   },
+  "shallow_1_continuation_step_8703": {
+    "correct": 1355,
+    "accuracy": 0.2629536192509218,
+    "perplexity": 68.48083190530448,
+    "target_token_perplexity": 27.480291136758314,
+    "elapsed_seconds": 53.44623441703152,
+    "logical_input_tokens_per_second": 7953.357325105438,
+    "fineweb_validation_loss": 3.3054311275482178,
+    "checkpoint_sha256": "3ebb9d8a6189390c779e499957d3b44e4e9a1ae13a41ac8f91f61749beabf27c"
+  },
   "gpt2_small": {
     "correct": 1678,
     "accuracy": 0.32563555210556955,
@@ -32,6 +42,42 @@
     "provenance": "Community-uploaded 3,242-step checkpoint; not the official 10.8-minute run."
   },
   "paired_comparisons": {
+    "shallow_1_continuation_minus_shallow_1": {
+      "accuracy_difference": 0.006404036483601827,
+      "paired_bootstrap_95_percent_ci": [
+        -0.0007762468464971861,
+        0.013584319813700757
+      ],
+      "first_only_correct": 195,
+      "second_only_correct": 162,
+      "both_correct": 1160,
+      "both_wrong": 3636,
+      "mcnemar_exact_two_sided_p": 0.09019705395655132
+    },
+    "gpt2_small_minus_shallow_1_continuation": {
+      "accuracy_difference": 0.06268193285464774,
+      "paired_bootstrap_95_percent_ci": [
+        0.05084416844556569,
+        0.07451969726372987
+      ],
+      "first_only_correct": 649,
+      "second_only_correct": 326,
+      "both_correct": 1029,
+      "both_wrong": 3149,
+      "mcnemar_exact_two_sided_p": 2.256747912315526e-25
+    },
+    "community_deep_3242_minus_shallow_1_continuation": {
+      "accuracy_difference": 0.05297884727343294,
+      "paired_bootstrap_95_percent_ci": [
+        0.04249951484572094,
+        0.06345817970114496
+      ],
+      "first_only_correct": 530,
+      "second_only_correct": 257,
+      "both_correct": 1098,
+      "both_wrong": 3268,
+      "mcnemar_exact_two_sided_p": 1.1758246934958602e-22
+    },
     "gpt2_small_minus_shallow_1": {
       "accuracy_difference": 0.06908596933824956,
       "paired_bootstrap_95_percent_ci": [

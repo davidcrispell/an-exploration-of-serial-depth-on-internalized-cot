@@ -11,8 +11,23 @@ FP32 parameters, batch size 16, and the Apple M4 GPU backend.
 | Model | Correct | Accuracy | Target-word perplexity | M4 elapsed | Logical input tokens/s |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Shallow 1 | 1,322 / 5,153 | 25.65% | 70.34 | 54.1 s | 7,862 |
+| Shallow 1 continued (step 8,703) | 1,355 / 5,153 | 26.30% | 68.48 | 53.4 s | 7,953 |
 | Community Deep 3242 | 1,628 / 5,153 | 31.59% | 45.50 | 78.9 s | 5,390 |
 | OpenAI GPT-2 Small | 1,678 / 5,153 | 32.56% | 40.06 | 79.2 s | 5,365 |
+
+The constant-rate continuation improves Shallow 1 by 33 correct examples, or
+0.64 percentage points. On paired examples, the continued checkpoint alone is
+correct 195 times, the original alone is correct 162 times, both are correct
+1,160 times, and both are wrong 3,636 times. The 20,000-replicate paired
+bootstrap interval is -0.08 to 1.36 percentage points and the exact two-sided
+McNemar test gives `p = 0.090`; the observed gain is therefore suggestive but
+not statistically conclusive. Target-word perplexity improves from 70.34 to
+68.48.
+
+GPT-2 Small still leads the continued checkpoint by 6.27 percentage points
+(paired 95% interval 5.08–7.45), and Community Deep 3242 leads it by 5.30
+points (4.25–6.35). Thus the continuation narrows but does not close the broad
+capability gap.
 
 Community Deep 3242 leads Shallow 1 by 5.94 percentage points. A
 20,000-replicate paired bootstrap gives a 95% interval of 4.87–7.03 points.
@@ -62,5 +77,6 @@ checkpoint. Its local 1.0 GB artifact is excluded from Git and has SHA256
 
 - [`comparison.json`](comparison.json)
 - [`shallow-1.json`](shallow-1.json)
+- [`shallow-1-continuation-step8703.json`](shallow-1-continuation-step8703.json)
 - [`community-deep-3242.json`](community-deep-3242.json)
 - [`gpt2-small.json`](gpt2-small.json)

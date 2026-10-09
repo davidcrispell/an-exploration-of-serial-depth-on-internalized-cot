@@ -195,10 +195,13 @@ A subsequent constant-rate FineWeb continuation restored Shallow 1's complete
 optimizer state and used zero warmup and zero warmdown. After 2,125 updates,
 validation loss reached **3.30543**, improving on its 3.30923 parent but not
 reaching the 3.25 target before the budget guard stopped the run. This remains
-above the community deep checkpoint's 3.2766. The continuation checkpoint has
-not yet been evaluated on LAMBADA or used for the multiplication curriculum,
-so the benchmark and internalization results above continue to describe the
-original Shallow 1 checkpoint. Full curves and recovery details are in
+above the community deep checkpoint's 3.2766. On LAMBADA, the continued model
+scored **1,355/5,153 (26.30%)** with target-word perplexity 68.48, versus
+1,322/5,153 (25.65%) and 70.34 for the original. The 0.64-point paired gain has
+a 95% bootstrap interval of -0.08 to 1.36 points, so it is not conclusive. The
+continuation checkpoint has not been used for the multiplication curriculum;
+the internalization results above still describe the original checkpoint.
+Full curves and recovery details are in
 [`results/pretraining`](results/pretraining/README.md).
 
 ### Broad capability versus internalized computation
