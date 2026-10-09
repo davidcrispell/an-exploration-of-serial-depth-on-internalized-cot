@@ -127,6 +127,16 @@ held-out test scored **3/1,000 (0.3%)**. Thus the shallow model learned the
 explicit algorithm perfectly but did not preserve it after the full 75-token
 trace was hidden under this curriculum and training budget.
 
+Here, “75 steps” would be misleading. The experiment operationalizes trace
+length as **75 GPT-2 tokens**, and the curriculum removes those tokens—not
+independently labeled semantic reasoning steps. A 5x5 trace contains five
+shifted partial-product blocks and three explicitly parenthesized intermediate
+cumulative-sum blocks. The final answer supplies the result after incorporating
+the fifth partial product. Thus there are eight visible arithmetic blocks in
+the CoT, or nine arithmetic actions if the final accumulation represented by
+the answer is counted; neither count has a one-to-one mapping to the 75-token
+removal axis.
+
 The first observed failing checkpoint for both the 99% primary threshold and
 95% sensitivity threshold is 8/75 removed tokens, bracketing each frontier
 between 0 and 8. The curve is strongly non-monotonic, and every checkpoint also

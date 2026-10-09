@@ -50,10 +50,12 @@ The validator checks all 10,000 records for:
 ## Training stages
 
 `train_explicit_cot.py` first teaches the full visible long-multiplication trace.
-`train_internalized_cot.py` then removes its 47 tokens from left to right at the
-paper's rate of eight tokens per epoch. The removal boundary uses exponential
-smoothing with lambda 4, and AdamW is reset whenever one more token is scheduled
-for removal. Both stages use the same GPT-2 tokenization and held-out evaluator.
+`train_internalized_cot.py` then removes the trace from left to right at the
+paper's rate of eight GPT-2 tokens per epoch. The uniform traces contain 47
+tokens for 4x4 and 75 tokens for 5x5. These are tokenizer positions, not labeled
+semantic reasoning steps. The removal boundary uses exponential smoothing with
+lambda 4, and AdamW is reset whenever one more token is scheduled for removal.
+Both stages use the same GPT-2 tokenization and held-out evaluator.
 
 ## Provenance
 

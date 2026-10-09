@@ -29,6 +29,16 @@ GPT-2 alone is correct 679 times, Shallow 1 alone is correct 323 times, both are
 correct 999 times, and both are wrong 3,152 times. An exact two-sided McNemar
 test gives `p = 8.62e-30`.
 
+These scores are not equal, but they are comparable enough to rule out the
+uninteresting picture that Shallow 1 is simply a nonfunctional language model.
+That makes the multiplication contrast informative: the same Shallow 1
+checkpoint can be fine-tuned to 100.0% explicit-CoT accuracy on held-out 5x5
+multiplication, yet its final fully internalized checkpoint reaches only
+3/1,000 (0.3%) test accuracy after all 75 CoT tokens are hidden. Broad language
+capability and perfect acquisition of the visible algorithm therefore coexist
+with failure of this internalized-computation protocol. This cross-task contrast
+does not isolate depth; it motivates the still-needed matched deep 5x5 run.
+
 Shallow 1 is 1.47x faster than GPT-2 Small for this batched M4 scoring workload,
 consistent with its six rather than twelve serial transformer blocks. This is a
 throughput result, not autoregressive decoding speed. On a separate 128-example

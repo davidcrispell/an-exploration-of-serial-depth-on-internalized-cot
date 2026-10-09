@@ -186,6 +186,26 @@ not a causal depth result. Results and the reproducible evaluator are under
 [`results/lambada`](results/lambada/README.md) and
 [`benchmarks/lambada`](benchmarks/lambada/evaluate.py).
 
+### Broad capability versus internalized computation
+
+The LAMBADA comparison puts Shallow 1 and GPT-2 Small in the same broad
+language-model capability regime, although it does not show parity: Shallow 1
+scores 25.65% and GPT-2 Small scores 32.56%, a statistically significant 6.91
+percentage-point gap. More importantly for the multiplication control, Shallow
+1 itself reaches 100.0% held-out accuracy when allowed to generate the explicit
+5x5 trace. Nevertheless, after the full 75-token trace is removed, the final
+checkpoint scores only 3/1,000 (0.3%) on the 5x5 test set—effectively zero, but
+not literally zero.
+
+This separation is suggestive: a model can retain broadly comparable language
+capability and learn the visible multiplication algorithm perfectly while
+failing to carry out the same computation when its intermediate trace is
+hidden. Internalized computation should therefore be treated as a distinct
+capability axis rather than inferred from LAMBADA or pretraining loss alone.
+It is not yet evidence that shallow depth caused the failure: GPT-2 Small has
+not been run through our identical 5x5 curriculum, and a causal depth claim
+still requires the parameter-matched deep control on the same data and schedule.
+
 This is a fast variant of the [PyTorch GPT-2 trainer](https://github.com/karpathy/llm.c/blob/7b929300217ff1a974b63791a228928b39b26409/train_gpt2.py) from
 Andrej Karpathy's [llm.c](https://github.com/karpathy/llm.c) repo, which attains the same final validation loss in:
 * 2.4B tokens instead of 10B
