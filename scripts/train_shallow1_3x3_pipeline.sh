@@ -6,8 +6,9 @@ BASE_CHECKPOINT="${BASE_CHECKPOINT:-/root/checkpoints/shallow1-matched/latest.pt
 TRAIN_PATH="${TRAIN_PATH:-/root/multiplication-3x3/train.txt}"
 RUN_ROOT="${RUN_ROOT:-/root/experiment-results}"
 CACHE_DIR="${CACHE_DIR:-/root/token-cache/3x3}"
-EXPLICIT_DIR="$RUN_ROOT/shallow1-3x3-explicit-cot-fp32"
-INTERNAL_DIR="$RUN_ROOT/shallow1-3x3-internalized-cot-fp32"
+RUN_NAME="${RUN_NAME:-shallow1}"
+EXPLICIT_DIR="$RUN_ROOT/$RUN_NAME-3x3-explicit-cot-fp32"
+INTERNAL_DIR="$RUN_ROOT/$RUN_NAME-3x3-internalized-cot-fp32"
 VALIDATION_PATH="$REPO/benchmarks/multiplication/data/3x3/validation.txt"
 TEST_PATH="$REPO/benchmarks/multiplication/data/3x3/test.txt"
 

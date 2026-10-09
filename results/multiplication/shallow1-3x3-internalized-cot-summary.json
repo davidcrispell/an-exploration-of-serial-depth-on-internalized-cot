@@ -1,0 +1,63 @@
+{
+  "experiment": "shallow1_3x3_internalized_cot",
+  "status": "complete",
+  "base": {
+    "name": "Shallow 1 matched-loss",
+    "layers": 6,
+    "width": 1024,
+    "parameters": 162201600,
+    "fineweb_validation_loss": 3.3054311275482178,
+    "checkpoint_sha256": "3ebb9d8a6189390c779e499957d3b44e4e9a1ae13a41ac8f91f61749beabf27c"
+  },
+  "dataset": {
+    "provenance": "custom deterministic extension of the paper format; not paper-released",
+    "digits": 3,
+    "train_examples": 806000,
+    "validation_examples": 1000,
+    "test_examples": 1000,
+    "train_sha256": "d2eec55c9241f4c65d88d15ba3c3bafb28236714a6de9b411956ce3868448c86",
+    "seed": 3456
+  },
+  "explicit_cot": {
+    "validation_accuracy": 1.0,
+    "test_accuracy": 1.0,
+    "optimizer_steps": 25187,
+    "checkpoint_sha256": "7ce513979bf7f9423991250828824c9f5709fe16fe778e908ef9e014c2f6ce80"
+  },
+  "internalization": {
+    "cot_tokens": 25,
+    "remove_per_epoch": 8,
+    "validation_curve": [
+      {"stage": "explicit", "removed": 0, "correct": 1000, "accuracy": 1.0},
+      {"epoch": 0, "removed": 8, "correct": 757, "accuracy": 0.757},
+      {"epoch": 1, "removed": 16, "correct": 613, "accuracy": 0.613},
+      {"epoch": 2, "removed": 24, "correct": 842, "accuracy": 0.842},
+      {"epoch": 3, "removed": 25, "correct": 965, "accuracy": 0.965},
+      {"epoch": 4, "removed": 25, "correct": 990, "accuracy": 0.99}
+    ],
+    "first_observed_below_99_percent": 8,
+    "first_observed_below_95_percent": 8,
+    "first_full_removal_validation_accuracy": 0.965,
+    "final_validation_accuracy": 0.99,
+    "final_test_correct": 988,
+    "final_test_examples": 1000,
+    "final_test_accuracy": 0.988,
+    "checkpoint_sha256": "7d06b82ede81dd82f238602ae9271c8a1ad48ea1aa50b500fa3d215a97d8a7c8"
+  },
+  "runpod": {
+    "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition MIG 1g.24gb",
+    "gpu_price_per_hour": 0.69,
+    "pod_created_at": "2026-10-09T21:21:41.939Z",
+    "pod_runtime_approx_hours": 2.5,
+    "starting_balance": 17.4503192594,
+    "ending_balance": 15.5773513286,
+    "balance_delta": 1.8729679308,
+    "pod_deleted": true,
+    "network_volume_retained": "vpzu3qptxw"
+  },
+  "caveats": [
+    "The 3x3 data is a custom extension because the paper release begins at 4x4.",
+    "The curve is non-monotonic and checkpoints differ in adaptation time.",
+    "This shallow-only result cannot establish a causal depth effect."
+  ]
+}

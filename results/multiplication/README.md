@@ -62,7 +62,8 @@ declines cannot be extrapolated to the first or final full-removal result. At
 the first 25/25 checkpoint, accuracy recovered further to 965/1,000 (96.5%).
 This misses the preregistered 99% target but clears the 95% sensitivity
 threshold, so training continues through the remaining full-removal adaptation
-budget.
+budget. One additional full-removal epoch reached 990/1,000 (99.0%), satisfying
+the stopping target. The resulting held-out test score is 988/1,000 (98.8%).
 
 | Curriculum checkpoint | Removed CoT tokens | Correct | Examples | Accuracy |
 | ---: | ---: | ---: | ---: | ---: |
@@ -71,6 +72,28 @@ budget.
 | Epoch 1 | 16 / 25 | 613 | 1,000 | 61.3% |
 | Epoch 2 | 24 / 25 | 842 | 1,000 | 84.2% |
 | Epoch 3 (first full removal) | 25 / 25 | 965 | 1,000 | 96.5% |
+| Epoch 4 (full-removal adaptation 1) | 25 / 25 | 990 | 1,000 | 99.0% |
+
+Thus Shallow 1 successfully internalizes the custom 3x3 task under the primary
+validation criterion after one full-removal adaptation epoch, with 98.8% held-out
+test accuracy. The first observed checkpoint below both 99% and 95% remains
+8/25, but that frontier records the transient removal curriculum rather than a
+hard capacity limit: the same model later recovers above both thresholds at
+full removal. The non-monotonic curve and adaptation-time confound are therefore
+substantive, not merely formal caveats.
+
+The run used a secure 24 GB RTX PRO 6000 Blackwell MIG at $0.69/hour. Pod
+lifecycle time was approximately 2.5 hours, including setup, artifact transfer,
+explicit training, internalization, evaluation, and download. The observed
+Runpod balance delta was **$1.8729679308**. The GPU pod was deleted after local
+checkpoint hashes were verified; network volume `vpzu3qptxw` remains.
+
+Local Git-ignored artifacts:
+
+- `artifacts/checkpoints/shallow1-3x3-explicit-cot/explicit_cot_epoch_000.pt`
+  (`7ce513979bf7f9423991250828824c9f5709fe16fe778e908ef9e014c2f6ce80`)
+- `artifacts/checkpoints/shallow1-3x3-internalized-cot/latest.pt`
+  (`7d06b82ede81dd82f238602ae9271c8a1ad48ea1aa50b500fa3d215a97d8a7c8`)
 
 - [`3x3-dataset.json`](3x3-dataset.json)
 - [`shallow1-3x3-explicit-cot-validation.json`](shallow1-3x3-explicit-cot-validation.json)
@@ -78,6 +101,8 @@ budget.
 - [`shallow1-3x3-explicit-cot-training-config.json`](shallow1-3x3-explicit-cot-training-config.json)
 - [`shallow1-3x3-internalized-cot-validation.json`](shallow1-3x3-internalized-cot-validation.json)
 - [`shallow1-3x3-internalized-cot-training-config.json`](shallow1-3x3-internalized-cot-training-config.json)
+- [`shallow1-3x3-internalized-cot-test.json`](shallow1-3x3-internalized-cot-test.json)
+- [`shallow1-3x3-internalized-cot-summary.json`](shallow1-3x3-internalized-cot-summary.json)
 
 ## Shallow model after explicit-CoT fine-tuning
 

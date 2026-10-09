@@ -213,6 +213,15 @@ parameter count and near-identical aggregate pretraining loss therefore do not
 imply identical broad capability; this residual difference must accompany any
 interpretation of the paired internalization results.
 
+On the custom 3x3 multiplication extension, matched-loss Shallow 1 reached
+100.0% explicit-CoT validation and test accuracy. Its stepwise internalization
+curve was strongly non-monotonic: 75.7%, 61.3%, and 84.2% at 8, 16, and 24 of
+25 tokens removed. It then reached 96.5% at the first full-removal checkpoint
+and 99.0% after one additional adaptation epoch, with **98.8% held-out test
+accuracy**. Thus the shallow model can internalize this shorter task; the
+paired Deep 1 run on identical examples and schedule is required to determine
+whether depth changes the adaptation curve or final reliability.
+
 ### Broad capability versus internalized computation
 
 The LAMBADA comparison puts Shallow 1 and GPT-2 Small in the same broad
