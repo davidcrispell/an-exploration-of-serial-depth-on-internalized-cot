@@ -35,4 +35,6 @@ losses were 3.3440 at step 250, 3.3414 at step 375, and 3.3390 at step 500.
 The post-warmup curve is improving: step 500 is 0.0021 below the parent loss of
 3.3411. Validation loss then reached 3.3368 at step 625, 3.3348 at step 750,
 and 3.3335 at step 875. The latest checkpoint is 0.0076 below the parent while
-remaining 0.0835 above the 3.25 target.
+remaining 0.0835 above the 3.25 target. Validation loss continued to 3.3319 at
+step 1,000, 3.3307 at step 1,125, and 3.3288 at step 1,250. The latest point is
+0.0123 below the parent and 0.0788 above the target.
