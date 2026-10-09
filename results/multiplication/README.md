@@ -47,10 +47,27 @@ curriculum began from this checkpoint. This establishes that Shallow 1 can
 learn the visible 3x3 algorithm perfectly; it does not yet measure fully hidden
 reasoning or a depth effect.
 
+### 3x3 internalization progress
+
+The first epoch removes eight leftmost CoT tokens over the course of the full
+training pass. At its epoch-boundary input-only validation, accuracy fell to
+757/1,000 (75.7%). The first observed checkpoint below both the 99% primary
+threshold and 95% sensitivity threshold is therefore 8/25 removed tokens,
+bracketing both frontiers between 0 and 8. This coarse checkpoint is affected
+by which trace suffix remains and by adaptation time; later recovery would not
+erase the observed crossing.
+
+| Curriculum checkpoint | Removed CoT tokens | Correct | Examples | Accuracy |
+| ---: | ---: | ---: | ---: | ---: |
+| Explicit stage | 0 / 25 | 1,000 | 1,000 | 100.0% |
+| Epoch 0 | 8 / 25 | 757 | 1,000 | 75.7% |
+
 - [`3x3-dataset.json`](3x3-dataset.json)
 - [`shallow1-3x3-explicit-cot-validation.json`](shallow1-3x3-explicit-cot-validation.json)
 - [`shallow1-3x3-explicit-cot-test.json`](shallow1-3x3-explicit-cot-test.json)
 - [`shallow1-3x3-explicit-cot-training-config.json`](shallow1-3x3-explicit-cot-training-config.json)
+- [`shallow1-3x3-internalized-cot-validation.json`](shallow1-3x3-internalized-cot-validation.json)
+- [`shallow1-3x3-internalized-cot-training-config.json`](shallow1-3x3-internalized-cot-training-config.json)
 
 ## Shallow model after explicit-CoT fine-tuning
 
