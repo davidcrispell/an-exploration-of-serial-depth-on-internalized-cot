@@ -72,6 +72,18 @@
         "total_step": 7328,
         "validation_loss": 3.3160462379455566,
         "checkpoint_load_verified": true
+      },
+      {
+        "continuation_step": 875,
+        "total_step": 7453,
+        "validation_loss": 3.3149,
+        "precision_note": "rounded to four decimals in train.log"
+      },
+      {
+        "continuation_step": 1000,
+        "total_step": 7578,
+        "validation_loss": 3.314225435256958,
+        "checkpoint_load_verified": true
       }
     ],
     "network_volume_retained": "vpzu3qptxw"

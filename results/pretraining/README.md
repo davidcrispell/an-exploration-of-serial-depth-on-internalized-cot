@@ -97,3 +97,8 @@ target. The step-500 rolling checkpoint was load-verified.
 The gradual recovery continued to 3.3165 at step 625 and 3.3160462 at step
 750. Step 750 is still 0.0068185 above the parent and 0.0660462 above the
 target. Its checkpoint was load-verified with the restored optimizer state.
+
+At continuation steps 875 and 1,000, validation loss reached 3.3149 and
+3.3142254 respectively. The monotonic recovery since step 250 continues, but
+step 1,000 remains 0.0049977 above the parent and 0.0642254 above the target.
+The step-1,000 checkpoint was load-verified.
