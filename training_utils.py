@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
+from typing import Any
 
 
 def linear_warmup_warmdown_factor(
@@ -31,3 +32,20 @@ def linear_warmup_warmdown_factor(
 
 def strip_compiled_prefix(state: Mapping[str, object]) -> dict[str, object]:
     return {key.removeprefix("_orig_mod."): value for key, value in state.items()}
+
+
+def restore_optimizer_states(
+    optimizers: Sequence[Any],
+    state_dicts: Sequence[Mapping[str, object]],
+    learning_rates: Sequence[float],
+) -> None:
+    """Restore optimizer moments while starting a new constant-LR schedule."""
+    if not (len(optimizers) == len(state_dicts) == len(learning_rates)):
+        raise ValueError("optimizer, state, and learning-rate counts must match")
+    for optimizer, state_dict, learning_rate in zip(
+        optimizers, state_dicts, learning_rates
+    ):
+        optimizer.load_state_dict(state_dict)
+        for group in optimizer.param_groups:
+            group["lr"] = learning_rate
+            group["initial_lr"] = learning_rate

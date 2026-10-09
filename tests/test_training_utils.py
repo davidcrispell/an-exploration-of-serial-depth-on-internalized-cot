@@ -1,6 +1,12 @@
 import unittest
 
-from training_utils import linear_warmup_warmdown_factor, strip_compiled_prefix
+import torch
+
+from training_utils import (
+    linear_warmup_warmdown_factor,
+    restore_optimizer_states,
+    strip_compiled_prefix,
+)
 
 
 class LearningRateScheduleTests(unittest.TestCase):
@@ -32,6 +38,26 @@ class CheckpointStateTests(unittest.TestCase):
         self.assertEqual(
             strip_compiled_prefix(state), {"layer.weight": 1, "plain": 2}
         )
+
+    def test_optimizer_moments_restore_with_new_learning_rate(self):
+        source_parameter = torch.nn.Parameter(torch.tensor([1.0]))
+        source = torch.optim.Adam([source_parameter], lr=0.25)
+        source_parameter.grad = torch.tensor([2.0])
+        source.step()
+
+        target_parameter = torch.nn.Parameter(torch.tensor([1.0]))
+        target = torch.optim.Adam([target_parameter], lr=0.01)
+        restore_optimizer_states([target], [source.state_dict()], [0.125])
+
+        self.assertEqual(target.param_groups[0]["lr"], 0.125)
+        self.assertEqual(target.param_groups[0]["initial_lr"], 0.125)
+        self.assertEqual(target.state[target_parameter]["step"].item(), 1)
+
+    def test_optimizer_restore_rejects_mismatched_counts(self):
+        parameter = torch.nn.Parameter(torch.tensor([1.0]))
+        optimizer = torch.optim.Adam([parameter], lr=0.01)
+        with self.assertRaisesRegex(ValueError, "counts must match"):
+            restore_optimizer_states([optimizer], [], [0.1])
 
 
 if __name__ == "__main__":

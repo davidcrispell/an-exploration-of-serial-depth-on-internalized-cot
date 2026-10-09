@@ -21,7 +21,11 @@ import torch._inductor.config as config
 from torch.nn.parallel import DistributedDataParallel as DDP
 
 from model import GPT, GPTConfig, add_architecture_arguments, config_from_args
-from training_utils import linear_warmup_warmdown_factor, strip_compiled_prefix
+from training_utils import (
+    linear_warmup_warmdown_factor,
+    restore_optimizer_states,
+    strip_compiled_prefix,
+)
 
 # -----------------------------------------------------------------------------
 # Muon optimizer
@@ -231,7 +235,12 @@ class Hyperparameters:
 args = Hyperparameters()
 parser = argparse.ArgumentParser(description="Train configurable-depth modded-nanoGPT")
 add_architecture_arguments(parser)
-parser.add_argument("--resume", help="model checkpoint to continue from; optimizer state is reset")
+parser.add_argument("--resume", help="model checkpoint to continue from")
+parser.add_argument(
+    "--restore-optimizer",
+    action="store_true",
+    help="restore optimizer moments from --resume, then apply the requested learning rates",
+)
 parser.add_argument("--num-iterations", type=int, default=args.num_iterations)
 parser.add_argument("--warmup-iters", type=int, default=args.warmup_iters)
 parser.add_argument("--warmdown-iters", type=int, default=args.warmdown_iters)
@@ -267,6 +276,8 @@ if architecture_args.lr_scale <= 0:
     parser.error("--lr-scale must be positive")
 if architecture_args.train_shard_offset < 0:
     parser.error("--train-shard-offset must be nonnegative")
+if architecture_args.restore_optimizer and not architecture_args.resume:
+    parser.error("--restore-optimizer requires --resume")
 linear_warmup_warmdown_factor(
     0,
     num_iterations=args.num_iterations,
@@ -275,6 +286,7 @@ linear_warmup_warmdown_factor(
 )
 
 resume_payload = None
+resume_optimizer_states = None
 parent_step = 0
 if architecture_args.resume:
     torch.serialization.add_safe_globals([GPTConfig])
@@ -288,6 +300,10 @@ if architecture_args.resume:
             f"requested architecture {model_config!r}"
         )
     parent_step = int(resume_payload["step"])
+    if architecture_args.restore_optimizer:
+        resume_optimizer_states = resume_payload.get("optimizers")
+        if resume_optimizer_states is None:
+            parser.error("--restore-optimizer requested but checkpoint has no optimizer states")
 
 # Set up DDP for CUDA; MPS and CPU continuation probes are single-process.
 if architecture_args.device == "cuda":
@@ -380,6 +396,18 @@ optimizer1 = torch.optim.Adam([raw_model.transformer.wte.weight], lr=0.3 * archi
 optimizer2 = torch.optim.Adam([raw_model.lm_head.weight],         lr=0.002 * architecture_args.lr_scale, betas=(0.9, 0.95), fused=use_fused_adam)
 optimizer3 = Muon(raw_model.transformer.h.parameters(),           lr=0.02 * architecture_args.lr_scale,  momentum=0.95)
 optimizers = [optimizer1, optimizer2, optimizer3]
+optimizer_learning_rates = [
+    0.3 * architecture_args.lr_scale,
+    0.002 * architecture_args.lr_scale,
+    0.02 * architecture_args.lr_scale,
+]
+optimizer_state_mode = "reset_at_continuation_start" if architecture_args.resume else "fresh"
+if resume_optimizer_states is not None:
+    restore_optimizer_states(
+        optimizers, resume_optimizer_states, optimizer_learning_rates
+    )
+    optimizer_state_mode = "restored_from_parent"
+    del resume_optimizer_states
 # learning rate decay scheduler (linear warmup and warmdown)
 def get_lr(it):
     return linear_warmup_warmdown_factor(
@@ -405,7 +433,7 @@ if master_process:
                 {
                     "resume": architecture_args.resume,
                     "parent_step": parent_step,
-                    "optimizer_state": "reset",
+                    "optimizer_state": optimizer_state_mode,
                     "num_iterations": args.num_iterations,
                     "warmup_iters": args.warmup_iters,
                     "warmdown_iters": args.warmdown_iters,
@@ -434,7 +462,7 @@ if master_process:
                 {
                     "resume": architecture_args.resume,
                     "parent_step": parent_step,
-                    "optimizer_state": "reset",
+                    "optimizer_state": optimizer_state_mode,
                     "num_iterations": args.num_iterations,
                     "warmup_iters": args.warmup_iters,
                     "warmdown_iters": args.warmdown_iters,
@@ -517,7 +545,7 @@ for step in range(args.num_iterations + 1):
             continuation_step=step,
             parent_step=parent_step,
             parent_checkpoint=architecture_args.resume,
-            optimizer_state="reset_at_continuation_start" if architecture_args.resume else "fresh",
+            optimizer_state=optimizer_state_mode,
             validation_loss=last_val_loss,
             target_val_loss=architecture_args.target_val_loss,
             code=code,

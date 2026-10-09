@@ -44,6 +44,11 @@ python data/cached_fineweb10B.py 40
 The optimizer is intentionally reset because the original distributed Muon
 checkpoint contains only rank zero's momentum shards. The parent model weights
 are loaded exactly; this restart is documented as a distinct training phase.
+Once a continuation has been produced on one GPU, all optimizer moments are
+present and can be restored. To continue at a constant nonzero learning rate,
+use `--restore-optimizer --warmup-iters 0 --warmdown-iters 0`. The requested
+`--lr-scale` is reapplied after loading so a checkpoint saved at the end of a
+cooldown does not remain at zero learning rate.
 
 Apple-silicon feasibility probes can use the same entry point without DDP:
 
