@@ -55,12 +55,14 @@ training pass. At its epoch-boundary input-only validation, accuracy fell to
 threshold and 95% sensitivity threshold is therefore 8/25 removed tokens,
 bracketing both frontiers between 0 and 8. This coarse checkpoint is affected
 by which trace suffix remains and by adaptation time; later recovery would not
-erase the observed crossing.
+erase the observed crossing. Accuracy declined further to 613/1,000 (61.3%)
+at the 16/25-token checkpoint.
 
 | Curriculum checkpoint | Removed CoT tokens | Correct | Examples | Accuracy |
 | ---: | ---: | ---: | ---: | ---: |
 | Explicit stage | 0 / 25 | 1,000 | 1,000 | 100.0% |
 | Epoch 0 | 8 / 25 | 757 | 1,000 | 75.7% |
+| Epoch 1 | 16 / 25 | 613 | 1,000 | 61.3% |
 
 - [`3x3-dataset.json`](3x3-dataset.json)
 - [`shallow1-3x3-explicit-cot-validation.json`](shallow1-3x3-explicit-cot-validation.json)
