@@ -88,3 +88,8 @@ successfully with model and optimizer state. Both measurements are above the
 3.3092277 parent loss, so the immediate full-rate response is a small
 regression; two points are not enough to determine whether the constant-rate
 phase will reverse direction later.
+
+Validation then improved modestly to 3.3181 at continuation step 375 and
+3.3175735 at step 500. This reverses part of the initial jump, but step 500
+remains 0.0083458 above the 3.3092277 parent loss and 0.0675735 above the 3.25
+target. The step-500 rolling checkpoint was load-verified.
