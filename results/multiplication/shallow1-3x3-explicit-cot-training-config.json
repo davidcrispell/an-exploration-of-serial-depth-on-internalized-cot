@@ -1,0 +1,21 @@
+{
+  "checkpoint": "/root/checkpoints/shallow1-matched/model.pt",
+  "train_path": "/root/multiplication-3x3/train.txt",
+  "validation_path": "/root/modded-nanogpt-depth/benchmarks/multiplication/data/3x3/validation.txt",
+  "test_path": "/root/modded-nanogpt-depth/benchmarks/multiplication/data/3x3/test.txt",
+  "output_dir": "/root/experiment-results/shallow1-3x3-explicit-cot-fp32",
+  "cache_dir": "/root/token-cache/3x3",
+  "digits": 3,
+  "epochs": 1,
+  "batch_size": 32,
+  "accumulate": 1,
+  "lr": 5e-05,
+  "max_grad_norm": 1.0,
+  "seed": 3456,
+  "log_every": 100,
+  "eval_examples": 1000,
+  "eval_batch_size": 32,
+  "max_steps": null,
+  "compile": false,
+  "bf16": false
+}

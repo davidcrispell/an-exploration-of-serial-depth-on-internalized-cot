@@ -22,6 +22,36 @@ continuation to match exactly.
 Machine-readable outputs and representative generations are in
 [`shallow-base-direct-test.json`](shallow-base-direct-test.json).
 
+## Matched-loss Shallow 1 on custom 3x3 explicit CoT
+
+This probe starts from the final matched-loss Shallow 1 checkpoint (FineWeb
+validation loss `3.3054311275`) rather than the earlier `3.3411` checkpoint.
+Because the paper's released multiplication task starts at 4x4, the 3x3 data
+is a deterministic custom extension of its exact long-multiplication format.
+The 806,000-example training set contains every ordered three-digit pair except
+both orientations of the 2,000 held-out commutative pairs. Validation and test
+contain 1,000 examples each (seed 3456), and the explicit trace occupies 25
+GPT-2 tokens.
+
+After one paper-matched FP32 explicit-CoT epoch (25,187 optimizer steps),
+input-only greedy evaluation required the model to generate the complete trace
+and final answer; no reference CoT was supplied at evaluation time.
+
+| Split | Correct | Examples | Final-answer exact match |
+| --- | ---: | ---: | ---: |
+| 3x3 validation | 1,000 | 1,000 | 100.0% |
+| 3x3 test | 1,000 | 1,000 | 100.0% |
+
+The explicit gate therefore passed and the stepwise 25-token internalization
+curriculum began from this checkpoint. This establishes that Shallow 1 can
+learn the visible 3x3 algorithm perfectly; it does not yet measure fully hidden
+reasoning or a depth effect.
+
+- [`3x3-dataset.json`](3x3-dataset.json)
+- [`shallow1-3x3-explicit-cot-validation.json`](shallow1-3x3-explicit-cot-validation.json)
+- [`shallow1-3x3-explicit-cot-test.json`](shallow1-3x3-explicit-cot-test.json)
+- [`shallow1-3x3-explicit-cot-training-config.json`](shallow1-3x3-explicit-cot-training-config.json)
+
 ## Shallow model after explicit-CoT fine-tuning
 
 The 4x4 model was fine-tuned for one full pass over the authors' 808,000-example training split
