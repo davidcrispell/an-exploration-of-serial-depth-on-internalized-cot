@@ -1,0 +1,20 @@
+{
+  "digits": 3,
+  "seed": 3456,
+  "heldout_per_split": 1000,
+  "train": {
+    "path": "artifacts/datasets/multiplication-3x3/train.txt",
+    "examples": 806000,
+    "sha256": "d2eec55c9241f4c65d88d15ba3c3bafb28236714a6de9b411956ce3868448c86"
+  },
+  "validation": {
+    "path": "benchmarks/multiplication/data/3x3/validation.txt",
+    "examples": 1000,
+    "sha256": "c3db4dde5c694444c3d56c48176f7117ac10bbd054e0b375b02b4bd1aeed7a47"
+  },
+  "test": {
+    "path": "benchmarks/multiplication/data/3x3/test.txt",
+    "examples": 1000,
+    "sha256": "091fbd743ea405aec4a7b899258121308992b47bc116b418d72d7d5c7514b485"
+  }
+}

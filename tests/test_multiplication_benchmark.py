@@ -1,3 +1,4 @@
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -17,6 +18,10 @@ from benchmarks.multiplication.cot import (
     shifted_inputs_and_labels,
     strip_compile_prefix,
 )
+from benchmarks.multiplication.generate import (
+    generate_dataset,
+    multiplication_record,
+)
 from benchmarks.multiplication.evaluate import answer_matches
 
 from benchmarks.multiplication.validate import (
@@ -31,6 +36,45 @@ DATA_ROOT = Path(__file__).parents[1] / "benchmarks" / "multiplication" / "data"
 
 
 class MultiplicationBenchmarkTests(unittest.TestCase):
+    def test_generated_record_matches_released_format(self) -> None:
+        line = multiplication_record(2365, 4347, 4)
+        self.assertEqual(
+            line,
+            "5 6 3 2 * 7 4 3 4||5 5 5 6 1 + 0 0 6 4 9 0 "
+            "( 5 5 1 1 1 1 ) + 0 0 5 9 0 7 0 ( 5 5 6 0 2 8 0 ) "
+            "+ 0 0 0 0 6 4 9 0 #### 5 5 6 0 8 2 0 1",
+        )
+        record = parse_record(line, 4)
+        self.assertEqual((record.left, record.right), (2365, 4347))
+
+    def test_dataset_excludes_heldout_pairs_in_both_orders(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            summary = generate_dataset(
+                digits=2,
+                train_path=root / "train.txt",
+                validation_path=root / "validation.txt",
+                test_path=root / "test.txt",
+                heldout_per_split=3,
+                seed=7,
+            )
+            heldout = {
+                tuple(sorted((record.left, record.right)))
+                for path in (root / "validation.txt", root / "test.txt")
+                for record in (parse_record(line, 2) for line in path.read_text().splitlines())
+            }
+            train_pairs = {
+                (record.left, record.right)
+                for record in (
+                    parse_record(line, 2)
+                    for line in (root / "train.txt").read_text().splitlines()
+                )
+            }
+            self.assertEqual(summary["train"]["examples"], 90 * 90 - 2 * 6)
+            for left, right in heldout:
+                self.assertNotIn((left, right), train_pairs)
+                self.assertNotIn((right, left), train_pairs)
+
     def test_all_paper_splits_are_valid(self):
         summaries = validate_all(DATA_ROOT)
         self.assertEqual(len(summaries), 2 * len(DIGIT_SIZES))
