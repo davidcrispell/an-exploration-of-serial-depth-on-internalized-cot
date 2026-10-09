@@ -199,10 +199,19 @@ above the community deep checkpoint's 3.2766. On LAMBADA, the continued model
 scored **1,355/5,153 (26.30%)** with target-word perplexity 68.48, versus
 1,322/5,153 (25.65%) and 70.34 for the original. The 0.64-point paired gain has
 a 95% bootstrap interval of -0.08 to 1.36 points, so it is not conclusive. The
-continuation checkpoint has not been used for the multiplication curriculum;
-the internalization results above still describe the original checkpoint.
-Full curves and recovery details are in
+continuation checkpoint is the base for the newer custom 3x3 multiplication
+curriculum; the earlier 4x4 and 5x5 results above still describe the original
+checkpoint. Full curves and recovery details are in
 [`results/pretraining`](results/pretraining/README.md).
+
+The same-recipe Deep 1 control was then trained from scratch to FineWeb
+validation loss **3.30502**, only 0.000415 below Shallow 1, with exactly the
+same 162,201,600 parameters. On LAMBADA it scored **1,516/5,153 (29.42%)** and
+target-word perplexity 55.42. This is 3.12 percentage points above matched-loss
+Shallow 1 (paired 95% interval 2.06–4.19; McNemar `p = 8.80e-9`). Exact
+parameter count and near-identical aggregate pretraining loss therefore do not
+imply identical broad capability; this residual difference must accompany any
+interpretation of the paired internalization results.
 
 ### Broad capability versus internalized computation
 

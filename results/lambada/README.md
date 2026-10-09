@@ -1,19 +1,41 @@
 # LAMBADA capability check
 
-Shallow 1, a community-uploaded 12-layer modded-nanoGPT checkpoint, and OpenAI
-GPT-2 Small were evaluated on all 5,153 examples in the
+Shallow 1, its same-recipe matched-loss Deep 1 control, a community-uploaded
+12-layer modded-nanoGPT checkpoint, and OpenAI GPT-2 Small were evaluated on all 5,153 examples in the
 `EleutherAI/lambada_openai` test split. The scorer follows lm-evaluation-harness
 task version 1.0: the final space-delimited word is the target, accuracy requires
 teacher-forced greedy exact match over every target token, and perplexity is
 aggregated from target-word log likelihood. Both models used the GPT-2 tokenizer,
-FP32 parameters, batch size 16, and the Apple M4 GPU backend.
+FP32 parameters and the Apple M4 GPU backend. Deep 1 used batch size 8 to fit
+the optimizer-bearing checkpoint in memory; the other runs used batch size 16.
+Batch size affects timing but not the teacher-forced predictions.
 
 | Model | Correct | Accuracy | Target-word perplexity | M4 elapsed | Logical input tokens/s |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Shallow 1 | 1,322 / 5,153 | 25.65% | 70.34 | 54.1 s | 7,862 |
 | Shallow 1 continued (step 8,703) | 1,355 / 5,153 | 26.30% | 68.48 | 53.4 s | 7,953 |
+| Deep 1 matched (step 4,200) | 1,516 / 5,153 | 29.42% | 55.42 | 84.9 s | 5,008 |
 | Community Deep 3242 | 1,628 / 5,153 | 31.59% | 45.50 | 78.9 s | 5,390 |
 | OpenAI GPT-2 Small | 1,678 / 5,153 | 32.56% | 40.06 | 79.2 s | 5,365 |
+
+Deep 1 leads the matched-loss Shallow 1 checkpoint by **3.12 percentage
+points** (1,516 versus 1,355 correct). The paired 20,000-replicate bootstrap
+95% interval is 2.06–4.19 points. Deep 1 alone is correct on 470 examples,
+Shallow 1 alone on 309, both on 1,046, and neither on 3,328; the exact
+two-sided McNemar test gives `p = 8.80e-9`. Target-word perplexity also improves
+from 68.48 to 55.42.
+
+This is an important qualification to the experimental control. The models
+have exactly 162,201,600 parameters, use the same pretraining implementation,
+data, tokenizer, and validation set, and their FineWeb losses differ by only
+0.000415. Nevertheless, matching one aggregate loss does not make broad
+capability identical: Deep 1 remains measurably better on LAMBADA. The paired
+multiplication experiment is still necessary, and any internalization gap must
+be interpreted alongside this residual capability difference.
+
+GPT-2 Small leads Deep 1 by 3.14 points (paired 95% interval 1.98–4.29;
+McNemar `p = 9.35e-8`). Community Deep 3242 leads Deep 1 by 2.17 points
+(1.09–3.26; `p = 8.14e-5`).
 
 The constant-rate continuation improves Shallow 1 by 33 correct examples, or
 0.64 percentage points. On paired examples, the continued checkpoint alone is
@@ -78,5 +100,6 @@ checkpoint. Its local 1.0 GB artifact is excluded from Git and has SHA256
 - [`comparison.json`](comparison.json)
 - [`shallow-1.json`](shallow-1.json)
 - [`shallow-1-continuation-step8703.json`](shallow-1-continuation-step8703.json)
+- [`deep-1.json`](deep-1.json)
 - [`community-deep-3242.json`](community-deep-3242.json)
 - [`gpt2-small.json`](gpt2-small.json)

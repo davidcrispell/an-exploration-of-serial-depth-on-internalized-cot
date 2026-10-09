@@ -20,6 +20,19 @@
     "fineweb_validation_loss": 3.3054311275482178,
     "checkpoint_sha256": "3ebb9d8a6189390c779e499957d3b44e4e9a1ae13a41ac8f91f61749beabf27c"
   },
+  "deep_1": {
+    "correct": 1516,
+    "accuracy": 0.29419755482243354,
+    "perplexity": 55.41633669805382,
+    "target_token_perplexity": 23.27825934356182,
+    "elapsed_seconds": 84.87405933300033,
+    "logical_input_tokens_per_second": 5008.326493872829,
+    "fineweb_validation_loss": 3.305016040802002,
+    "checkpoint_sha256": "b7d1e1c596839a8d3da0fd27eea21ad9f4f9b9537d5a0dd527190594fd14b300",
+    "parameters": 162201600,
+    "layers": 12,
+    "width": 768
+  },
   "gpt2_small": {
     "correct": 1678,
     "accuracy": 0.32563555210556955,
@@ -42,6 +55,42 @@
     "provenance": "Community-uploaded 3,242-step checkpoint; not the official 10.8-minute run."
   },
   "paired_comparisons": {
+    "deep_1_minus_shallow_1_continuation": {
+      "accuracy_difference": 0.031243935571511727,
+      "paired_bootstrap_95_percent_ci": [
+        0.02057054143217543,
+        0.041917329710848055
+      ],
+      "first_only_correct": 470,
+      "second_only_correct": 309,
+      "both_correct": 1046,
+      "both_wrong": 3328,
+      "mcnemar_exact_two_sided_p": 8.796524795526534e-09
+    },
+    "gpt2_small_minus_deep_1": {
+      "accuracy_difference": 0.03143799728313601,
+      "paired_bootstrap_95_percent_ci": [
+        0.019794295585968247,
+        0.04288763826896953
+      ],
+      "first_only_correct": 538,
+      "second_only_correct": 376,
+      "both_correct": 1140,
+      "both_wrong": 3099,
+      "mcnemar_exact_two_sided_p": 9.354197385293346e-08
+    },
+    "community_deep_3242_minus_deep_1": {
+      "accuracy_difference": 0.02173491170192121,
+      "paired_bootstrap_95_percent_ci": [
+        0.010867455850960606,
+        0.03260236755288182
+      ],
+      "first_only_correct": 454,
+      "second_only_correct": 342,
+      "both_correct": 1174,
+      "both_wrong": 3183,
+      "mcnemar_exact_two_sided_p": 8.138099354879702e-05
+    },
     "shallow_1_continuation_minus_shallow_1": {
       "accuracy_difference": 0.006404036483601827,
       "paired_bootstrap_95_percent_ci": [
@@ -130,6 +179,6 @@
       "gpt2_small_examples_per_second": 24.681391513150334
     }
   },
-  "interpretation": "The community 12-layer checkpoint is nearly exactly parameter-matched to Shallow 1 and performs materially better on LAMBADA. Its training loss is also lower and it uses additional architectural and optimization changes, so this is evidence of a capability mismatch rather than a causal depth result.",
-  "causal_caveat": "The serial-depth experiment still requires a 12-layer checkpoint trained with the same recipe and matched to Shallow 1's FineWeb validation loss."
+  "interpretation": "Deep 1 is exactly parameter-matched, same-recipe trained, and FineWeb-loss-matched to Shallow 1, yet scores 3.12 percentage points higher on LAMBADA. Matching parameter count and one validation-loss scalar therefore does not make broad capabilities identical.",
+  "causal_caveat": "The depth experiment must compare Deep 1 and Shallow 1 on identical multiplication examples and curricula, and should account for the remaining LAMBADA capability difference when interpreting any internalization gap."
 }

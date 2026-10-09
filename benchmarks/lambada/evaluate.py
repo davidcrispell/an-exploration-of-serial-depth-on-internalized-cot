@@ -40,7 +40,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--model",
-        choices=("shallow-1", "community-deep-3242", "gpt2-small"),
+        choices=("shallow-1", "deep-1", "community-deep-3242", "gpt2-small"),
         required=True,
     )
     parser.add_argument(
@@ -76,7 +76,9 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def load_shallow(checkpoint: Path, device: torch.device):
+def load_project_checkpoint(
+    checkpoint: Path, device: torch.device, *, name: str
+):
     payload = torch.load(checkpoint, map_location="cpu", weights_only=False)
     model = GPT(payload["model_config"])
     state = {
@@ -95,7 +97,7 @@ def load_shallow(checkpoint: Path, device: torch.device):
         return F.rms_norm(x, (x.size(-1),))
 
     metadata = {
-        "name": "Shallow 1",
+        "name": name,
         "architecture": {
             "layers": model.config.n_layer,
             "width": model.config.n_embd,
@@ -106,6 +108,10 @@ def load_shallow(checkpoint: Path, device: torch.device):
         "checkpoint": str(checkpoint.resolve()),
         "checkpoint_sha256": sha256(checkpoint),
     }
+    if payload.get("step") is not None:
+        metadata["pretraining_total_step"] = payload["step"]
+    if payload.get("validation_loss") is not None:
+        metadata["fineweb_validation_loss"] = payload["validation_loss"]
     return model, hidden, model.lm_head, metadata
 
 
@@ -314,9 +320,11 @@ def main() -> None:
         rows = rows[: args.limit]
     examples, truncated = tokenize_examples(tokenizer, rows)
 
-    if args.model == "shallow-1":
-        model, hidden_fn, lm_head, model_metadata = load_shallow(
-            args.checkpoint, device
+    if args.model in {"shallow-1", "deep-1"}:
+        model, hidden_fn, lm_head, model_metadata = load_project_checkpoint(
+            args.checkpoint,
+            device,
+            name="Shallow 1" if args.model == "shallow-1" else "Deep 1",
         )
     elif args.model == "community-deep-3242":
         model, hidden_fn, lm_head, model_metadata = load_community_deep(
