@@ -30,4 +30,7 @@ for 2,000 updates is 50.4 minutes, before validation and checkpoint overhead.
 The continuation reproduced the parent validation loss of 3.3411 at step 0.
 At continuation step 125 (total step 4,703), validation loss was 3.3457. This
 small initial regression occurred just after the 100-update warmup and does not
-establish the eventual direction of the continuation.
+establish the eventual direction of the continuation. Subsequent validation
+losses were 3.3440 at step 250, 3.3414 at step 375, and 3.3390 at step 500.
+The post-warmup curve is improving: step 500 is 0.0021 below the parent loss of
+3.3411, while remaining 0.0890 above the 3.25 target.
