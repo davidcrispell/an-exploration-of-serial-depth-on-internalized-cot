@@ -102,3 +102,8 @@ At continuation steps 875 and 1,000, validation loss reached 3.3149 and
 3.3142254 respectively. The monotonic recovery since step 250 continues, but
 step 1,000 remains 0.0049977 above the parent and 0.0642254 above the target.
 The step-1,000 checkpoint was load-verified.
+
+Validation loss subsequently reached 3.3132, 3.3129, 3.3125, and 3.3103549 at
+steps 1,125, 1,250, 1,375, and 1,500. The latest value is only 0.0011272
+above the 3.3092277 parent, although it remains 0.0603549 above the 3.25
+target. The step-1,500 checkpoint was load-verified.
