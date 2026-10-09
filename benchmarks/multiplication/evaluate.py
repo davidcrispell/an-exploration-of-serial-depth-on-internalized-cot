@@ -137,6 +137,7 @@ def evaluate_size(
         marker = tokenizer.encode(" ####")
 
     correct = 0
+    correct_by_example: list[bool] = []
     samples: list[dict] = []
     failures: list[dict] = []
     started = time.perf_counter()
@@ -169,6 +170,7 @@ def evaluate_size(
                 )
                 is_correct = answer_matches(tokenizer, prediction, examples[offset].answer)
             correct += int(is_correct)
+            correct_by_example.append(is_correct)
             record = {
                 "source": examples[offset].source,
                 "target": examples[offset].answer,
@@ -192,6 +194,7 @@ def evaluate_size(
         "max_new_tokens": max_new_tokens,
         "seconds": elapsed,
         "examples_per_second": len(examples) / elapsed,
+        "correct_by_example": correct_by_example,
         "samples": samples,
         "failures": failures,
     }
