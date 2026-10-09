@@ -11,6 +11,7 @@ import json
 import uuid
 import glob
 import time
+from contextlib import nullcontext
 from dataclasses import dataclass
 
 import numpy as np
@@ -29,7 +30,6 @@ def zeropower_via_svd(G, steps=None):
     U, S, V = G.svd()
     return U @ V.T
 
-@torch.compile
 def zeropower_via_newtonschulz5(G, steps=10, eps=1e-7):
     """
     Newton-Schulz iteration to compute the zeroth power / orthogonalization of G. We opt to use a
@@ -54,7 +54,9 @@ def zeropower_via_newtonschulz5(G, steps=10, eps=1e-7):
         X = X.T
     return X
 
-zeropower_backends = dict(svd=zeropower_via_svd, newtonschulz5=zeropower_via_newtonschulz5)
+zeropower_via_newtonschulz5_compiled = torch.compile(zeropower_via_newtonschulz5)
+zeropower_backends = dict(svd=zeropower_via_svd, newtonschulz5=zeropower_via_newtonschulz5_compiled)
+zeropower_backends_eager = dict(svd=zeropower_via_svd, newtonschulz5=zeropower_via_newtonschulz5)
 
 class Muon(torch.optim.Optimizer):
     """
@@ -92,15 +94,19 @@ class Muon(torch.optim.Optimizer):
 
             lr = group['lr']
             momentum = group['momentum']
-            zeropower_backend = zeropower_backends[group['backend']]
+            parameter_device = group['params'][0].device
+            backends = zeropower_backends if parameter_device.type == "cuda" else zeropower_backends_eager
+            zeropower_backend = backends[group['backend']]
 
             # generate weight updates in distributed fashion
             total_params = sum(p.numel() for p in group['params'])
-            updates_flat = torch.zeros(total_params, device='cuda', dtype=torch.bfloat16)
+            world_size = dist.get_world_size() if dist.is_initialized() else 1
+            rank = dist.get_rank() if dist.is_initialized() else 0
+            updates_flat = torch.zeros(total_params, device=parameter_device, dtype=torch.bfloat16)
             curr_idx = 0
             for i, p in enumerate(group['params']):
                 # luckily this will perfectly distribute a transformer with multiple of 4 layers to 8 GPUs
-                if i % int(os.environ['WORLD_SIZE']) == int(os.environ['RANK']):
+                if i % world_size == rank:
                     g = p.grad
                     assert g is not None
                     state = self.state[p]
@@ -116,7 +122,8 @@ class Muon(torch.optim.Optimizer):
                 curr_idx += p.numel()
 
             # sync updates across devices. we are not memory-constrained so can do this simple deserialization
-            dist.all_reduce(updates_flat, op=dist.ReduceOp.SUM)
+            if world_size > 1:
+                dist.all_reduce(updates_flat, op=dist.ReduceOp.SUM)
 
             # deserialize and apply updates
             curr_idx = 0
@@ -156,11 +163,12 @@ def _load_data_shard(filename):
     return tokens
 
 class DistributedDataLoader:
-    def __init__(self, filename_pattern, B, T, process_rank, num_processes, file_offset=0):
+    def __init__(self, filename_pattern, B, T, process_rank, num_processes, file_offset=0, device='cuda'):
         self.process_rank = process_rank
         self.num_processes = num_processes
         self.B = B
         self.T = T
+        self.device = device
 
         # glob files that match the pattern
         self.files = sorted(glob.glob(filename_pattern))[file_offset:]
@@ -198,7 +206,7 @@ class DistributedDataLoader:
         self.current_position += B * T * self.num_processes
         if self.current_position + (B * T * self.num_processes + 1) > len(self.tokens):
             self.advance()
-        return x.cuda(), y.cuda()
+        return x.to(self.device), y.to(self.device)
 
 # -----------------------------------------------------------------------------
 # int main
@@ -235,6 +243,13 @@ parser.add_argument("--input-bin", default=args.input_bin)
 parser.add_argument("--input-val-bin", default=args.input_val_bin)
 parser.add_argument("--train-shard-offset", type=int, default=0)
 parser.add_argument("--output-dir")
+parser.add_argument("--device", choices=("cuda", "mps", "cpu"), default="cuda")
+parser.add_argument("--batch-size", type=int, default=args.batch_size)
+parser.add_argument("--device-batch-size", type=int, default=args.device_batch_size)
+parser.add_argument("--sequence-length", type=int, default=args.sequence_length)
+parser.add_argument("--val-tokens", type=int, default=args.val_tokens)
+parser.add_argument("--no-compile", action="store_true")
+parser.add_argument("--no-save", action="store_true")
 architecture_args = parser.parse_args()
 model_config = config_from_args(architecture_args, vocab_size=50304)
 args.num_iterations = architecture_args.num_iterations
@@ -244,6 +259,10 @@ args.val_loss_every = architecture_args.val_loss_every
 args.save_every = architecture_args.save_every
 args.input_bin = architecture_args.input_bin
 args.input_val_bin = architecture_args.input_val_bin
+args.batch_size = architecture_args.batch_size
+args.device_batch_size = architecture_args.device_batch_size
+args.sequence_length = architecture_args.sequence_length
+args.val_tokens = architecture_args.val_tokens
 if architecture_args.lr_scale <= 0:
     parser.error("--lr-scale must be positive")
 if architecture_args.train_shard_offset < 0:
@@ -270,15 +289,28 @@ if architecture_args.resume:
         )
     parent_step = int(resume_payload["step"])
 
-# set up DDP (distributed data parallel). torchrun sets this env variable
-assert torch.cuda.is_available()
-dist.init_process_group(backend='nccl')
-ddp_rank = int(os.environ['RANK'])
-ddp_local_rank = int(os.environ['LOCAL_RANK'])
-ddp_world_size = int(os.environ['WORLD_SIZE'])
-device = f'cuda:{ddp_local_rank}'
-torch.cuda.set_device(device)
+# Set up DDP for CUDA; MPS and CPU continuation probes are single-process.
+if architecture_args.device == "cuda":
+    assert torch.cuda.is_available()
+    dist.init_process_group(backend='nccl')
+    ddp_rank = int(os.environ['RANK'])
+    ddp_local_rank = int(os.environ['LOCAL_RANK'])
+    ddp_world_size = int(os.environ['WORLD_SIZE'])
+    device = f'cuda:{ddp_local_rank}'
+    torch.cuda.set_device(device)
+else:
+    if architecture_args.device == "mps":
+        assert torch.backends.mps.is_available()
+    ddp_rank = ddp_local_rank = 0
+    ddp_world_size = 1
+    device = architecture_args.device
 print(f"using device: {device}")
+
+def synchronize_device():
+    if architecture_args.device == "cuda":
+        torch.cuda.synchronize()
+    elif architecture_args.device == "mps":
+        torch.mps.synchronize()
 master_process = (ddp_rank == 0) # this process will do logging, checkpointing etc.
 
 # convenience variables
@@ -298,8 +330,9 @@ train_loader = DistributedDataLoader(
     ddp_rank,
     ddp_world_size,
     file_offset=architecture_args.train_shard_offset,
+    device=device,
 )
-val_loader = DistributedDataLoader(args.input_val_bin, B, T, ddp_rank, ddp_world_size)
+val_loader = DistributedDataLoader(args.input_val_bin, B, T, ddp_rank, ddp_world_size, device=device)
 if master_process:
     print(f"Training DataLoader: total number of tokens: {train_loader.ntok_total} across {len(train_loader.files)} files")
     print(f"Validation DataLoader: total number of tokens: {val_loader.ntok_total} across {len(val_loader.files)} files")
@@ -319,25 +352,32 @@ if master_process:
         f"heads={model_config.n_head} head_dim={model_config.head_dim} "
         f"mlp_width={model_config.n_ff} parameters={actual_parameter_count}"
     )
-model = model.cuda()
-if hasattr(config, "coordinate_descent_tuning"):
+model = model.to(device)
+if architecture_args.device == "cuda" and hasattr(config, "coordinate_descent_tuning"):
     config.coordinate_descent_tuning = True # suggested by @Chillee
-model = torch.compile(model)
-# here we wrap model into DDP container
-model = DDP(model, device_ids=[ddp_local_rank])
-raw_model = model.module # always contains the "raw" unwrapped model
-ctx = torch.amp.autocast(device_type='cuda', dtype=torch.bfloat16)
+if not architecture_args.no_compile:
+    model = torch.compile(model)
+# Here we wrap CUDA models in DDP; local MPS/CPU probes stay single-process.
+if architecture_args.device == "cuda":
+    model = DDP(model, device_ids=[ddp_local_rank])
+    raw_model = model.module
+    ctx = torch.amp.autocast(device_type='cuda', dtype=torch.bfloat16)
+else:
+    raw_model = model
+    ctx = nullcontext()
 
 # CUDNN attention is ~4ms faster than Flash, but doesn't get selected by default in PyTorch 2.5.1
-from torch.backends.cuda import enable_cudnn_sdp, enable_flash_sdp, enable_math_sdp, enable_mem_efficient_sdp
-enable_cudnn_sdp(True)
-enable_flash_sdp(False)
-enable_mem_efficient_sdp(False)
-enable_math_sdp(False)
+if architecture_args.device == "cuda":
+    from torch.backends.cuda import enable_cudnn_sdp, enable_flash_sdp, enable_math_sdp, enable_mem_efficient_sdp
+    enable_cudnn_sdp(True)
+    enable_flash_sdp(False)
+    enable_mem_efficient_sdp(False)
+    enable_math_sdp(False)
 
 # init the optimizer(s)
-optimizer1 = torch.optim.Adam([raw_model.transformer.wte.weight], lr=0.3 * architecture_args.lr_scale,   betas=(0.9, 0.95), fused=True)
-optimizer2 = torch.optim.Adam([raw_model.lm_head.weight],         lr=0.002 * architecture_args.lr_scale, betas=(0.9, 0.95), fused=True)
+use_fused_adam = architecture_args.device == "cuda"
+optimizer1 = torch.optim.Adam([raw_model.transformer.wte.weight], lr=0.3 * architecture_args.lr_scale,   betas=(0.9, 0.95), fused=use_fused_adam)
+optimizer2 = torch.optim.Adam([raw_model.lm_head.weight],         lr=0.002 * architecture_args.lr_scale, betas=(0.9, 0.95), fused=use_fused_adam)
 optimizer3 = Muon(raw_model.transformer.h.parameters(),           lr=0.02 * architecture_args.lr_scale,  momentum=0.95)
 optimizers = [optimizer1, optimizer2, optimizer3]
 # learning rate decay scheduler (linear warmup and warmdown)
@@ -382,10 +422,11 @@ if master_process:
         f.write('='*100 + '\n')
         # log information about the hardware/software environment this is running on
         # and print the full `nvidia-smi` to file
-        f.write(f"Running pytorch {torch.version.__version__} compiled for CUDA {torch.version.cuda}\nnvidia-smi:\n")
+        f.write(f"Running pytorch {torch.version.__version__} on {device}; CUDA build {torch.version.cuda}\n")
         import subprocess
-        result = subprocess.run(['nvidia-smi'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        f.write(f'{result.stdout}\n')
+        if architecture_args.device == "cuda":
+            result = subprocess.run(['nvidia-smi'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            f.write(f'nvidia-smi:\n{result.stdout}\n')
         f.write('='*100 + '\n')
     if architecture_args.output_dir:
         with open(os.path.join(logdir, "training_config.json"), "w") as f:
@@ -414,7 +455,7 @@ if master_process:
 
 training_time_ms = 0
 # start the clock
-torch.cuda.synchronize()
+synchronize_device()
 t0 = time.time()
 # begin training
 train_loader.reset()
@@ -434,7 +475,7 @@ for step in range(args.num_iterations + 1):
     # once in a while evaluate the validation dataset
     if (scheduled_last_step or (args.val_loss_every > 0 and step % args.val_loss_every == 0)):
         # stop the clock
-        torch.cuda.synchronize()
+        synchronize_device()
         training_time_ms += 1000 * (time.time() - t0)
         # run validation batches
         model.eval()
@@ -446,7 +487,8 @@ for step in range(args.num_iterations + 1):
                 _, loss = model(x_val, y_val, return_logits=False)
                 val_loss += loss.detach()
                 del loss
-        dist.all_reduce(val_loss, op=dist.ReduceOp.AVG)
+        if dist.is_initialized():
+            dist.all_reduce(val_loss, op=dist.ReduceOp.AVG)
         val_loss /= val_steps
         last_val_loss = float(val_loss.item())
         # log val loss to console and to logfile
@@ -459,15 +501,15 @@ for step in range(args.num_iterations + 1):
             and val_loss.item() <= architecture_args.target_val_loss
         )
         # start the clock again
-        torch.cuda.synchronize()
+        synchronize_device()
         t0 = time.time()
 
     last_step = scheduled_last_step or target_reached
-    if master_process and (
+    if master_process and not architecture_args.no_save and (
         last_step or (args.save_every > 0 and step > 0 and step % args.save_every == 0)
     ):
         # stop the clock
-        torch.cuda.synchronize()
+        synchronize_device()
         training_time_ms += 1000 * (time.time() - t0)
         # save the state of the training process
         log = dict(
@@ -490,7 +532,7 @@ for step in range(args.num_iterations + 1):
         )
         torch.save(log, checkpoint_path)
         # start the clock again
-        torch.cuda.synchronize()
+        synchronize_device()
         t0 = time.time()
 
     # bit confusing: we want to make sure to eval on 0th iteration
@@ -511,7 +553,7 @@ for step in range(args.num_iterations + 1):
         x, y = train_loader.next_batch()
         # backward pass
         if i < train_accumulation_steps:
-            with model.no_sync(): # there's no need to sync gradients every accumulation step
+            with (model.no_sync() if isinstance(model, DDP) else nullcontext()):
                 loss.backward()
         else:
             loss.backward() # just sync on the last step
@@ -534,8 +576,12 @@ for step in range(args.num_iterations + 1):
             f.write(f"step:{step+1}/{args.num_iterations} total_step:{parent_step + step + 1} train_loss:{train_loss.item():.4f} train_time:{approx_time:.0f}ms step_avg:{approx_time/timed_steps:.2f}ms\n")
 
 if master_process:
-    print(f"peak memory consumption: {torch.cuda.max_memory_allocated() // 1024 // 1024} MiB")
+    if architecture_args.device == "cuda":
+        print(f"peak memory consumption: {torch.cuda.max_memory_allocated() // 1024 // 1024} MiB")
+    elif architecture_args.device == "mps":
+        print(f"current MPS memory: {torch.mps.current_allocated_memory() // 1024 // 1024} MiB")
 
 # -------------------------------------------------------------------------
 # clean up nice
-dist.destroy_process_group()
+if dist.is_initialized():
+    dist.destroy_process_group()

@@ -45,6 +45,22 @@ The optimizer is intentionally reset because the original distributed Muon
 checkpoint contains only rank zero's momentum shards. The parent model weights
 are loaded exactly; this restart is documented as a distinct training phase.
 
+Apple-silicon feasibility probes can use the same entry point without DDP:
+
+```bash
+python train_gpt2.py --device mps --no-compile --no-save \
+  --layers 6 --width 1024 --heads 8 --mlp-width 2768 \
+  --resume artifacts/checkpoints/shallow-fineweb/state_step004578.pt \
+  --input-bin 'data/fineweb10B/fineweb_train_*.bin' \
+  --input-val-bin 'data/fineweb10B/fineweb_val_*.bin' \
+  --batch-size 8 --device-batch-size 1 --num-iterations 1 \
+  --val-tokens 1024 --lr-scale 0.02 --output-dir /tmp/shallow1-mps-probe
+```
+
+`--batch-size` is the effective batch after accumulation. Matching the CUDA
+run requires 512 sequences per update; smaller values are throughput probes,
+not equivalent continuation training.
+
 An exactly parameter-matched shallow/deep pair, counting every trainable parameter in the untied
 embedding/head model, is:
 

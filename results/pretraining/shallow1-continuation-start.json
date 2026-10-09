@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-08",
+  "parent_checkpoint_sha256": "c5e54086d9ef419f2c43591eca0887bd5ed5e8fed52dd3a329363f807a3f49e0",
+  "parent_step": 4578,
+  "parent_validation_loss": 3.3411,
+  "runpod": {
+    "gpu": "RTX PRO 6000 Blackwell Server Edition",
+    "hourly_price_usd": 2.49,
+    "pod_id": "acd493mib3yi3s",
+    "steps_cap": 2000,
+    "target_validation_loss": 3.25,
+    "effective_batch_sequences": 512,
+    "sequence_length": 1024,
+    "warmup_updates": 100,
+    "warmdown_updates": 500,
+    "learning_rate_scale": 0.2,
+    "train_shards": "25-35",
+    "measured_seconds_per_update": 1.512,
+    "probe_peak_memory_mib": 23257,
+    "validation_checkpoints": [
+      {
+        "continuation_step": 0,
+        "total_step": 4578,
+        "validation_loss": 3.3411
+      },
+      {
+        "continuation_step": 125,
+        "total_step": 4703,
+        "validation_loss": 3.3457
+      }
+    ]
+  },
+  "local_mps_probe": {
+    "hardware": "MacBook Air, Apple M4, 8 GPU cores, 16 GB unified memory",
+    "effective_batch_sequences": 8,
+    "sequence_length": 1024,
+    "seconds_per_update": 5.84,
+    "post_update_allocated_memory_mib": 1676,
+    "matched_batch_linear_estimate_seconds_per_update": 373.76,
+    "matched_2000_update_linear_estimate_days": 8.65
+  }
+}
