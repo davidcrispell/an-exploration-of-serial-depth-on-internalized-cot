@@ -58,7 +58,11 @@ by which trace suffix remains and by adaptation time; later recovery would not
 erase the observed crossing. Accuracy declined further to 613/1,000 (61.3%)
 at the 16/25-token checkpoint, then rebounded to 842/1,000 (84.2%) at 24/25.
 As in the earlier 4x4 curriculum, the curve is non-monotonic, so intermediate
-declines cannot be extrapolated to the first or final full-removal result.
+declines cannot be extrapolated to the first or final full-removal result. At
+the first 25/25 checkpoint, accuracy recovered further to 965/1,000 (96.5%).
+This misses the preregistered 99% target but clears the 95% sensitivity
+threshold, so training continues through the remaining full-removal adaptation
+budget.
 
 | Curriculum checkpoint | Removed CoT tokens | Correct | Examples | Accuracy |
 | ---: | ---: | ---: | ---: | ---: |
@@ -66,6 +70,7 @@ declines cannot be extrapolated to the first or final full-removal result.
 | Epoch 0 | 8 / 25 | 757 | 1,000 | 75.7% |
 | Epoch 1 | 16 / 25 | 613 | 1,000 | 61.3% |
 | Epoch 2 | 24 / 25 | 842 | 1,000 | 84.2% |
+| Epoch 3 (first full removal) | 25 / 25 | 965 | 1,000 | 96.5% |
 
 - [`3x3-dataset.json`](3x3-dataset.json)
 - [`shallow1-3x3-explicit-cot-validation.json`](shallow1-3x3-explicit-cot-validation.json)
