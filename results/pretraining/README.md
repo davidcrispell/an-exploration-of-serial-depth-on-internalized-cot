@@ -59,3 +59,14 @@ The verified final checkpoint is stored locally at
 `27964d91b2a36700340db5a89227dcdb8f226ee2f7404d6ef06d235480a82b6b`.
 The checkpoint, training configuration, and full logs are Git-ignored; compact
 metrics are tracked in `shallow1-continuation-start.json`.
+
+## Constant-rate follow-on phase
+
+Because the first continuation spent its final 500 updates linearly reducing
+the learning rate to zero, a follow-on phase starts from its verified final
+checkpoint and restores the complete single-GPU optimizer state. This phase
+uses `lr_scale=0.2` with **zero warmup and zero warmdown**, so the learning rate
+is constant and nonzero for every optimizer update. It uses unseen FineWeb
+shards 36-50, validates and overwrites its rolling checkpoint every 125
+updates, stops early at validation loss 3.25, and has a budget-safe maximum of
+2,200 updates. Step-zero validation reproduced the parent loss of 3.3092.

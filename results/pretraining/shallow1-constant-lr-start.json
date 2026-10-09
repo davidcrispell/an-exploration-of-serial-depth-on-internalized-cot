@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-08",
+  "status": "running",
+  "parent_checkpoint_sha256": "27964d91b2a36700340db5a89227dcdb8f226ee2f7404d6ef06d235480a82b6b",
+  "parent_step": 6578,
+  "parent_validation_loss": 3.309227705001831,
+  "runpod": {
+    "pod_id": "v65fbs8pswgrui",
+    "gpu": "RTX PRO 6000 Blackwell Server Edition",
+    "cloud": "secure",
+    "hourly_price_usd": 2.49,
+    "initial_balance_usd": 3.3188042684,
+    "optimizer_state": "restored_from_parent",
+    "learning_rate_scale": 0.2,
+    "warmup_updates": 0,
+    "warmdown_updates": 0,
+    "steps_cap": 2200,
+    "target_validation_loss": 3.25,
+    "effective_batch_sequences": 512,
+    "sequence_length": 1024,
+    "train_shards": "36-50",
+    "validation_checkpoints": [
+      {
+        "continuation_step": 0,
+        "total_step": 6578,
+        "validation_loss": 3.309227705001831
+      }
+    ],
+    "network_volume_retained": "vpzu3qptxw"
+  }
+}
