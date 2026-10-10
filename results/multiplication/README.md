@@ -136,10 +136,10 @@ this checkpoint, so each first observed frontier is bracketed between 0 and 8
 removed tokens.
 
 A fresh recovery run from the independently preserved explicit-CoT checkpoint
-has reproduced its first two boundaries exactly: 897/1,000 (89.7%) at 8/25 and
-767/1,000 (76.7%) at 16/25 removed tokens. The recovery remains in progress;
-later checkpoints will be compared before treating the lost final checkpoint
-as reproduced.
+has reproduced its first three boundaries exactly: 897/1,000 (89.7%) at 8/25,
+767/1,000 (76.7%) at 16/25, and 873/1,000 (87.3%) at 24/25 removed tokens. The
+fully removed-reasoning checkpoints remain in progress and will be compared
+before treating the lost final checkpoint as reproduced.
 
 | Curriculum checkpoint | Deep 1 | Shallow 1 | Deep minus shallow |
 | --- | ---: | ---: | ---: |

@@ -29,10 +29,19 @@
       "examples": 1000,
       "accuracy": 0.767,
       "matches_prior_run": true
+    },
+    {
+      "epoch": 2,
+      "removed": 24,
+      "correct": 873,
+      "examples": 1000,
+      "accuracy": 0.873,
+      "matches_prior_run": true
     }
   ],
   "prior_run_accuracy_at_8_removed": 0.897,
   "prior_run_accuracy_at_16_removed": 0.767,
-  "next_checkpoint_removed": 24,
-  "updated_at": "2026-10-10T08:35:58Z"
+  "prior_run_accuracy_at_24_removed": 0.873,
+  "next_checkpoint_removed": 25,
+  "updated_at": "2026-10-10T08:55:58Z"
 }
