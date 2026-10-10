@@ -135,6 +135,11 @@ is at least five points. Both models are below the 99% and 95% thresholds at
 this checkpoint, so each first observed frontier is bracketed between 0 and 8
 removed tokens.
 
+A fresh recovery run from the independently preserved explicit-CoT checkpoint
+reproduced this first boundary exactly: 897/1,000 (89.7%) at 8/25 removed
+tokens. The recovery remains in progress; later checkpoints will be compared
+before treating the lost final checkpoint as reproduced.
+
 | Curriculum checkpoint | Deep 1 | Shallow 1 | Deep minus shallow |
 | --- | ---: | ---: | ---: |
 | Explicit stage (0 / 25) | 100.0% | 100.0% | 0.0 pp |
@@ -190,6 +195,9 @@ effect.
 - [`deep1-3x3-internalized-cot-test.json`](deep1-3x3-internalized-cot-test.json)
 - [`deep1-3x3-internalized-cot-training-config.json`](deep1-3x3-internalized-cot-training-config.json)
 - [`deep1-3x3-internalized-cot-progress.json`](deep1-3x3-internalized-cot-progress.json)
+- [`deep1-3x3-internalized-cot-recovery-progress.json`](deep1-3x3-internalized-cot-recovery-progress.json)
+- [`deep1-3x3-internalized-cot-recovery-validation.json`](deep1-3x3-internalized-cot-recovery-validation.json)
+- [`deep1-3x3-internalized-cot-recovery-training-config.json`](deep1-3x3-internalized-cot-recovery-training-config.json)
 - [`deep1-vs-shallow1-3x3-paired-sensitivity.json`](deep1-vs-shallow1-3x3-paired-sensitivity.json)
 - [`shallow1-3x3-internalized-cot-test-paired-rerun.json`](shallow1-3x3-internalized-cot-test-paired-rerun.json)
 

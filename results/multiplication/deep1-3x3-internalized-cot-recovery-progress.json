@@ -1,0 +1,29 @@
+{
+  "experiment": "deep1_3x3_internalized_cot_recovery",
+  "status": "training",
+  "reason": "The prior final internalized checkpoint was lost when stopped-pod container storage did not persist; recovery starts from the independently preserved explicit-CoT checkpoint.",
+  "pod_id": "a5h1qf7p4cmy52",
+  "pipeline_started_at": "2026-10-10T07:33:11Z",
+  "base_explicit_checkpoint_sha256": "d71a3f994619d6f8276dcfeb51a790a3fb376a1f8dfb3450c43f73f945b58ba0",
+  "schedule": {
+    "cot_tokens": 25,
+    "remove_per_epoch": 8,
+    "batch_size": 32,
+    "learning_rate": 0.00005,
+    "removal_smoothing_lambda": 4.0,
+    "seed": 3456
+  },
+  "completed_validation_checkpoints": [
+    {
+      "epoch": 0,
+      "removed": 8,
+      "correct": 897,
+      "examples": 1000,
+      "accuracy": 0.897,
+      "matches_prior_run": true
+    }
+  ],
+  "prior_run_accuracy_at_8_removed": 0.897,
+  "next_checkpoint_removed": 16,
+  "updated_at": "2026-10-10T08:05:28Z"
+}
