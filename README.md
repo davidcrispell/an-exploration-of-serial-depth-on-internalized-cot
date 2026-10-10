@@ -225,10 +225,10 @@ for Shallow 1**, a final gap of only 0.4 points.
 
 Because the stopped pod's temporary disk did not retain the final Deep 1
 internalized checkpoint, a recovery run was started from the verified explicit
-checkpoint. Its first three completed boundaries exactly reproduced the archived
-results: **89.7% at 8/25**, **76.7% at 16/25**, and **87.3% at 24/25 tokens
-removed**. The fully removed-reasoning checkpoints and matched 4x4 Deep 1 run
-are in progress.
+checkpoint. Its first four completed boundaries exactly reproduced the archived
+results: **89.7% at 8/25**, **76.7% at 16/25**, **87.3% at 24/25**, and **97.5%
+at the first 25/25 checkpoint**. Full-removal adaptation and the matched 4x4
+Deep 1 run are in progress.
 
 The archived Shallow evaluation did not save per-example correctness. A local
 CPU rerun of the identical checkpoint scored 98.6%, two examples below the

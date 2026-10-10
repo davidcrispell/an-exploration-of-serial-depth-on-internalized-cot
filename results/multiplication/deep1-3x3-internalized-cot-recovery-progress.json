@@ -37,11 +37,23 @@
       "examples": 1000,
       "accuracy": 0.873,
       "matches_prior_run": true
+    },
+    {
+      "epoch": 3,
+      "removed": 25,
+      "correct": 975,
+      "examples": 1000,
+      "accuracy": 0.975,
+      "fully_internalized": true,
+      "full_removal_adaptation_epochs": 0,
+      "matches_prior_run": true
     }
   ],
   "prior_run_accuracy_at_8_removed": 0.897,
   "prior_run_accuracy_at_16_removed": 0.767,
   "prior_run_accuracy_at_24_removed": 0.873,
+  "prior_run_first_full_removal_accuracy": 0.975,
   "next_checkpoint_removed": 25,
-  "updated_at": "2026-10-10T08:55:58Z"
+  "next_checkpoint_full_removal_adaptation_epochs": 1,
+  "updated_at": "2026-10-10T09:15:58Z"
 }
