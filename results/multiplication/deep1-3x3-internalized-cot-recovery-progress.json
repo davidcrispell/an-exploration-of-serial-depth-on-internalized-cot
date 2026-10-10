@@ -21,9 +21,18 @@
       "examples": 1000,
       "accuracy": 0.897,
       "matches_prior_run": true
+    },
+    {
+      "epoch": 1,
+      "removed": 16,
+      "correct": 767,
+      "examples": 1000,
+      "accuracy": 0.767,
+      "matches_prior_run": true
     }
   ],
   "prior_run_accuracy_at_8_removed": 0.897,
-  "next_checkpoint_removed": 16,
-  "updated_at": "2026-10-10T08:05:28Z"
+  "prior_run_accuracy_at_16_removed": 0.767,
+  "next_checkpoint_removed": 24,
+  "updated_at": "2026-10-10T08:35:58Z"
 }
