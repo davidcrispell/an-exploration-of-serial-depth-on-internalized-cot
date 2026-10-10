@@ -233,13 +233,24 @@ The explicit checkpoint is downloaded under
 `artifacts/checkpoints/deep1-4x4-explicit-cot/` and verified at SHA256
 `f7df6b802eca06ce78c5db280ab21dc01206745cd67d1057a910941659195daf`.
 The 47-token internalization curriculum is now running from this checkpoint.
-This establishes equal visible-algorithm accuracy for the matched Deep and
-Shallow models before the trace is hidden; it is not evidence of a depth-only
-effect.
+At its first epoch boundary, Deep 1 scored 933/1,000 (93.3%) with 8/47 CoT
+tokens removed, versus 852/1,000 (85.2%) for Shallow 1 at the identical
+boundary, an observed gap of +8.1 percentage points. Both models are below the
+99% primary and 95% sensitivity thresholds, so both first observed frontiers
+are bracketed between 0 and 8 removed tokens. This is an intermediate,
+adaptation-confounded checkpoint on a known non-monotonic curriculum—not a
+causal depth-only effect—and Deep 1 retains its 3.12-point LAMBADA advantage.
+
+| Curriculum checkpoint | Deep 1 | Shallow 1 | Deep minus shallow |
+| --- | ---: | ---: | ---: |
+| Explicit stage (0 / 47) | 100.0% | 100.0% | 0.0 pp |
+| Epoch 0 (8 / 47) | 93.3% | 85.2% | +8.1 pp |
 
 - [`deep1-4x4-explicit-cot-validation.json`](deep1-4x4-explicit-cot-validation.json)
 - [`deep1-4x4-explicit-cot-test.json`](deep1-4x4-explicit-cot-test.json)
 - [`deep1-4x4-explicit-cot-training-config.json`](deep1-4x4-explicit-cot-training-config.json)
+- [`deep1-4x4-internalized-cot-progress.json`](deep1-4x4-internalized-cot-progress.json)
+- [`deep1-4x4-internalized-cot-training-config.json`](deep1-4x4-internalized-cot-training-config.json)
 
 ## Shallow model after explicit-CoT fine-tuning
 

@@ -245,7 +245,11 @@ result exactly: **89.7% at 8/25**, **76.7% at 16/25**, **87.3% at 24/25**,
 and **99.2% test**. The recovered checkpoint is downloaded and SHA256-verified;
 the matched 4x4 Deep 1 explicit stage has since reached **100.0% validation and
 100.0% test accuracy**, its checkpoint is downloaded and SHA256-verified, and
-the 47-token internalization curriculum is in progress.
+the 47-token internalization curriculum is in progress. At the first 8/47
+checkpoint, Deep 1 scored **93.3%** versus Shallow 1's **85.2%** (+8.1 points).
+Both first observed 95% and 99% frontiers lie between 0 and 8 tokens, and the
+intermediate gap remains non-causal because the curriculum is non-monotonic and
+Deep 1 retains a 3.12-point LAMBADA advantage.
 
 The archived Shallow evaluation did not save per-example correctness. A local
 CPU rerun of the identical checkpoint scored 98.6%, two examples below the
