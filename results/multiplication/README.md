@@ -122,11 +122,10 @@ was supplied at evaluation time.
 | 3x3 validation | 1,000 | 1,000 | 100.0% |
 | 3x3 test | 1,000 | 1,000 | 100.0% |
 
-The explicit gate passed, and Deep 1 has entered the same 25-token stepwise
-internalization curriculum. This stage establishes equal visible-algorithm
-accuracy before reasoning tokens are hidden; it does not itself establish a
-depth effect. The evaluator now records correctness for every ordered example
-so later comparisons can use paired uncertainty tests.
+The explicit gate passed, and Deep 1 completed the same 25-token stepwise
+internalization curriculum. This establishes equal visible-algorithm accuracy
+before reasoning tokens are hidden; it does not by itself establish a depth
+effect. The evaluator records correctness for every ordered example.
 
 At the first curriculum boundary, Deep 1 scored 897/1,000 (89.7%) with 8/25
 CoT tokens removed. Shallow 1 scored 757/1,000 (75.7%) at the identical
@@ -143,6 +142,8 @@ removed tokens.
 | Epoch 1 (16 / 25) | 76.7% | 61.3% | +15.4 pp |
 | Epoch 2 (24 / 25) | 87.3% | 84.2% | +3.1 pp |
 | Epoch 3 (first full removal) | 97.5% | 96.5% | +1.0 pp |
+| Epoch 4 (one full-removal adaptation epoch) | 99.0% | 99.0% | 0.0 pp |
+| Held-out test after epoch 4 | 99.2% | 98.8% | +0.4 pp |
 
 At 16/25 removed tokens, Deep 1 scored 767/1,000 (76.7%) versus
 613/1,000 (61.3%) for Shallow 1, widening the observed gap slightly to
@@ -158,22 +159,48 @@ earlier large separation does not persist uniformly across removal checkpoints.
 At the first 25/25 checkpoint, Deep 1 reached 975/1,000 (97.5%) and Shallow 1
 reached 965/1,000 (96.5%), leaving only a 1.0-point gap. Both models therefore
 clear the 95% sensitivity threshold at first full removal, while neither clears
-the 99% primary threshold. Deep 1 is continuing through the same full-removal
-adaptation budget; Shallow 1 reached 99.0% after one such additional epoch.
+the 99% primary threshold. After one additional full-removal adaptation epoch,
+both reached exactly 990/1,000 (99.0%) on validation. Their archived CUDA test
+scores were 992/1,000 (99.2%) for Deep 1 and 988/1,000 (98.8%) for Shallow 1,
+only a 0.4-point final gap.
 
-This is a meaningful matched-curriculum separation, but not yet a final
-capacity result. The earlier shallow curves were strongly non-monotonic, and
-each removal checkpoint also differs in adaptation time. In addition, Deep 1
-outperformed Shallow 1 on LAMBADA by 3.12 points despite the parameter/loss
-match, leaving residual broad-capability mismatch as a causal confound. Paired
-example-level uncertainty for the 8-token checkpoint is pending because the
-archived shallow epoch-0 metrics predate per-example correctness recording.
+The archived Shallow result predates per-example correctness recording. A
+rerun of its identical checkpoint and examples on local CPU produced 986/1,000
+(98.6%), two examples below the archived CUDA score. Pairing that CPU vector
+with Deep's CUDA vector gives a **cross-backend sensitivity analysis** of +0.6
+points (paired-bootstrap 95% interval -0.3 to +1.5; 14 Deep-only versus 8
+Shallow-only successes; exact McNemar `p = 0.2863`). This does not detect a
+final-test difference, but it is not a definitive same-backend paired test.
+The small reproducibility discrepancy is consistent with backend-sensitive
+low-margin greedy decisions; both checkpoints should be rerun on the same CUDA
+backend before making a primary paired claim.
+
+The intermediate separation is real as an observed training-curve result, but
+it is not a clean capacity frontier: both curves are strongly non-monotonic,
+each checkpoint differs in adaptation time, and the gap collapses near full
+removal. Deep 1 also outperformed Shallow 1 on LAMBADA by 3.12 points despite
+the parameter/loss match, leaving residual broad-capability mismatch as a
+causal confound. These data therefore do not establish a causal depth-only
+effect.
 
 - [`deep1-3x3-explicit-cot-validation.json`](deep1-3x3-explicit-cot-validation.json)
 - [`deep1-3x3-explicit-cot-test.json`](deep1-3x3-explicit-cot-test.json)
 - [`deep1-3x3-explicit-cot-training-config.json`](deep1-3x3-explicit-cot-training-config.json)
 - [`deep1-3x3-internalized-cot-validation.json`](deep1-3x3-internalized-cot-validation.json)
+- [`deep1-3x3-internalized-cot-test.json`](deep1-3x3-internalized-cot-test.json)
+- [`deep1-3x3-internalized-cot-training-config.json`](deep1-3x3-internalized-cot-training-config.json)
 - [`deep1-3x3-internalized-cot-progress.json`](deep1-3x3-internalized-cot-progress.json)
+- [`deep1-vs-shallow1-3x3-paired-sensitivity.json`](deep1-vs-shallow1-3x3-paired-sensitivity.json)
+- [`shallow1-3x3-internalized-cot-test-paired-rerun.json`](shallow1-3x3-internalized-cot-test-paired-rerun.json)
+
+The Deep run used a 24 GB RTX PRO 6000 Blackwell MIG at $0.69/hour. From pod
+creation through its stop after completion, runtime was about 2 hours 53
+minutes and the observed Runpod balance delta was $2.0199. The explicit
+checkpoint is verified locally (SHA256
+`d71a3f994619d6f8276dcfeb51a790a3fb376a1f8dfb3450c43f73f945b58ba0`).
+The final internalized checkpoint has remote SHA256
+`91ef1a680f14912be4e53e163643b02fcd96d536697d33079b6cb92e4613b729`;
+its pod is stopped at approximately $0.002/hour storage pending safe download.
 
 ## Shallow model after explicit-CoT fine-tuning
 

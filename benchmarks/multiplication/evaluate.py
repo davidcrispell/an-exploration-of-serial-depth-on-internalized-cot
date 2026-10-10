@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+from contextlib import nullcontext
 import hashlib
 import json
 import random
@@ -49,7 +50,12 @@ def generate(
     device = next(model.parameters()).device
     sequences = torch.tensor(prompts, dtype=torch.long, device=device)
     for _ in range(max_new_tokens):
-        with torch.autocast(device_type="cuda", dtype=torch.bfloat16):
+        autocast = (
+            torch.autocast(device_type="cuda", dtype=torch.bfloat16)
+            if device.type == "cuda"
+            else nullcontext()
+        )
+        with autocast:
             logits, _ = model(sequences)
         next_logits = logits[:, -1, :]
         if do_sample:
@@ -223,15 +229,32 @@ def main() -> None:
     parser.add_argument("--limit", type=int)
     parser.add_argument("--seed", type=int, default=3456)
     parser.add_argument("--do-sample", action="store_true")
+    parser.add_argument(
+        "--device",
+        choices=["auto", "cuda", "mps", "cpu"],
+        default="auto",
+        help="evaluation device (default: CUDA, then MPS, then CPU)",
+    )
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
 
-    if not torch.cuda.is_available():
-        raise RuntimeError("CUDA is required for benchmark generation")
+    if args.device == "auto":
+        if torch.cuda.is_available():
+            device = torch.device("cuda")
+        elif torch.backends.mps.is_available():
+            device = torch.device("mps")
+        else:
+            device = torch.device("cpu")
+    else:
+        device = torch.device(args.device)
+    if device.type == "cuda" and not torch.cuda.is_available():
+        raise RuntimeError("CUDA was requested but is unavailable")
+    if device.type == "mps" and not torch.backends.mps.is_available():
+        raise RuntimeError("MPS was requested but is unavailable")
     random.seed(args.seed)
     torch.manual_seed(args.seed)
-    torch.cuda.manual_seed_all(args.seed)
-    device = torch.device("cuda")
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(args.seed)
     tokenizer = tiktoken.get_encoding("gpt2")
     model = load_checkpoint(args.checkpoint, device, torch.bfloat16)
 

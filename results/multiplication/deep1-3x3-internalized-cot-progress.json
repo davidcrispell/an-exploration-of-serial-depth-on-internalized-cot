@@ -1,71 +1,106 @@
 {
   "experiment": "deep1_3x3_internalized_cot",
-  "status": "in_progress",
+  "status": "results_complete_checkpoint_download_pending",
   "base": {
     "name": "Deep 1 matched-loss",
     "layers": 12,
     "width": 768,
+    "heads": 6,
+    "mlp_width": 3072,
     "parameters": 162201600,
     "fineweb_validation_loss": 3.305016040802002,
+    "matched_shallow_fineweb_validation_loss": 3.3054311275482178,
+    "absolute_loss_gap": 0.0004150867462158203,
     "checkpoint_sha256": "b7d1e1c596839a8d3da0fd27eea21ad9f4f9b9537d5a0dd527190594fd14b300"
+  },
+  "dataset": {
+    "provenance": "custom deterministic extension of the paper format; not paper-released",
+    "digits": 3,
+    "train_examples": 806000,
+    "validation_examples": 1000,
+    "test_examples": 1000,
+    "seed": 3456,
+    "train_sha256": "d2eec55c9241f4c65d88d15ba3c3bafb28236714a6de9b411956ce3868448c86"
   },
   "explicit_cot": {
     "validation_accuracy": 1.0,
     "test_accuracy": 1.0,
-    "optimizer_steps": 25187
+    "optimizer_steps": 25187,
+    "checkpoint_sha256": "d71a3f994619d6f8276dcfeb51a790a3fb376a1f8dfb3450c43f73f945b58ba0",
+    "checkpoint_downloaded_and_verified": true
   },
   "internalization": {
     "cot_tokens": 25,
     "remove_per_epoch": 8,
     "validation_curve": [
-      {
-        "stage": "explicit",
-        "removed": 0,
-        "correct": 1000,
-        "accuracy": 1.0
-      },
-      {
-        "epoch": 0,
-        "removed": 8,
-        "correct": 897,
-        "accuracy": 0.897
-      },
-      {
-        "epoch": 1,
-        "removed": 16,
-        "correct": 767,
-        "accuracy": 0.767
-      },
-      {
-        "epoch": 2,
-        "removed": 24,
-        "correct": 873,
-        "accuracy": 0.873
-      },
-      {
-        "epoch": 3,
-        "removed": 25,
-        "correct": 975,
-        "accuracy": 0.975,
-        "stage": "first_full_removal"
-      }
+      {"stage": "explicit", "removed": 0, "correct": 1000, "accuracy": 1.0},
+      {"epoch": 0, "removed": 8, "correct": 897, "accuracy": 0.897},
+      {"epoch": 1, "removed": 16, "correct": 767, "accuracy": 0.767},
+      {"epoch": 2, "removed": 24, "correct": 873, "accuracy": 0.873},
+      {"epoch": 3, "removed": 25, "correct": 975, "accuracy": 0.975, "stage": "first_full_removal"},
+      {"epoch": 4, "removed": 25, "correct": 990, "accuracy": 0.99, "stage": "one_full_removal_adaptation_epoch"}
     ],
     "first_observed_below_99_percent": 8,
     "first_observed_below_95_percent": 8,
     "first_full_removal_validation_accuracy": 0.975,
-    "target_status": "95_percent_sensitivity_passed; 99_percent_primary_target_not_yet_met"
+    "final_validation_accuracy": 0.99,
+    "final_test_correct": 992,
+    "final_test_examples": 1000,
+    "final_test_accuracy": 0.992,
+    "final_checkpoint_sha256": "91ef1a680f14912be4e53e163643b02fcd96d536697d33079b6cb92e4613b729",
+    "final_checkpoint_downloaded": false
   },
   "matched_shallow_comparison": {
-    "latest_checkpoint_removed_tokens": 25,
-    "latest_deep_accuracy": 0.975,
-    "latest_shallow_accuracy": 0.965,
-    "latest_deep_minus_shallow_percentage_points": 1.0,
+    "curve": [
+      {"removed": 0, "deep_accuracy": 1.0, "shallow_accuracy": 1.0, "deep_minus_shallow_percentage_points": 0.0},
+      {"removed": 8, "deep_accuracy": 0.897, "shallow_accuracy": 0.757, "deep_minus_shallow_percentage_points": 14.0},
+      {"removed": 16, "deep_accuracy": 0.767, "shallow_accuracy": 0.613, "deep_minus_shallow_percentage_points": 15.4},
+      {"removed": 24, "deep_accuracy": 0.873, "shallow_accuracy": 0.842, "deep_minus_shallow_percentage_points": 3.1},
+      {"removed": 25, "stage": "first_full_removal", "deep_accuracy": 0.975, "shallow_accuracy": 0.965, "deep_minus_shallow_percentage_points": 1.0},
+      {"removed": 25, "stage": "one_full_removal_adaptation_epoch", "deep_accuracy": 0.99, "shallow_accuracy": 0.99, "deep_minus_shallow_percentage_points": 0.0}
+    ],
     "first_observed_checkpoint_with_gap_at_least_5_percentage_points": 8,
-    "paired_uncertainty_status": "pending; the archived shallow epoch-0 metrics predate per-example correctness recording"
+    "archived_gpu_test": {
+      "deep_correct": 992,
+      "shallow_correct": 988,
+      "examples": 1000,
+      "deep_minus_shallow_percentage_points": 0.4,
+      "paired_uncertainty": "pending same-backend rerun because the archived shallow metrics did not record per-example correctness"
+    },
+    "cross_backend_paired_sensitivity": {
+      "description": "Deep CUDA correctness paired with a local CPU rerun of the identical Shallow checkpoint and examples; not the primary same-backend comparison",
+      "deep_correct": 992,
+      "shallow_correct": 986,
+      "examples": 1000,
+      "deep_minus_shallow_percentage_points": 0.6,
+      "deep_only_correct": 14,
+      "shallow_only_correct": 8,
+      "paired_bootstrap_95_percent_ci_percentage_points": [-0.3, 1.5],
+      "paired_bootstrap_replicates": 100000,
+      "exact_mcnemar_p": 0.28627872467041016,
+      "seed": 3456,
+      "reproducibility_note": "The CPU rerun scored 98.6%, two examples below the archived CUDA score of 98.8%, despite an identical checkpoint hash. This is consistent with backend-sensitive low-margin greedy decisions and prevents treating the cross-backend test as definitive."
+    }
+  },
+  "runpod": {
+    "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition MIG 1g.24gb",
+    "gpu_price_per_hour": 0.69,
+    "pod_id": "po2aqdu4hounus",
+    "pod_created_at": "2026-10-09T23:52:44.477Z",
+    "pod_stopped_at": "2026-10-10T02:45:41Z",
+    "runtime_approx_hours": 2.8824,
+    "starting_balance": 15.5773513286,
+    "stopped_balance": 13.5574395811,
+    "observed_balance_delta": 2.0199117475,
+    "pod_status": "stopped_pending_final_checkpoint_download",
+    "stopped_pod_storage_price_per_hour_approx": 0.002,
+    "network_volume_retained": "vpzu3qptxw"
   },
   "caveats": [
-    "The internalization curves are non-monotonic and checkpoints differ in adaptation time.",
-    "The 8-token gap is an observed matched-curriculum difference, not a final capacity frontier.",
-    "Deep 1 also outperformed Shallow 1 on LAMBADA by 3.12 percentage points, so residual broad-capability mismatch remains a causal confound."
+    "Both internalization curves are strongly non-monotonic and checkpoints differ in adaptation time.",
+    "The large Deep advantage at 8 and 16 removed tokens collapses to one point at first full removal and 0.4 points on the archived final GPU tests.",
+    "Deep 1 outperformed Shallow 1 on LAMBADA by 3.12 percentage points, so residual broad-capability mismatch remains a causal confound.",
+    "The custom 3x3 data is not a paper-released benchmark.",
+    "No causal depth-only conclusion is supported by this single matched pair."
   ]
 }

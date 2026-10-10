@@ -213,26 +213,27 @@ parameter count and near-identical aggregate pretraining loss therefore do not
 imply identical broad capability; this residual difference must accompany any
 interpretation of the paired internalization results.
 
-On the custom 3x3 multiplication extension, matched-loss Shallow 1 reached
-100.0% explicit-CoT validation and test accuracy. Its stepwise internalization
-curve was strongly non-monotonic: 75.7%, 61.3%, and 84.2% at 8, 16, and 24 of
-25 tokens removed. It then reached 96.5% at the first full-removal checkpoint
-and 99.0% after one additional adaptation epoch, with **98.8% held-out test
-accuracy**. Thus the shallow model can internalize this shorter task; the
-paired Deep 1 run uses identical examples and schedule. Deep 1 has now also
-reached 100.0% explicit-CoT validation and test accuracy and passed into the
-25-token internalization curriculum. The matched models therefore enter the
-hidden-reasoning comparison with equal observed explicit-task accuracy; the
-first matched internalization checkpoint now shows 89.7% for Deep 1 versus
-75.7% for Shallow 1 at 8/25 tokens removed, a +14.0-point gap. This is an
-observed matched-curriculum separation, but the curves are non-monotonic and
-the next checkpoint likewise shows 76.7% versus 61.3% at 16/25 removed, a
-+15.4-point gap. At 24/25 removed, both models rebound to 87.3% and 84.2%,
-narrowing the gap to 3.1 points. The final full-removal comparison remains in
-progress: at the first 25/25 checkpoint Deep 1 reaches 97.5% versus 96.5% for
-Shallow 1, only a +1.0-point gap. Deep 1 is now receiving the same additional
-full-removal adaptation epoch that brought Shallow 1 to 99.0%. The 3.12-point
-Deep 1 LAMBADA advantage also remains an important causal confound.
+On the custom 3x3 multiplication extension, both matched models reached 100.0%
+explicit-CoT validation and test accuracy. Their stepwise internalization
+curves were strongly non-monotonic. Deep 1 versus Shallow 1 was 89.7% versus
+75.7% at 8/25 tokens removed (+14.0 points), 76.7% versus 61.3% at 16/25
+(+15.4), and 87.3% versus 84.2% at 24/25 (+3.1). At the first fully hidden
+checkpoint, however, the gap collapsed to 97.5% versus 96.5% (+1.0). After one
+additional full-removal adaptation epoch both models reached exactly 99.0% on
+validation. Their archived CUDA test scores were **99.2% for Deep 1 and 98.8%
+for Shallow 1**, a final gap of only 0.4 points.
+
+The archived Shallow evaluation did not save per-example correctness. A local
+CPU rerun of the identical checkpoint scored 98.6%, two examples below the
+archived CUDA result. Pairing that sensitivity rerun with Deep's CUDA vector
+produces a +0.6-point estimate with paired-bootstrap 95% interval -0.3 to +1.5
+and exact McNemar `p = 0.2863`; it does not detect a final-test difference, but
+the backend mismatch prevents treating it as the definitive paired test. Most
+importantly, the intermediate depth gap does not persist near full removal,
+and Deep 1's 3.12-point LAMBADA advantage remains a broad-capability confound.
+This single matched pair therefore does not establish a causal depth-only
+effect. Full curves, artifacts, cost, and reproducibility notes are in
+[`results/multiplication`](results/multiplication/README.md).
 
 ### Broad capability versus internalized computation
 

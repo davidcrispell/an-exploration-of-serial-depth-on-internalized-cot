@@ -1,0 +1,26 @@
+{
+  "comparison": "deep1_vs_shallow1_3x3_fully_internalized_test",
+  "examples": 1000,
+  "archived_cuda_scores": {
+    "deep_correct": 992,
+    "deep_accuracy": 0.992,
+    "shallow_correct": 988,
+    "shallow_accuracy": 0.988,
+    "deep_minus_shallow_percentage_points": 0.4
+  },
+  "paired_sensitivity": {
+    "deep_backend": "CUDA",
+    "shallow_backend": "CPU",
+    "deep_correct": 992,
+    "shallow_correct": 986,
+    "deep_minus_shallow_percentage_points": 0.6,
+    "deep_only_correct": 14,
+    "shallow_only_correct": 8,
+    "discordant_examples": 22,
+    "paired_bootstrap_95_percent_ci_percentage_points": [-0.3, 1.5],
+    "paired_bootstrap_replicates": 100000,
+    "exact_mcnemar_p": 0.28627872467041016,
+    "seed": 3456
+  },
+  "interpretation": "The paired sensitivity analysis does not detect a final-test difference. It is not the primary same-backend test because the identical Shallow checkpoint scored 98.6% on CPU versus its archived 98.8% CUDA result. A CUDA rerun is required for definitive paired uncertainty."
+}
