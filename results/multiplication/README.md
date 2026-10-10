@@ -104,6 +104,34 @@ Local Git-ignored artifacts:
 - [`shallow1-3x3-internalized-cot-test.json`](shallow1-3x3-internalized-cot-test.json)
 - [`shallow1-3x3-internalized-cot-summary.json`](shallow1-3x3-internalized-cot-summary.json)
 
+## Matched-loss Deep 1 on custom 3x3 explicit CoT
+
+Deep 1 has 12 layers at width 768 (6 attention heads and MLP width 3072),
+while Shallow 1 has 6 layers at width 1024. Both models have exactly
+162,201,600 parameters. Their FineWeb validation losses are closely matched:
+`3.3050160408` for Deep 1 and `3.3054311275` for Shallow 1 (absolute gap
+`0.0004151`).
+
+Deep 1 was trained on the identical custom 3x3 examples and paper-matched
+explicit-CoT schedule used for Shallow 1. Input-only greedy evaluation required
+generation of the complete reasoning trace and final answer; no reference CoT
+was supplied at evaluation time.
+
+| Split | Correct | Examples | Final-answer exact match |
+| --- | ---: | ---: | ---: |
+| 3x3 validation | 1,000 | 1,000 | 100.0% |
+| 3x3 test | 1,000 | 1,000 | 100.0% |
+
+The explicit gate passed, and Deep 1 has entered the same 25-token stepwise
+internalization curriculum. This stage establishes equal visible-algorithm
+accuracy before reasoning tokens are hidden; it does not itself establish a
+depth effect. The evaluator now records correctness for every ordered example
+so later comparisons can use paired uncertainty tests.
+
+- [`deep1-3x3-explicit-cot-validation.json`](deep1-3x3-explicit-cot-validation.json)
+- [`deep1-3x3-explicit-cot-test.json`](deep1-3x3-explicit-cot-test.json)
+- [`deep1-3x3-explicit-cot-training-config.json`](deep1-3x3-explicit-cot-training-config.json)
+
 ## Shallow model after explicit-CoT fine-tuning
 
 The 4x4 model was fine-tuned for one full pass over the authors' 808,000-example training split

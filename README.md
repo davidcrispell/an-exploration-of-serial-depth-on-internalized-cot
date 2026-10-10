@@ -219,8 +219,11 @@ curve was strongly non-monotonic: 75.7%, 61.3%, and 84.2% at 8, 16, and 24 of
 25 tokens removed. It then reached 96.5% at the first full-removal checkpoint
 and 99.0% after one additional adaptation epoch, with **98.8% held-out test
 accuracy**. Thus the shallow model can internalize this shorter task; the
-paired Deep 1 run on identical examples and schedule is required to determine
-whether depth changes the adaptation curve or final reliability.
+paired Deep 1 run uses identical examples and schedule. Deep 1 has now also
+reached 100.0% explicit-CoT validation and test accuracy and passed into the
+25-token internalization curriculum. The matched models therefore enter the
+hidden-reasoning comparison with equal observed explicit-task accuracy; the
+internalization curve and final paired test remain in progress.
 
 ### Broad capability versus internalized computation
 
