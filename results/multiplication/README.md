@@ -140,6 +140,13 @@ removed tokens.
 | --- | ---: | ---: | ---: |
 | Explicit stage (0 / 25) | 100.0% | 100.0% | 0.0 pp |
 | Epoch 0 (8 / 25) | 89.7% | 75.7% | +14.0 pp |
+| Epoch 1 (16 / 25) | 76.7% | 61.3% | +15.4 pp |
+
+At 16/25 removed tokens, Deep 1 scored 767/1,000 (76.7%) versus
+613/1,000 (61.3%) for Shallow 1, widening the observed gap slightly to
+15.4 points. Both models declined from their 8-token checkpoint, reinforcing
+that checkpoint number, remaining trace suffix, and adaptation time cannot be
+collapsed into a simple monotonic capacity axis.
 
 This is a meaningful matched-curriculum separation, but not yet a final
 capacity result. The earlier shallow curves were strongly non-monotonic, and
