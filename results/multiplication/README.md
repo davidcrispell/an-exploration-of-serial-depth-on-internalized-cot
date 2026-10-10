@@ -136,10 +136,16 @@ this checkpoint, so each first observed frontier is bracketed between 0 and 8
 removed tokens.
 
 A fresh recovery run from the independently preserved explicit-CoT checkpoint
-has reproduced its first four boundaries exactly: 897/1,000 (89.7%) at 8/25,
-767/1,000 (76.7%) at 16/25, 873/1,000 (87.3%) at 24/25, and 975/1,000 (97.5%)
-at the first 25/25 checkpoint. Full-removal adaptation remains in progress and
-will be compared before treating the lost final checkpoint as reproduced.
+reproduced every archived aggregate and per-example result exactly: 897/1,000
+(89.7%) at 8/25, 767/1,000 (76.7%) at 16/25, 873/1,000 (87.3%) at 24/25,
+975/1,000 (97.5%) at the first 25/25 checkpoint, 990/1,000 (99.0%) after one
+full-removal adaptation epoch, and 992/1,000 (99.2%) on test. Its final
+checkpoint was downloaded and verified at SHA256
+`e3eedc9de3bc1a98f9567662cd1a29e2bedd990f8bbea6396cec1446de0c5868`.
+The serialized bytes differ from the lost prior checkpoint, whose remote hash
+was `91ef1a680f14912be4e53e163643b02fcd96d536697d33079b6cb92e4613b729`,
+but all five validation correctness vectors and the test correctness vector are
+identical. This is an exact behavioral reproduction on the recorded examples.
 
 | Curriculum checkpoint | Deep 1 | Shallow 1 | Deep minus shallow |
 | --- | ---: | ---: | ---: |
@@ -198,6 +204,7 @@ effect.
 - [`deep1-3x3-internalized-cot-progress.json`](deep1-3x3-internalized-cot-progress.json)
 - [`deep1-3x3-internalized-cot-recovery-progress.json`](deep1-3x3-internalized-cot-recovery-progress.json)
 - [`deep1-3x3-internalized-cot-recovery-validation.json`](deep1-3x3-internalized-cot-recovery-validation.json)
+- [`deep1-3x3-internalized-cot-recovery-test.json`](deep1-3x3-internalized-cot-recovery-test.json)
 - [`deep1-3x3-internalized-cot-recovery-training-config.json`](deep1-3x3-internalized-cot-recovery-training-config.json)
 - [`deep1-vs-shallow1-3x3-paired-sensitivity.json`](deep1-vs-shallow1-3x3-paired-sensitivity.json)
 - [`shallow1-3x3-internalized-cot-test-paired-rerun.json`](shallow1-3x3-internalized-cot-test-paired-rerun.json)

@@ -225,10 +225,11 @@ for Shallow 1**, a final gap of only 0.4 points.
 
 Because the stopped pod's temporary disk did not retain the final Deep 1
 internalized checkpoint, a recovery run was started from the verified explicit
-checkpoint. Its first four completed boundaries exactly reproduced the archived
-results: **89.7% at 8/25**, **76.7% at 16/25**, **87.3% at 24/25**, and **97.5%
-at the first 25/25 checkpoint**. Full-removal adaptation and the matched 4x4
-Deep 1 run are in progress.
+checkpoint. The recovery reproduced every archived aggregate and per-example
+result exactly: **89.7% at 8/25**, **76.7% at 16/25**, **87.3% at 24/25**,
+**97.5% at the first 25/25 checkpoint**, **99.0% after one adaptation epoch**,
+and **99.2% test**. The recovered checkpoint is downloaded and SHA256-verified;
+the matched 4x4 Deep 1 run is in progress.
 
 The archived Shallow evaluation did not save per-example correctness. A local
 CPU rerun of the identical checkpoint scored 98.6%, two examples below the

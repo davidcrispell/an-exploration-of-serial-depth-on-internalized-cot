@@ -1,6 +1,6 @@
 {
   "experiment": "deep1_3x3_internalized_cot",
-  "status": "results_complete_checkpoint_download_pending",
+  "status": "results_complete_recovery_checkpoint_downloaded_and_verified",
   "base": {
     "name": "Deep 1 matched-loss",
     "layers": 12,
@@ -47,8 +47,11 @@
     "final_test_correct": 992,
     "final_test_examples": 1000,
     "final_test_accuracy": 0.992,
-    "final_checkpoint_sha256": "91ef1a680f14912be4e53e163643b02fcd96d536697d33079b6cb92e4613b729",
-    "final_checkpoint_downloaded": false
+    "archived_lost_final_checkpoint_sha256": "91ef1a680f14912be4e53e163643b02fcd96d536697d33079b6cb92e4613b729",
+    "recovered_final_checkpoint_sha256": "e3eedc9de3bc1a98f9567662cd1a29e2bedd990f8bbea6396cec1446de0c5868",
+    "recovered_final_checkpoint_path": "artifacts/checkpoints/deep1-3x3-internalized-cot/latest.pt",
+    "final_checkpoint_downloaded_and_verified": true,
+    "recovery_matches_archived_accuracy_and_per_example_correctness": true
   },
   "matched_shallow_comparison": {
     "curve": [

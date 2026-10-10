@@ -1,6 +1,6 @@
 {
   "experiment": "deep1_3x3_internalized_cot_recovery",
-  "status": "training",
+  "status": "complete_checkpoint_downloaded_and_verified",
   "reason": "The prior final internalized checkpoint was lost when stopped-pod container storage did not persist; recovery starts from the independently preserved explicit-CoT checkpoint.",
   "pod_id": "a5h1qf7p4cmy52",
   "pipeline_started_at": "2026-10-10T07:33:11Z",
@@ -47,13 +47,40 @@
       "fully_internalized": true,
       "full_removal_adaptation_epochs": 0,
       "matches_prior_run": true
+    },
+    {
+      "epoch": 4,
+      "removed": 25,
+      "correct": 990,
+      "examples": 1000,
+      "accuracy": 0.99,
+      "fully_internalized": true,
+      "full_removal_adaptation_epochs": 1,
+      "matches_prior_run": true
     }
   ],
   "prior_run_accuracy_at_8_removed": 0.897,
   "prior_run_accuracy_at_16_removed": 0.767,
   "prior_run_accuracy_at_24_removed": 0.873,
   "prior_run_first_full_removal_accuracy": 0.975,
-  "next_checkpoint_removed": 25,
-  "next_checkpoint_full_removal_adaptation_epochs": 1,
-  "updated_at": "2026-10-10T09:15:58Z"
+  "prior_run_final_validation_accuracy": 0.99,
+  "test": {
+    "correct": 992,
+    "examples": 1000,
+    "accuracy": 0.992,
+    "matches_prior_run": true
+  },
+  "per_example_reproducibility": {
+    "validation_vector_differences_by_epoch": [0, 0, 0, 0, 0],
+    "test_vector_differences": 0
+  },
+  "recovered_checkpoint": {
+    "path": "artifacts/checkpoints/deep1-3x3-internalized-cot/latest.pt",
+    "sha256": "e3eedc9de3bc1a98f9567662cd1a29e2bedd990f8bbea6396cec1446de0c5868",
+    "downloaded_and_verified": true,
+    "archived_lost_checkpoint_sha256": "91ef1a680f14912be4e53e163643b02fcd96d536697d33079b6cb92e4613b729",
+    "byte_identity_with_archived_lost_checkpoint": false
+  },
+  "finished_at": "2026-10-10T09:34:47Z",
+  "updated_at": "2026-10-10T09:35:59Z"
 }
