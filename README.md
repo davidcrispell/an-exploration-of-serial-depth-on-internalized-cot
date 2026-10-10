@@ -253,6 +253,8 @@ At 24/47, Deep 1 declined to **17.3%** versus Shallow 1's **7.4%** (+9.9 points)
 At 32/47, Deep 1 scored **8.2%** versus Shallow 1's **0.7%** (+7.5 points).
 At 40/47, both curves rebounded: Deep 1 scored **89.9%** versus Shallow 1's
 **79.1%** (+10.8 points).
+At the first 47/47 checkpoint, before any full-removal adaptation, Deep 1 scored
+**80.2%** versus Shallow 1's **65.1%** (+15.1 points).
 Both first observed 95% and 99% frontiers lie between 0 and 8 tokens, and the
 intermediate gap remains non-causal because the curriculum is non-monotonic and
 Deep 1 retains a 3.12-point LAMBADA advantage.
