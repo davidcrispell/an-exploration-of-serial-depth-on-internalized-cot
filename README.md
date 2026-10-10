@@ -149,18 +149,19 @@ python -m benchmarks.multiplication.train_internalized_cot \
   --removal-smoothing-lambda 4 --seed 3456
 ```
 
-For a live view of long remote runs, the lightweight dashboard reads the
-Runpod log over SSH and plots loss on a logarithmic scale alongside completed
-validation checkpoints:
+For a live view of long remote runs, the Matplotlib viewer reads the Runpod log
+over SSH and plots loss on a logarithmic scale. Vertical markers show each
+scheduled increase in removed reasoning tokens:
 
 ```bash
-python scripts/live_runpod_loss_dashboard.py \
+python scripts/live_runpod_loss_plot.py \
   --pod POD_ID --log /root/path/to/pipeline.log \
   --key /path/to/runpodctl-ssh-key
 ```
 
-Open `http://127.0.0.1:8765`; the view refreshes every ten seconds and follows
-SSH endpoint changes automatically.
+The native plot refreshes every ten seconds and follows SSH endpoint changes
+automatically. A browser-based dashboard remains available through
+`scripts/live_runpod_loss_dashboard.py` when validation tables are useful.
 
 The trainer removes eight CoT tokens per epoch, samples the paper's exponential smoothing offset,
 resets AdamW each time the scheduled removal advances, and stops once the whole trace is hidden and
