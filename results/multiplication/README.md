@@ -240,7 +240,8 @@ boundary, an observed gap of +8.1 percentage points. At 16/47, Deep 1 fell to
 observed gap of +51.5 points. At 24/47, Deep 1 declined again to 173/1,000
 (17.3%), versus 74/1,000 (7.4%) for Shallow 1, a +9.9-point gap. At 32/47,
 Deep 1 scored 82/1,000 (8.2%) versus 7/1,000 (0.7%) for Shallow 1, a +7.5-point
-gap. Both models are below the
+gap. At 40/47, both curves rebounded: Deep 1 scored 899/1,000 (89.9%) versus
+791/1,000 (79.1%) for Shallow 1, a +10.8-point gap. Both models are below the
 99% primary and 95% sensitivity thresholds, so both first observed frontiers
 are bracketed between 0 and 8 removed tokens. This is an intermediate,
 adaptation-confounded checkpoint on a known non-monotonic curriculum—not a
@@ -253,6 +254,7 @@ causal depth-only effect—and Deep 1 retains its 3.12-point LAMBADA advantage.
 | Epoch 1 (16 / 47) | 69.2% | 17.7% | +51.5 pp |
 | Epoch 2 (24 / 47) | 17.3% | 7.4% | +9.9 pp |
 | Epoch 3 (32 / 47) | 8.2% | 0.7% | +7.5 pp |
+| Epoch 4 (40 / 47) | 89.9% | 79.1% | +10.8 pp |
 
 - [`deep1-4x4-explicit-cot-validation.json`](deep1-4x4-explicit-cot-validation.json)
 - [`deep1-4x4-explicit-cot-test.json`](deep1-4x4-explicit-cot-test.json)
