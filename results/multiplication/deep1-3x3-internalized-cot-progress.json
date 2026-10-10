@@ -41,16 +41,25 @@
         "removed": 24,
         "correct": 873,
         "accuracy": 0.873
+      },
+      {
+        "epoch": 3,
+        "removed": 25,
+        "correct": 975,
+        "accuracy": 0.975,
+        "stage": "first_full_removal"
       }
     ],
     "first_observed_below_99_percent": 8,
-    "first_observed_below_95_percent": 8
+    "first_observed_below_95_percent": 8,
+    "first_full_removal_validation_accuracy": 0.975,
+    "target_status": "95_percent_sensitivity_passed; 99_percent_primary_target_not_yet_met"
   },
   "matched_shallow_comparison": {
-    "latest_checkpoint_removed_tokens": 24,
-    "latest_deep_accuracy": 0.873,
-    "latest_shallow_accuracy": 0.842,
-    "latest_deep_minus_shallow_percentage_points": 3.1,
+    "latest_checkpoint_removed_tokens": 25,
+    "latest_deep_accuracy": 0.975,
+    "latest_shallow_accuracy": 0.965,
+    "latest_deep_minus_shallow_percentage_points": 1.0,
     "first_observed_checkpoint_with_gap_at_least_5_percentage_points": 8,
     "paired_uncertainty_status": "pending; the archived shallow epoch-0 metrics predate per-example correctness recording"
   },

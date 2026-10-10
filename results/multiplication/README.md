@@ -142,6 +142,7 @@ removed tokens.
 | Epoch 0 (8 / 25) | 89.7% | 75.7% | +14.0 pp |
 | Epoch 1 (16 / 25) | 76.7% | 61.3% | +15.4 pp |
 | Epoch 2 (24 / 25) | 87.3% | 84.2% | +3.1 pp |
+| Epoch 3 (first full removal) | 97.5% | 96.5% | +1.0 pp |
 
 At 16/25 removed tokens, Deep 1 scored 767/1,000 (76.7%) versus
 613/1,000 (61.3%) for Shallow 1, widening the observed gap slightly to
@@ -152,8 +153,13 @@ collapsed into a simple monotonic capacity axis.
 At 24/25 removed tokens, both models rebounded: Deep 1 reached 873/1,000
 (87.3%) and Shallow 1 reached 842/1,000 (84.2%). The observed gap therefore
 narrowed to 3.1 points, below the preregistered five-point threshold. The
-earlier large separation does not persist uniformly across removal checkpoints;
-the first full-removal evaluation is the next decisive stage.
+earlier large separation does not persist uniformly across removal checkpoints.
+
+At the first 25/25 checkpoint, Deep 1 reached 975/1,000 (97.5%) and Shallow 1
+reached 965/1,000 (96.5%), leaving only a 1.0-point gap. Both models therefore
+clear the 95% sensitivity threshold at first full removal, while neither clears
+the 99% primary threshold. Deep 1 is continuing through the same full-removal
+adaptation budget; Shallow 1 reached 99.0% after one such additional epoch.
 
 This is a meaningful matched-curriculum separation, but not yet a final
 capacity result. The earlier shallow curves were strongly non-monotonic, and

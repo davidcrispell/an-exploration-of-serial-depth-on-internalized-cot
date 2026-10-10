@@ -229,8 +229,10 @@ observed matched-curriculum separation, but the curves are non-monotonic and
 the next checkpoint likewise shows 76.7% versus 61.3% at 16/25 removed, a
 +15.4-point gap. At 24/25 removed, both models rebound to 87.3% and 84.2%,
 narrowing the gap to 3.1 points. The final full-removal comparison remains in
-progress. The 3.12-point Deep 1 LAMBADA advantage also remains an important
-causal confound.
+progress: at the first 25/25 checkpoint Deep 1 reaches 97.5% versus 96.5% for
+Shallow 1, only a +1.0-point gap. Deep 1 is now receiving the same additional
+full-removal adaptation epoch that brought Shallow 1 to 99.0%. The 3.12-point
+Deep 1 LAMBADA advantage also remains an important causal confound.
 
 ### Broad capability versus internalized computation
 
