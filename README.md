@@ -223,7 +223,11 @@ paired Deep 1 run uses identical examples and schedule. Deep 1 has now also
 reached 100.0% explicit-CoT validation and test accuracy and passed into the
 25-token internalization curriculum. The matched models therefore enter the
 hidden-reasoning comparison with equal observed explicit-task accuracy; the
-internalization curve and final paired test remain in progress.
+first matched internalization checkpoint now shows 89.7% for Deep 1 versus
+75.7% for Shallow 1 at 8/25 tokens removed, a +14.0-point gap. This is an
+observed matched-curriculum separation, but the curves are non-monotonic and
+the final full-removal comparison remains in progress. The 3.12-point Deep 1
+LAMBADA advantage also remains an important causal confound.
 
 ### Broad capability versus internalized computation
 

@@ -1,0 +1,50 @@
+{
+  "experiment": "deep1_3x3_internalized_cot",
+  "status": "in_progress",
+  "base": {
+    "name": "Deep 1 matched-loss",
+    "layers": 12,
+    "width": 768,
+    "parameters": 162201600,
+    "fineweb_validation_loss": 3.305016040802002,
+    "checkpoint_sha256": "b7d1e1c596839a8d3da0fd27eea21ad9f4f9b9537d5a0dd527190594fd14b300"
+  },
+  "explicit_cot": {
+    "validation_accuracy": 1.0,
+    "test_accuracy": 1.0,
+    "optimizer_steps": 25187
+  },
+  "internalization": {
+    "cot_tokens": 25,
+    "remove_per_epoch": 8,
+    "validation_curve": [
+      {
+        "stage": "explicit",
+        "removed": 0,
+        "correct": 1000,
+        "accuracy": 1.0
+      },
+      {
+        "epoch": 0,
+        "removed": 8,
+        "correct": 897,
+        "accuracy": 0.897
+      }
+    ],
+    "first_observed_below_99_percent": 8,
+    "first_observed_below_95_percent": 8
+  },
+  "matched_shallow_comparison": {
+    "checkpoint_removed_tokens": 8,
+    "deep_accuracy": 0.897,
+    "shallow_accuracy": 0.757,
+    "deep_minus_shallow_percentage_points": 14.0,
+    "first_observed_checkpoint_with_gap_at_least_5_percentage_points": 8,
+    "paired_uncertainty_status": "pending; the archived shallow epoch-0 metrics predate per-example correctness recording"
+  },
+  "caveats": [
+    "The internalization curves are non-monotonic and checkpoints differ in adaptation time.",
+    "The 8-token gap is an observed matched-curriculum difference, not a final capacity frontier.",
+    "Deep 1 also outperformed Shallow 1 on LAMBADA by 3.12 percentage points, so residual broad-capability mismatch remains a causal confound."
+  ]
+}

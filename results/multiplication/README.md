@@ -128,9 +128,32 @@ accuracy before reasoning tokens are hidden; it does not itself establish a
 depth effect. The evaluator now records correctness for every ordered example
 so later comparisons can use paired uncertainty tests.
 
+At the first curriculum boundary, Deep 1 scored 897/1,000 (89.7%) with 8/25
+CoT tokens removed. Shallow 1 scored 757/1,000 (75.7%) at the identical
+checkpoint, giving an observed deep-minus-shallow gap of **14.0 percentage
+points**. This is the first observed checkpoint at which the preregistered gap
+is at least five points. Both models are below the 99% and 95% thresholds at
+this checkpoint, so each first observed frontier is bracketed between 0 and 8
+removed tokens.
+
+| Curriculum checkpoint | Deep 1 | Shallow 1 | Deep minus shallow |
+| --- | ---: | ---: | ---: |
+| Explicit stage (0 / 25) | 100.0% | 100.0% | 0.0 pp |
+| Epoch 0 (8 / 25) | 89.7% | 75.7% | +14.0 pp |
+
+This is a meaningful matched-curriculum separation, but not yet a final
+capacity result. The earlier shallow curves were strongly non-monotonic, and
+each removal checkpoint also differs in adaptation time. In addition, Deep 1
+outperformed Shallow 1 on LAMBADA by 3.12 points despite the parameter/loss
+match, leaving residual broad-capability mismatch as a causal confound. Paired
+example-level uncertainty for the 8-token checkpoint is pending because the
+archived shallow epoch-0 metrics predate per-example correctness recording.
+
 - [`deep1-3x3-explicit-cot-validation.json`](deep1-3x3-explicit-cot-validation.json)
 - [`deep1-3x3-explicit-cot-test.json`](deep1-3x3-explicit-cot-test.json)
 - [`deep1-3x3-explicit-cot-training-config.json`](deep1-3x3-explicit-cot-training-config.json)
+- [`deep1-3x3-internalized-cot-validation.json`](deep1-3x3-internalized-cot-validation.json)
+- [`deep1-3x3-internalized-cot-progress.json`](deep1-3x3-internalized-cot-progress.json)
 
 ## Shallow model after explicit-CoT fine-tuning
 
