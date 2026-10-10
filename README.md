@@ -227,8 +227,10 @@ first matched internalization checkpoint now shows 89.7% for Deep 1 versus
 75.7% for Shallow 1 at 8/25 tokens removed, a +14.0-point gap. This is an
 observed matched-curriculum separation, but the curves are non-monotonic and
 the next checkpoint likewise shows 76.7% versus 61.3% at 16/25 removed, a
-+15.4-point gap. The final full-removal comparison remains in progress. The
-3.12-point Deep 1 LAMBADA advantage also remains an important causal confound.
++15.4-point gap. At 24/25 removed, both models rebound to 87.3% and 84.2%,
+narrowing the gap to 3.1 points. The final full-removal comparison remains in
+progress. The 3.12-point Deep 1 LAMBADA advantage also remains an important
+causal confound.
 
 ### Broad capability versus internalized computation
 
