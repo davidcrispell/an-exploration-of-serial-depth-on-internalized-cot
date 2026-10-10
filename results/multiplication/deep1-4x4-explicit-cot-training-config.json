@@ -1,0 +1,21 @@
+{
+  "checkpoint": "/root/checkpoints/deep1-fineweb-matched.pt",
+  "train_path": "/workspace/paper-data/4_by_4_mult/train.txt",
+  "validation_path": "/root/modded-nanogpt-depth/benchmarks/multiplication/data/4x4/validation.txt",
+  "test_path": "/root/modded-nanogpt-depth/benchmarks/multiplication/data/4x4/test.txt",
+  "output_dir": "/root/experiment-results/deep1-4x4-explicit-cot-fp32",
+  "cache_dir": "/workspace/token-cache",
+  "digits": 4,
+  "epochs": 1,
+  "batch_size": 32,
+  "accumulate": 1,
+  "lr": 5e-05,
+  "max_grad_norm": 1.0,
+  "seed": 3456,
+  "log_every": 100,
+  "eval_examples": 1000,
+  "eval_batch_size": 32,
+  "max_steps": null,
+  "compile": false,
+  "bf16": false
+}

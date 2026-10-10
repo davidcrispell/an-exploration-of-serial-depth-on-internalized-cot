@@ -214,9 +214,32 @@ creation through its stop after completion, runtime was about 2 hours 53
 minutes and the observed Runpod balance delta was $2.0199. The explicit
 checkpoint is verified locally (SHA256
 `d71a3f994619d6f8276dcfeb51a790a3fb376a1f8dfb3450c43f73f945b58ba0`).
-The final internalized checkpoint has remote SHA256
-`91ef1a680f14912be4e53e163643b02fcd96d536697d33079b6cb92e4613b729`;
-its pod is stopped at approximately $0.002/hour storage pending safe download.
+The exactly reproduced final internalized checkpoint is also verified locally
+(SHA256 `e3eedc9de3bc1a98f9567662cd1a29e2bedd990f8bbea6396cec1446de0c5868`).
+
+## Matched-loss Deep 1 on 4x4 explicit CoT
+
+Starting from the untouched matched-loss Deep 1 FineWeb checkpoint, one
+paper-matched FP32 epoch on the released 808,000-example 4x4 training set
+reached perfect input-only greedy accuracy. Evaluation required generation of
+the full visible trace and final answer; no ground-truth CoT was supplied.
+
+| Split | Correct | Examples | Final-answer exact match |
+| --- | ---: | ---: | ---: |
+| 4x4 validation | 1,000 | 1,000 | 100.0% |
+| 4x4 test | 1,000 | 1,000 | 100.0% |
+
+The explicit checkpoint is downloaded under
+`artifacts/checkpoints/deep1-4x4-explicit-cot/` and verified at SHA256
+`f7df6b802eca06ce78c5db280ab21dc01206745cd67d1057a910941659195daf`.
+The 47-token internalization curriculum is now running from this checkpoint.
+This establishes equal visible-algorithm accuracy for the matched Deep and
+Shallow models before the trace is hidden; it is not evidence of a depth-only
+effect.
+
+- [`deep1-4x4-explicit-cot-validation.json`](deep1-4x4-explicit-cot-validation.json)
+- [`deep1-4x4-explicit-cot-test.json`](deep1-4x4-explicit-cot-test.json)
+- [`deep1-4x4-explicit-cot-training-config.json`](deep1-4x4-explicit-cot-training-config.json)
 
 ## Shallow model after explicit-CoT fine-tuning
 

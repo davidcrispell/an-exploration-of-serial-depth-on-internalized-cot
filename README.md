@@ -149,6 +149,19 @@ python -m benchmarks.multiplication.train_internalized_cot \
   --removal-smoothing-lambda 4 --seed 3456
 ```
 
+For a live view of long remote runs, the lightweight dashboard reads the
+Runpod log over SSH and plots loss on a logarithmic scale alongside completed
+validation checkpoints:
+
+```bash
+python scripts/live_runpod_loss_dashboard.py \
+  --pod POD_ID --log /root/path/to/pipeline.log \
+  --key /path/to/runpodctl-ssh-key
+```
+
+Open `http://127.0.0.1:8765`; the view refreshes every ten seconds and follows
+SSH endpoint changes automatically.
+
 The trainer removes eight CoT tokens per epoch, samples the paper's exponential smoothing offset,
 resets AdamW each time the scheduled removal advances, and stops once the whole trace is hidden and
 validation exact-answer accuracy reaches 99%. It keeps a single atomic `latest.pt` checkpoint plus
@@ -229,7 +242,9 @@ checkpoint. The recovery reproduced every archived aggregate and per-example
 result exactly: **89.7% at 8/25**, **76.7% at 16/25**, **87.3% at 24/25**,
 **97.5% at the first 25/25 checkpoint**, **99.0% after one adaptation epoch**,
 and **99.2% test**. The recovered checkpoint is downloaded and SHA256-verified;
-the matched 4x4 Deep 1 run is in progress.
+the matched 4x4 Deep 1 explicit stage has since reached **100.0% validation and
+100.0% test accuracy**, its checkpoint is downloaded and SHA256-verified, and
+the 47-token internalization curriculum is in progress.
 
 The archived Shallow evaluation did not save per-example correctness. A local
 CPU rerun of the identical checkpoint scored 98.6%, two examples below the
