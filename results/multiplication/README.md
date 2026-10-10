@@ -243,7 +243,9 @@ Deep 1 scored 82/1,000 (8.2%) versus 7/1,000 (0.7%) for Shallow 1, a +7.5-point
 gap. At 40/47, both curves rebounded: Deep 1 scored 899/1,000 (89.9%) versus
 791/1,000 (79.1%) for Shallow 1, a +10.8-point gap. At the first 47/47
 checkpoint—before any full-removal adaptation—Deep 1 scored 802/1,000 (80.2%)
-versus Shallow 1's 651/1,000 (65.1%), a +15.1-point gap. Both models are below the
+versus Shallow 1's 651/1,000 (65.1%), a +15.1-point gap. After one full-removal
+adaptation epoch, Deep 1 reached 931/1,000 (93.1%) versus Shallow 1's 799/1,000
+(79.9%), a +13.2-point gap. Both models are below the
 99% primary and 95% sensitivity thresholds, so both first observed frontiers
 are bracketed between 0 and 8 removed tokens. This is an intermediate,
 adaptation-confounded checkpoint on a known non-monotonic curriculum—not a
@@ -258,6 +260,7 @@ causal depth-only effect—and Deep 1 retains its 3.12-point LAMBADA advantage.
 | Epoch 3 (32 / 47) | 8.2% | 0.7% | +7.5 pp |
 | Epoch 4 (40 / 47) | 89.9% | 79.1% | +10.8 pp |
 | Epoch 5, first full removal (47 / 47) | 80.2% | 65.1% | +15.1 pp |
+| Epoch 6, one adaptation epoch (47 / 47) | 93.1% | 79.9% | +13.2 pp |
 
 - [`deep1-4x4-explicit-cot-validation.json`](deep1-4x4-explicit-cot-validation.json)
 - [`deep1-4x4-explicit-cot-test.json`](deep1-4x4-explicit-cot-test.json)
