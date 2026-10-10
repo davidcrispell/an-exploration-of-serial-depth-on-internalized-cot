@@ -247,6 +247,8 @@ the matched 4x4 Deep 1 explicit stage has since reached **100.0% validation and
 100.0% test accuracy**, its checkpoint is downloaded and SHA256-verified, and
 the 47-token internalization curriculum is in progress. At the first 8/47
 checkpoint, Deep 1 scored **93.3%** versus Shallow 1's **85.2%** (+8.1 points).
+At 16/47, both curves declined non-monotonically: Deep 1 scored **69.2%** versus
+Shallow 1's **17.7%** (+51.5 points).
 Both first observed 95% and 99% frontiers lie between 0 and 8 tokens, and the
 intermediate gap remains non-causal because the curriculum is non-monotonic and
 Deep 1 retains a 3.12-point LAMBADA advantage.
