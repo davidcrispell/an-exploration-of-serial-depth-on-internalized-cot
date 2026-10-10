@@ -1,0 +1,88 @@
+{
+  "experiment": "deep1_4x4_internalized_cot",
+  "status": "complete",
+  "architecture": {
+    "layers": 12,
+    "width": 768,
+    "heads": 6,
+    "mlp_width": 3072,
+    "parameters": 162201600
+  },
+  "matched_base": {
+    "fineweb_validation_loss": 3.305016040802002,
+    "shallow_fineweb_validation_loss": 3.3054311275482178,
+    "loss_gap": -0.0004150867462158203,
+    "source_full_checkpoint_sha256": "b7d1e1c596839a8d3da0fd27eea21ad9f4f9b9537d5a0dd527190594fd14b300",
+    "local_slim_checkpoint_sha256": "3d9b65247396d545884ef3da4771023be9767ad95afc140d604d175225706164"
+  },
+  "source_explicit_checkpoint_sha256": "f7df6b802eca06ce78c5db280ab21dc01206745cd67d1057a910941659195daf",
+  "curriculum": {
+    "cot_tokens": 47,
+    "removal_side": "left",
+    "remove_per_epoch": 8,
+    "removal_smoothing_lambda": 4.0,
+    "epochs": 8,
+    "optimizer_steps": 202000,
+    "seed": 3456
+  },
+  "validation_curve": [
+    {"checkpoint": "explicit", "removed": 0, "correct": 1000, "examples": 1000, "accuracy": 1.0},
+    {"checkpoint": "epoch_0", "removed": 8, "correct": 933, "examples": 1000, "accuracy": 0.933},
+    {"checkpoint": "epoch_1", "removed": 16, "correct": 692, "examples": 1000, "accuracy": 0.692},
+    {"checkpoint": "epoch_2", "removed": 24, "correct": 173, "examples": 1000, "accuracy": 0.173},
+    {"checkpoint": "epoch_3", "removed": 32, "correct": 82, "examples": 1000, "accuracy": 0.082},
+    {"checkpoint": "epoch_4", "removed": 40, "correct": 899, "examples": 1000, "accuracy": 0.899},
+    {"checkpoint": "epoch_5_first_full_removal", "removed": 47, "correct": 802, "examples": 1000, "accuracy": 0.802},
+    {"checkpoint": "epoch_6_one_adaptation_epoch", "removed": 47, "correct": 931, "examples": 1000, "accuracy": 0.931},
+    {"checkpoint": "epoch_7_final", "removed": 47, "correct": 939, "examples": 1000, "accuracy": 0.939}
+  ],
+  "frontiers": {
+    "primary_99_percent": {
+      "last_observed_passing_removed": 0,
+      "first_observed_failing_removed": 8
+    },
+    "sensitivity_95_percent": {
+      "last_observed_passing_removed": 0,
+      "first_observed_failing_removed": 8
+    }
+  },
+  "final_test": {
+    "removed": 47,
+    "fully_internalized": true,
+    "correct": 919,
+    "examples": 1000,
+    "accuracy": 0.919
+  },
+  "shallow_comparison": {
+    "first_full_removal_validation_accuracy": 0.651,
+    "one_adaptation_epoch_validation_accuracy": 0.799,
+    "final_validation_accuracy": 0.923,
+    "final_test_accuracy": 0.923,
+    "deep_minus_shallow_final_validation_pp": 1.6,
+    "deep_minus_shallow_final_test_pp": -0.4,
+    "deep_lambada_accuracy": 0.2942,
+    "shallow_lambada_accuracy": 0.263,
+    "lambada_gap_pp": 3.12
+  },
+  "runpod": {
+    "pod_id": "a5h1qf7p4cmy52",
+    "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition MIG 1g.24gb",
+    "gpu_price_usd_per_hour": 0.69,
+    "pipeline_started_at": "2026-10-10T07:33:11Z",
+    "pipeline_finished_at": "2026-10-10T14:21:32Z",
+    "pipeline_runtime_seconds": 24501,
+    "balance_before_usd": 13.5142354785,
+    "balance_before_teardown_usd": 8.3638714864,
+    "balance_delta_usd": 5.1503639921,
+    "pod_deleted": true,
+    "old_recovery_pod_deleted": "po2aqdu4hounus",
+    "network_volume_retained": "vpzu3qptxw"
+  },
+  "checkpoint": {
+    "local_path": "artifacts/checkpoints/deep1-4x4-internalized-cot/latest.pt",
+    "bytes": 648838501,
+    "sha256": "d55d5dcd70edb9a7b9e895d55d36933d1556be5355692b2921c4fba38205d348",
+    "tracked_by_git": false
+  },
+  "interpretation": "The internalization curve is strongly non-monotonic and checkpoints differ in adaptation time. Deep's large intermediate advantages narrow to +1.6 percentage points on final validation and reverse to -0.4 points on final test. The residual +3.12-point LAMBADA difference prevents a causal depth-only attribution."
+}

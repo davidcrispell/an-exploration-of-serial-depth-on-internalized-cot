@@ -245,7 +245,7 @@ result exactly: **89.7% at 8/25**, **76.7% at 16/25**, **87.3% at 24/25**,
 and **99.2% test**. The recovered checkpoint is downloaded and SHA256-verified;
 the matched 4x4 Deep 1 explicit stage has since reached **100.0% validation and
 100.0% test accuracy**, its checkpoint is downloaded and SHA256-verified, and
-the 47-token internalization curriculum is in progress. At the first 8/47
+the 47-token internalization curriculum is complete. At the first 8/47
 checkpoint, Deep 1 scored **93.3%** versus Shallow 1's **85.2%** (+8.1 points).
 At 16/47, both curves declined non-monotonically: Deep 1 scored **69.2%** versus
 Shallow 1's **17.7%** (+51.5 points).
@@ -257,9 +257,17 @@ At the first 47/47 checkpoint, before any full-removal adaptation, Deep 1 scored
 **80.2%** versus Shallow 1's **65.1%** (+15.1 points).
 After one full-removal adaptation epoch, Deep 1 reached **93.1%** versus Shallow
 1's **79.9%** (+13.2 points).
+Deep finished at **93.9% validation and 91.9% test**, versus Shallow 1's
+**92.3% validation and 92.3% test**: +1.6 points on validation but -0.4 points
+on test. The final 648,838,501-byte checkpoint is locally verified at SHA256
+`d55d5dcd70edb9a7b9e895d55d36933d1556be5355692b2921c4fba38205d348`.
+The serial pipeline took 6:48:21 and the exact Runpod balance delta through
+artifact verification was $5.1503639921; both pods were deleted while network
+volume `vpzu3qptxw` was retained.
 Both first observed 95% and 99% frontiers lie between 0 and 8 tokens, and the
-intermediate gap remains non-causal because the curriculum is non-monotonic and
-Deep 1 retains a 3.12-point LAMBADA advantage.
+result does not establish a causal depth-only effect because the curriculum is
+non-monotonic, the final test gap slightly favors Shallow, and Deep 1 retains a
+3.12-point LAMBADA advantage.
 
 The archived Shallow evaluation did not save per-example correctness. A local
 CPU rerun of the identical checkpoint scored 98.6%, two examples below the

@@ -232,7 +232,7 @@ the full visible trace and final answer; no ground-truth CoT was supplied.
 The explicit checkpoint is downloaded under
 `artifacts/checkpoints/deep1-4x4-explicit-cot/` and verified at SHA256
 `f7df6b802eca06ce78c5db280ab21dc01206745cd67d1057a910941659195daf`.
-The 47-token internalization curriculum is now running from this checkpoint.
+The 47-token internalization curriculum completed all eight scheduled epochs.
 At its first epoch boundary, Deep 1 scored 933/1,000 (93.3%) with 8/47 CoT
 tokens removed, versus 852/1,000 (85.2%) for Shallow 1 at the identical
 boundary, an observed gap of +8.1 percentage points. At 16/47, Deep 1 fell to
@@ -245,11 +245,15 @@ gap. At 40/47, both curves rebounded: Deep 1 scored 899/1,000 (89.9%) versus
 checkpoint—before any full-removal adaptation—Deep 1 scored 802/1,000 (80.2%)
 versus Shallow 1's 651/1,000 (65.1%), a +15.1-point gap. After one full-removal
 adaptation epoch, Deep 1 reached 931/1,000 (93.1%) versus Shallow 1's 799/1,000
-(79.9%), a +13.2-point gap. Both models are below the
+(79.9%), a +13.2-point gap. The final Deep 1 checkpoint reached 939/1,000
+(93.9%) validation and 919/1,000 (91.9%) test, versus Shallow 1's 923/1,000
+(92.3%) on both splits: +1.6 points on validation but -0.4 points on test.
+Both models are below the
 99% primary and 95% sensitivity thresholds, so both first observed frontiers
-are bracketed between 0 and 8 removed tokens. This is an intermediate,
-adaptation-confounded checkpoint on a known non-monotonic curriculum—not a
-causal depth-only effect—and Deep 1 retains its 3.12-point LAMBADA advantage.
+are bracketed between 0 and 8 removed tokens. The curve is non-monotonic and
+the full-removal checkpoints differ in adaptation time. Together with the
+slightly lower Deep test accuracy and Deep 1's 3.12-point LAMBADA advantage,
+this prevents a causal depth-only interpretation.
 
 | Curriculum checkpoint | Deep 1 | Shallow 1 | Deep minus shallow |
 | --- | ---: | ---: | ---: |
@@ -261,12 +265,26 @@ causal depth-only effect—and Deep 1 retains its 3.12-point LAMBADA advantage.
 | Epoch 4 (40 / 47) | 89.9% | 79.1% | +10.8 pp |
 | Epoch 5, first full removal (47 / 47) | 80.2% | 65.1% | +15.1 pp |
 | Epoch 6, one adaptation epoch (47 / 47) | 93.1% | 79.9% | +13.2 pp |
+| Epoch 7, final validation (47 / 47) | 93.9% | 92.3% | +1.6 pp |
+| Final test (47 / 47) | 91.9% | 92.3% | -0.4 pp |
+
+The final checkpoint is stored locally at
+`artifacts/checkpoints/deep1-4x4-internalized-cot/latest.pt` (648,838,501
+bytes), SHA256
+`d55d5dcd70edb9a7b9e895d55d36933d1556be5355692b2921c4fba38205d348`.
+The serial pipeline ran from 2026-10-10 07:33:11Z through 14:21:32Z
+(6:48:21). The Runpod balance changed from $13.5142354785 to $8.3638714864,
+an exact delta of $5.1503639921 through artifact verification. Both pods were
+deleted after verification; network volume `vpzu3qptxw` was retained.
 
 - [`deep1-4x4-explicit-cot-validation.json`](deep1-4x4-explicit-cot-validation.json)
 - [`deep1-4x4-explicit-cot-test.json`](deep1-4x4-explicit-cot-test.json)
 - [`deep1-4x4-explicit-cot-training-config.json`](deep1-4x4-explicit-cot-training-config.json)
 - [`deep1-4x4-internalized-cot-progress.json`](deep1-4x4-internalized-cot-progress.json)
 - [`deep1-4x4-internalized-cot-training-config.json`](deep1-4x4-internalized-cot-training-config.json)
+- [`deep1-4x4-internalized-cot-validation.json`](deep1-4x4-internalized-cot-validation.json)
+- [`deep1-4x4-internalized-cot-test.json`](deep1-4x4-internalized-cot-test.json)
+- [`deep1-4x4-internalized-cot-summary.json`](deep1-4x4-internalized-cot-summary.json)
 
 ## Shallow model after explicit-CoT fine-tuning
 
