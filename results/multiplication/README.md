@@ -331,7 +331,9 @@ fully internalized checkpoint then rebounded to 821/1,000 (82.1%), versus
 Shallow's 2/1,000 (0.2%), an observed +81.9-point gap. One full-removal
 adaptation epoch raised Deep to 913/1,000 (91.3%), while Shallow's matched point
 was 4/1,000 (0.4%), an observed +90.9-point gap. Deep has not yet met the 99%
-stopping threshold, so full-removal adaptation continues.
+stopping threshold. A second adaptation epoch held Deep at 910/1,000 (91.0%),
+versus Shallow's matched 2/1,000 (0.2%), an observed +90.8-point gap, so
+full-removal adaptation continues.
 
 | Curriculum checkpoint | Deep 1 | Shallow 1 | Deep minus shallow |
 | --- | ---: | ---: | ---: |
@@ -347,6 +349,7 @@ stopping threshold, so full-removal adaptation continues.
 | Epoch 8 (72 / 75) | 3.3% | 0.0% | +3.3 pp |
 | Epoch 9 (first 75 / 75) | 82.1% | 0.2% | +81.9 pp |
 | Epoch 10 (adaptation 1) | 91.3% | 0.4% | +90.9 pp |
+| Epoch 11 (adaptation 2) | 91.0% | 0.2% | +90.8 pp |
 
 The localhost dashboard overlays Deep 1 and Shallow 1 for explicit-CoT loss,
 internalization loss, and validation accuracy on 3x3, 4x4, and 5x5. Every

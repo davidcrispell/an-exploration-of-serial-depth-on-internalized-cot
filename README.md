@@ -293,9 +293,10 @@ Deep fell again to **3.3%**, while Shallow scored **0.0%** (+3.3 points). The
 first fully internalized checkpoint then rebounded to **82.1%**, versus
 Shallow's **0.2%** (+81.9 points). One full-removal adaptation epoch raised Deep
 to **91.3%**, while Shallow's matched point was **0.4%** (+90.9 points). Deep has
-not yet reached the 99% stopping threshold, so adaptation continues. These
-one-seed results are not a causal depth-only estimate because Deep retains a
-3.12-point LAMBADA advantage.
+not yet reached the 99% stopping threshold. A second adaptation epoch held Deep
+at **91.0%**, versus Shallow's matched **0.2%** (+90.8 points), so adaptation
+continues. These one-seed results are not a causal depth-only estimate because
+Deep retains a 3.12-point LAMBADA advantage.
 
 The archived Shallow evaluation did not save per-example correctness. A local
 CPU rerun of the identical checkpoint scored 98.6%, two examples below the
