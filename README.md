@@ -269,6 +269,16 @@ result does not establish a causal depth-only effect because the curriculum is
 non-monotonic, the final test gap slightly favors Shallow, and Deep 1 retains a
 3.12-point LAMBADA advantage.
 
+The matched Deep 1 5x5 control has now completed its explicit-CoT stage from
+the untouched FineWeb checkpoint. With the same 808,000 examples, FP32 AdamW
+schedule, batch size 32, and seed 3456 used for Shallow 1, it reached **100.0%
+validation and 100.0% test accuracy** after 25,250 optimizer steps. Its
+648,839,285-byte checkpoint is locally verified at SHA256
+`50e220806977ed7ff6f19ed413473e88bb1df574875f835e6410ee8b7f0f65bb`.
+The 75-token internalization curriculum is running from that checkpoint, so
+this explicit result establishes task learnability but does not yet establish
+the hidden-reasoning comparison.
+
 The archived Shallow evaluation did not save per-example correctness. A local
 CPU rerun of the identical checkpoint scored 98.6%, two examples below the
 archived CUDA result. Pairing that sensitivity rerun with Deep's CUDA vector
@@ -298,8 +308,8 @@ failing to carry out the same computation when its intermediate trace is
 hidden. Internalized computation should therefore be treated as a distinct
 capability axis rather than inferred from LAMBADA or pretraining loss alone.
 It is not yet evidence that shallow depth caused the failure: GPT-2 Small has
-not been run through our identical 5x5 curriculum, and a causal depth claim
-still requires the parameter-matched deep control on the same data and schedule.
+not been run through our identical 5x5 curriculum, and the parameter-matched
+Deep 1 control on the same data and schedule is still in progress.
 
 This is a fast variant of the [PyTorch GPT-2 trainer](https://github.com/karpathy/llm.c/blob/7b929300217ff1a974b63791a228928b39b26409/train_gpt2.py) from
 Andrej Karpathy's [llm.c](https://github.com/karpathy/llm.c) repo, which attains the same final validation loss in:

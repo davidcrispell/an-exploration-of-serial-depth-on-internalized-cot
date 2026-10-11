@@ -286,6 +286,32 @@ deleted after verification; network volume `vpzu3qptxw` was retained.
 - [`deep1-4x4-internalized-cot-test.json`](deep1-4x4-internalized-cot-test.json)
 - [`deep1-4x4-internalized-cot-summary.json`](deep1-4x4-internalized-cot-summary.json)
 
+## Matched-loss Deep 1 on 5x5 explicit CoT
+
+Starting from the untouched matched-loss Deep 1 FineWeb checkpoint, the
+12-layer, width-768 model completed one paper-matched FP32 epoch on the released
+808,000-example 5x5 training set (25,250 optimizer steps). The run used AdamW
+at `5e-5`, batch size 32, gradient clipping at 1.0, and seed 3456. Input-only
+greedy evaluation supplied no ground-truth reasoning tokens and required the
+model to generate the full visible trace and final answer.
+
+| Split | Correct | Examples | Final-answer exact match |
+| --- | ---: | ---: | ---: |
+| 5x5 validation | 1,000 | 1,000 | 100.0% |
+| 5x5 test | 1,000 | 1,000 | 100.0% |
+
+The checkpoint is archived locally at
+`artifacts/checkpoints/deep1-5x5-explicit-cot/explicit_cot_epoch_000.pt`
+(648,839,285 bytes) and verified at SHA256
+`50e220806977ed7ff6f19ed413473e88bb1df574875f835e6410ee8b7f0f65bb`.
+The standard 75-token internalization curriculum is in progress from this
+checkpoint; its intermediate curve and final comparison will be reported
+separately rather than inferred from the explicit result.
+
+- [`deep1-5x5-explicit-cot-validation.json`](deep1-5x5-explicit-cot-validation.json)
+- [`deep1-5x5-explicit-cot-test.json`](deep1-5x5-explicit-cot-test.json)
+- [`deep1-5x5-explicit-cot-training-config.json`](deep1-5x5-explicit-cot-training-config.json)
+
 ## Shallow model after explicit-CoT fine-tuning
 
 The 4x4 model was fine-tuned for one full pass over the authors' 808,000-example training split
