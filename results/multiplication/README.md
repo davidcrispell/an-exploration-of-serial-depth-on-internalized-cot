@@ -330,6 +330,12 @@ gap. At 40/75, Deep fell to 452/1,000 (45.2%) but remained above Shallow's
 | Epoch 3 (32 / 75) | 83.7% | 67.2% | +16.5 pp |
 | Epoch 4 (40 / 75) | 45.2% | 14.6% | +30.6 pp |
 
+The localhost dashboard overlays Deep 1 and Shallow 1 for explicit-CoT loss,
+internalization loss, and validation accuracy. Every refresh also writes a
+self-contained HTML snapshot, complete JSON payload, and per-series CSV files
+under `artifacts/dashboards/deep1-5x5/` so the view and raw chart data remain
+available after the live run ends.
+
 - [`deep1-5x5-explicit-cot-validation.json`](deep1-5x5-explicit-cot-validation.json)
 - [`deep1-5x5-explicit-cot-test.json`](deep1-5x5-explicit-cot-test.json)
 - [`deep1-5x5-explicit-cot-training-config.json`](deep1-5x5-explicit-cot-training-config.json)
