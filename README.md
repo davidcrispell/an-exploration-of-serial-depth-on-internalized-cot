@@ -280,8 +280,9 @@ this explicit result establishes task learnability but does not yet establish
 the hidden-reasoning comparison. At its first completed boundary, Deep 1
 retained **95.3%** validation accuracy with 8/75 tokens removed, versus
 Shallow 1's **91.5%** (+3.8 points). At 16/75, Deep then fell to **10.0%**
-versus Shallow 1's **32.3%** (-22.3 points), making the early curve sharply
-non-monotonic; later checkpoints remain pending.
+versus Shallow 1's **32.3%** (-22.3 points). At 24/75, Deep rebounded to
+**91.3%** versus Shallow 1's **18.8%** (+72.5 points), making the early curve
+sharply non-monotonic; later checkpoints remain pending.
 
 The archived Shallow evaluation did not save per-example correctness. A local
 CPU rerun of the identical checkpoint scored 98.6%, two examples below the
