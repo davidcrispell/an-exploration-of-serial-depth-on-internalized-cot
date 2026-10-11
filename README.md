@@ -1,3 +1,11 @@
+Serial depth and chain-of-thought internalization
+
+We trained 2 small models to similar losses to investigate the effects of lower serial depth on CoT internalization. Our motivation is creating an information bottleneck whereby models must reason over token-space instead of uninterpretable layer space. Our specific experiment is training a model with standard depth (Deep 1, 12 layers) and a model with shallow depth (Shallow 1, 6 layers).
+
+Deep 1 and Shallow 1 both reach 100% accuracy on nxn digit multiplication when generating an explicit CoT reasoning trace. However, after an internalization treatment (following the method here: https://arxiv.org/pdf/2405.14838), Shallow 1 achieves 0.6% 5x5 digit multiplication ability whereas Deep 1 achieves 96.3% accuracy. 
+
+
+
 # Modded-NanoGPT
 
 ## Configurable-depth experimental fork
