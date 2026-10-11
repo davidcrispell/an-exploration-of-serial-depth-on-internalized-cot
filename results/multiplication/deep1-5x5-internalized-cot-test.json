@@ -1,0 +1,13 @@
+{
+  "digits": 5,
+  "protocol": "input-only greedy final-answer exact match",
+  "removed_tokens": 75,
+  "fully_internalized": true,
+  "examples": 1000,
+  "correct": 958,
+  "accuracy": 0.958,
+  "max_new_tokens": 90,
+  "seconds": 12.778209913987666,
+  "examples_per_second": 78.25822292255116,
+  "source_artifact": "artifacts/checkpoints/deep1-5x5-internalized-cot/test_metrics.json"
+}

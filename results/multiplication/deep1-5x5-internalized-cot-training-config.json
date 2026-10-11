@@ -1,0 +1,17 @@
+{
+  "digits": 5,
+  "epochs": 15,
+  "batch_size": 32,
+  "learning_rate": 0.00005,
+  "optimizer": "AdamW",
+  "precision": "FP32",
+  "max_grad_norm": 1.0,
+  "remove_per_epoch": 8.0,
+  "removal_smoothing_lambda": 4.0,
+  "target_validation_accuracy": 0.99,
+  "seed": 3456,
+  "eval_examples": 1000,
+  "eval_batch_size": 32,
+  "evaluation": "input-only greedy final-answer exact match",
+  "source_artifact": "artifacts/checkpoints/deep1-5x5-internalized-cot/training_config.json"
+}

@@ -275,9 +275,8 @@ schedule, batch size 32, and seed 3456 used for Shallow 1, it reached **100.0%
 validation and 100.0% test accuracy** after 25,250 optimizer steps. Its
 648,839,285-byte checkpoint is locally verified at SHA256
 `50e220806977ed7ff6f19ed413473e88bb1df574875f835e6410ee8b7f0f65bb`.
-The 75-token internalization curriculum is running from that checkpoint, so
-this explicit result establishes task learnability but does not yet establish
-the hidden-reasoning comparison. At its first completed boundary, Deep 1
+The 75-token internalization curriculum completed all 15 prescribed epochs
+from that checkpoint. At its first completed boundary, Deep 1
 retained **95.3%** validation accuracy with 8/75 tokens removed, versus
 Shallow 1's **91.5%** (+3.8 points). At 16/75, Deep then fell to **10.0%**
 versus Shallow 1's **32.3%** (-22.3 points). At 24/75, Deep rebounded to
@@ -296,9 +295,17 @@ to **91.3%**, while Shallow's matched point was **0.4%** (+90.9 points). Deep ha
 not yet reached the 99% stopping threshold. A second adaptation epoch held Deep
 at **91.0%**, versus Shallow's matched **0.2%** (+90.8 points), so adaptation
 continued. A third adaptation epoch raised Deep to **96.5%**, versus Shallow's
-matched **0.5%** (+96.0 points), but remains below the 99% stopping threshold.
-These one-seed results are not a causal depth-only estimate because Deep retains
-a 3.12-point LAMBADA advantage.
+matched **0.5%** (+96.0 points). The fourth adaptation reached **96.6%** versus
+**0.3%** (+96.3 points), and the fifth/final adaptation ended at **96.3%**
+versus **0.6%** (+95.7 points), without reaching the 99% target. Final test was
+**95.8%** for Deep and **0.3%** for Shallow (+95.5 points). The verified final
+Deep checkpoint SHA256 is
+`f5b0300d4d1d54e681b7975c458d37261438b6b74f7b0168884a32d5839cda28`.
+The pipeline took 2:52:48; after accounting for the user's $10 mid-run top-up,
+the exact balance delta through verification was $8.1246932169. The GPU pod was
+deleted and network volume `vpzu3qptxw` was retained. These one-seed results are
+not a causal depth-only estimate because both curves are sharply non-monotonic
+and Deep retains a 3.12-point LAMBADA advantage.
 
 The archived Shallow evaluation did not save per-example correctness. A local
 CPU rerun of the identical checkpoint scored 98.6%, two examples below the
@@ -328,9 +335,11 @@ capability and learn the visible multiplication algorithm perfectly while
 failing to carry out the same computation when its intermediate trace is
 hidden. Internalized computation should therefore be treated as a distinct
 capability axis rather than inferred from LAMBADA or pretraining loss alone.
-It is not yet evidence that shallow depth caused the failure: GPT-2 Small has
-not been run through our identical 5x5 curriculum, and the parameter-matched
-Deep 1 control on the same data and schedule is still in progress.
+It is not by itself evidence that shallow depth caused the failure. The
+parameter-matched Deep 1 control retained 95.8% final-test accuracy on the same
+5x5 data and schedule, but this is one seed and Deep also retains a 3.12-point
+LAMBADA advantage; GPT-2 Small has not been run through the identical 5x5
+curriculum.
 
 This is a fast variant of the [PyTorch GPT-2 trainer](https://github.com/karpathy/llm.c/blob/7b929300217ff1a974b63791a228928b39b26409/train_gpt2.py) from
 Andrej Karpathy's [llm.c](https://github.com/karpathy/llm.c) repo, which attains the same final validation loss in:

@@ -304,9 +304,8 @@ The checkpoint is archived locally at
 `artifacts/checkpoints/deep1-5x5-explicit-cot/explicit_cot_epoch_000.pt`
 (648,839,285 bytes) and verified at SHA256
 `50e220806977ed7ff6f19ed413473e88bb1df574875f835e6410ee8b7f0f65bb`.
-The standard 75-token internalization curriculum is in progress from this
-checkpoint; its intermediate curve and final comparison will be reported
-separately rather than inferred from the explicit result.
+The standard 75-token internalization curriculum completed all 15 prescribed
+epochs from this checkpoint. It did not meet the 99% early-stop target.
 
 The first completed internalization checkpoint retained 953/1,000 (95.3%)
 validation accuracy with 8/75 reasoning tokens removed. Shallow 1 scored
@@ -335,7 +334,11 @@ stopping threshold. A second adaptation epoch held Deep at 910/1,000 (91.0%),
 versus Shallow's matched 2/1,000 (0.2%), an observed +90.8-point gap, so
 full-removal adaptation continued. A third adaptation epoch then raised Deep to
 965/1,000 (96.5%), versus Shallow's matched 5/1,000 (0.5%), an observed
-+96.0-point gap. Deep remains below the 99% stopping threshold.
++96.0-point gap. A fourth adaptation epoch reached 966/1,000 (96.6%) versus
+Shallow's 3/1,000 (0.3%), a +96.3-point gap. The fifth and final adaptation
+epoch ended at 963/1,000 (96.3%) versus Shallow's 6/1,000 (0.6%), a +95.7-point
+gap. On the held-out test set, Deep scored 958/1,000 (95.8%) and Shallow scored
+3/1,000 (0.3%), an observed +95.5-point gap.
 
 | Curriculum checkpoint | Deep 1 | Shallow 1 | Deep minus shallow |
 | --- | ---: | ---: | ---: |
@@ -353,6 +356,26 @@ full-removal adaptation continued. A third adaptation epoch then raised Deep to
 | Epoch 10 (adaptation 1) | 91.3% | 0.4% | +90.9 pp |
 | Epoch 11 (adaptation 2) | 91.0% | 0.2% | +90.8 pp |
 | Epoch 12 (adaptation 3) | 96.5% | 0.5% | +96.0 pp |
+| Epoch 13 (adaptation 4) | 96.6% | 0.3% | +96.3 pp |
+| Epoch 14 (adaptation 5, final) | 96.3% | 0.6% | +95.7 pp |
+| Final test | 95.8% | 0.3% | +95.5 pp |
+
+Deep's first fully internalized checkpoint was 82.1%, and its final test score
+was 95.8%; the matched Shallow values were 0.2% and 0.3%. This large observed
+gap is not a causal depth-only estimate: the comparison is one seed, both
+curves are sharply non-monotonic, and Deep retains a 3.12-point LAMBADA
+advantage (29.42% versus 26.30%).
+
+The final checkpoint is archived locally at
+`artifacts/checkpoints/deep1-5x5-internalized-cot/latest.pt` (648,838,501
+bytes), SHA256
+`f5b0300d4d1d54e681b7975c458d37261438b6b74f7b0168884a32d5839cda28`.
+The pipeline ran from 2026-10-10 23:59:23Z through 2026-10-11 02:52:11Z
+(2:52:48). Including the user's $10 mid-run account top-up, adjusted available
+balance changed from $18.3130256562 to $10.1883324393, an exact experiment
+delta of $8.1246932169 through artifact verification. The pod was deleted;
+network volume `vpzu3qptxw` was retained and the remaining spend rate is
+$0.002/hour.
 
 The localhost dashboard overlays Deep 1 and Shallow 1 for explicit-CoT loss,
 internalization loss, and validation accuracy on 3x3, 4x4, and 5x5. Every
@@ -364,6 +387,10 @@ chart data remain available after the live run ends.
 - [`deep1-5x5-explicit-cot-test.json`](deep1-5x5-explicit-cot-test.json)
 - [`deep1-5x5-explicit-cot-training-config.json`](deep1-5x5-explicit-cot-training-config.json)
 - [`deep1-5x5-internalized-cot-progress.json`](deep1-5x5-internalized-cot-progress.json)
+- [`deep1-5x5-internalized-cot-training-config.json`](deep1-5x5-internalized-cot-training-config.json)
+- [`deep1-5x5-internalized-cot-validation.json`](deep1-5x5-internalized-cot-validation.json)
+- [`deep1-5x5-internalized-cot-test.json`](deep1-5x5-internalized-cot-test.json)
+- [`deep1-5x5-internalized-cot-summary.json`](deep1-5x5-internalized-cot-summary.json)
 
 ## Shallow model after explicit-CoT fine-tuning
 

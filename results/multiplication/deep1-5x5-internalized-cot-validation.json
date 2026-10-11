@@ -1,0 +1,25 @@
+{
+  "digits": 5,
+  "protocol": "input-only greedy final-answer exact match",
+  "examples_per_checkpoint": 1000,
+  "validation_curve": [
+    {"epoch": 0, "scheduled_removal": 8, "correct": 953, "accuracy": 0.953},
+    {"epoch": 1, "scheduled_removal": 16, "correct": 100, "accuracy": 0.1},
+    {"epoch": 2, "scheduled_removal": 24, "correct": 913, "accuracy": 0.913},
+    {"epoch": 3, "scheduled_removal": 32, "correct": 837, "accuracy": 0.837},
+    {"epoch": 4, "scheduled_removal": 40, "correct": 452, "accuracy": 0.452},
+    {"epoch": 5, "scheduled_removal": 48, "correct": 144, "accuracy": 0.144},
+    {"epoch": 6, "scheduled_removal": 56, "correct": 0, "accuracy": 0.0},
+    {"epoch": 7, "scheduled_removal": 64, "correct": 899, "accuracy": 0.899},
+    {"epoch": 8, "scheduled_removal": 72, "correct": 33, "accuracy": 0.033},
+    {"epoch": 9, "scheduled_removal": 75, "correct": 821, "accuracy": 0.821, "phase": "first_full_removal"},
+    {"epoch": 10, "scheduled_removal": 75, "correct": 913, "accuracy": 0.913, "phase": "adaptation_1"},
+    {"epoch": 11, "scheduled_removal": 75, "correct": 910, "accuracy": 0.91, "phase": "adaptation_2"},
+    {"epoch": 12, "scheduled_removal": 75, "correct": 965, "accuracy": 0.965, "phase": "adaptation_3"},
+    {"epoch": 13, "scheduled_removal": 75, "correct": 966, "accuracy": 0.966, "phase": "adaptation_4"},
+    {"epoch": 14, "scheduled_removal": 75, "correct": 963, "accuracy": 0.963, "phase": "adaptation_5_final"}
+  ],
+  "target_accuracy": 0.99,
+  "target_reached": false,
+  "source_artifact": "artifacts/checkpoints/deep1-5x5-internalized-cot/validation_metrics.json"
+}

@@ -1,6 +1,6 @@
 {
-  "status": "running",
-  "observed_at_utc": "2026-10-11T02:38:57Z",
+  "status": "complete",
+  "observed_at_utc": "2026-10-11T02:52:11Z",
   "model": {
     "name": "Deep 1",
     "layers": 12,
@@ -161,6 +161,39 @@
       "accuracy": 0.965,
       "shallow1_accuracy": 0.005,
       "deep_minus_shallow_percentage_points": 96.0
+    },
+    {
+      "epoch": 13,
+      "scheduled_removal": 75,
+      "fully_internalized": true,
+      "phase": "adaptation_4",
+      "correct": 966,
+      "examples": 1000,
+      "accuracy": 0.966,
+      "shallow1_accuracy": 0.003,
+      "deep_minus_shallow_percentage_points": 96.3
+    },
+    {
+      "epoch": 14,
+      "scheduled_removal": 75,
+      "fully_internalized": true,
+      "phase": "adaptation_5_final",
+      "correct": 963,
+      "examples": 1000,
+      "accuracy": 0.963,
+      "shallow1_accuracy": 0.006,
+      "deep_minus_shallow_percentage_points": 95.7
     }
-  ]
+  ],
+  "final_test": {
+    "removed_tokens": 75,
+    "fully_internalized": true,
+    "correct": 958,
+    "examples": 1000,
+    "accuracy": 0.958,
+    "shallow1_accuracy": 0.003,
+    "deep_minus_shallow_percentage_points": 95.5
+  },
+  "target_validation_accuracy": 0.99,
+  "target_reached": false
 }
