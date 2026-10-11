@@ -36,12 +36,18 @@ class State:
 
     def resolve_endpoint(self) -> tuple[str, str]:
         result = subprocess.run(
-            ["runpodctl", "ssh", "info", self.args.pod],
+            ["runpodctl", "pod", "get", self.args.pod],
             check=True,
             capture_output=True,
             text=True,
             timeout=20,
         )
+        try:
+            pod = json.loads(result.stdout)
+            ssh = pod["ssh"]
+            return str(ssh["ip"]), str(ssh["port"])
+        except (KeyError, TypeError, json.JSONDecodeError):
+            pass
         match = re.search(
             r"(?P<host>(?:\d{1,3}\.){3}\d{1,3}).*?(?:-p\s+|:)(?P<port>\d+)",
             result.stdout,
