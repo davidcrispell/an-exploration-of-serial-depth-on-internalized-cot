@@ -318,7 +318,8 @@ threshold. At 16/75, Deep 1 then fell to 100/1,000 (10.0%), below Shallow 1's
 gap. The curve is therefore sharply non-monotonic and does not support a
 uniformly greater Deep internalization capacity. At 32/75, Deep retained
 837/1,000 (83.7%) versus Shallow's 672/1,000 (67.2%), an observed +16.5-point
-gap; later checkpoints remain pending.
+gap. At 40/75, Deep fell to 452/1,000 (45.2%) but remained above Shallow's
+146/1,000 (14.6%) by 30.6 points; later checkpoints remain pending.
 
 | Curriculum checkpoint | Deep 1 | Shallow 1 | Deep minus shallow |
 | --- | ---: | ---: | ---: |
@@ -327,6 +328,7 @@ gap; later checkpoints remain pending.
 | Epoch 1 (16 / 75) | 10.0% | 32.3% | -22.3 pp |
 | Epoch 2 (24 / 75) | 91.3% | 18.8% | +72.5 pp |
 | Epoch 3 (32 / 75) | 83.7% | 67.2% | +16.5 pp |
+| Epoch 4 (40 / 75) | 45.2% | 14.6% | +30.6 pp |
 
 - [`deep1-5x5-explicit-cot-validation.json`](deep1-5x5-explicit-cot-validation.json)
 - [`deep1-5x5-explicit-cot-test.json`](deep1-5x5-explicit-cot-test.json)

@@ -283,7 +283,8 @@ Shallow 1's **91.5%** (+3.8 points). At 16/75, Deep then fell to **10.0%**
 versus Shallow 1's **32.3%** (-22.3 points). At 24/75, Deep rebounded to
 **91.3%** versus Shallow 1's **18.8%** (+72.5 points), making the early curve
 sharply non-monotonic. At 32/75, Deep retained **83.7%** versus Shallow 1's
-**67.2%** (+16.5 points); later checkpoints remain pending.
+**67.2%** (+16.5 points). At 40/75, Deep fell to **45.2%** but remained above
+Shallow 1's **14.6%** (+30.6 points); later checkpoints remain pending.
 
 The archived Shallow evaluation did not save per-example correctness. A local
 CPU rerun of the identical checkpoint scored 98.6%, two examples below the
