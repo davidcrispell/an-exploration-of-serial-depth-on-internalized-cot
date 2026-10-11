@@ -288,8 +288,9 @@ Shallow 1's **14.6%** (+30.6 points). At 48/75, Deep fell to **14.4%** versus
 Shallow 1's **10.4%** (+4.0 points). At 56/75, both models reached **0.0%**,
 collapsing the observed gap at that boundary. At 64/75, Deep rebounded to
 **89.9%**, while Shallow scored **0.2%** (+89.7 points). This large second
-rebound reinforces that the curriculum curve is highly non-monotonic; later
-checkpoints remain pending.
+rebound reinforces that the curriculum curve is highly non-monotonic. At 72/75,
+Deep fell again to **3.3%**, while Shallow scored **0.0%** (+3.3 points). The
+first fully internalized checkpoint remains pending.
 
 The archived Shallow evaluation did not save per-example correctness. A local
 CPU rerun of the identical checkpoint scored 98.6%, two examples below the

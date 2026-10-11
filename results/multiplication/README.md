@@ -325,7 +325,9 @@ gap. At 40/75, Deep fell to 452/1,000 (45.2%) but remained above Shallow's
 collapsed completely at that boundary. At 64/75, Deep rebounded dramatically to
 899/1,000 (89.9%), while Shallow scored 2/1,000 (0.2%), an observed +89.7-point
 gap. This second rebound further emphasizes that the curriculum curve is highly
-non-monotonic; later checkpoints remain pending.
+non-monotonic. At 72/75, Deep fell again to 33/1,000 (3.3%), while Shallow
+scored 0/1,000 (0.0%), narrowing the observed gap to +3.3 points. The first
+fully internalized checkpoint remains pending.
 
 | Curriculum checkpoint | Deep 1 | Shallow 1 | Deep minus shallow |
 | --- | ---: | ---: | ---: |
@@ -338,6 +340,7 @@ non-monotonic; later checkpoints remain pending.
 | Epoch 5 (48 / 75) | 14.4% | 10.4% | +4.0 pp |
 | Epoch 6 (56 / 75) | 0.0% | 0.0% | 0.0 pp |
 | Epoch 7 (64 / 75) | 89.9% | 0.2% | +89.7 pp |
+| Epoch 8 (72 / 75) | 3.3% | 0.0% | +3.3 pp |
 
 The localhost dashboard overlays Deep 1 and Shallow 1 for explicit-CoT loss,
 internalization loss, and validation accuracy on 3x3, 4x4, and 5x5. Every
