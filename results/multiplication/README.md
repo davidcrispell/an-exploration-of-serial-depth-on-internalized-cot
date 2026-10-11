@@ -308,9 +308,21 @@ The standard 75-token internalization curriculum is in progress from this
 checkpoint; its intermediate curve and final comparison will be reported
 separately rather than inferred from the explicit result.
 
+The first completed internalization checkpoint retained 953/1,000 (95.3%)
+validation accuracy with 8/75 reasoning tokens removed. Shallow 1 scored
+915/1,000 (91.5%) at the identical boundary, an observed Deep-minus-Shallow
+gap of +3.8 percentage points. This is below the predeclared 5-point reporting
+threshold and is not a causal depth estimate; later checkpoints remain pending.
+
+| Curriculum checkpoint | Deep 1 | Shallow 1 | Deep minus shallow |
+| --- | ---: | ---: | ---: |
+| Explicit stage (0 / 75) | 100.0% | 100.0% | 0.0 pp |
+| Epoch 0 (8 / 75) | 95.3% | 91.5% | +3.8 pp |
+
 - [`deep1-5x5-explicit-cot-validation.json`](deep1-5x5-explicit-cot-validation.json)
 - [`deep1-5x5-explicit-cot-test.json`](deep1-5x5-explicit-cot-test.json)
 - [`deep1-5x5-explicit-cot-training-config.json`](deep1-5x5-explicit-cot-training-config.json)
+- [`deep1-5x5-internalized-cot-progress.json`](deep1-5x5-internalized-cot-progress.json)
 
 ## Shallow model after explicit-CoT fine-tuning
 

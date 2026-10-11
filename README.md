@@ -277,7 +277,9 @@ validation and 100.0% test accuracy** after 25,250 optimizer steps. Its
 `50e220806977ed7ff6f19ed413473e88bb1df574875f835e6410ee8b7f0f65bb`.
 The 75-token internalization curriculum is running from that checkpoint, so
 this explicit result establishes task learnability but does not yet establish
-the hidden-reasoning comparison.
+the hidden-reasoning comparison. At its first completed boundary, Deep 1
+retained **95.3%** validation accuracy with 8/75 tokens removed, versus
+Shallow 1's **91.5%** (+3.8 points); later checkpoints remain pending.
 
 The archived Shallow evaluation did not save per-example correctness. A local
 CPU rerun of the identical checkpoint scored 98.6%, two examples below the

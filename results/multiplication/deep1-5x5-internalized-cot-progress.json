@@ -1,0 +1,50 @@
+{
+  "status": "running",
+  "observed_at_utc": "2026-10-11T00:32:02Z",
+  "model": {
+    "name": "Deep 1",
+    "layers": 12,
+    "width": 768,
+    "heads": 6,
+    "mlp_width": 3072,
+    "parameters": 162201600,
+    "base_checkpoint_sha256": "3d9b65247396d545884ef3da4771023be9767ad95afc140d604d175225706164",
+    "explicit_checkpoint_sha256": "50e220806977ed7ff6f19ed413473e88bb1df574875f835e6410ee8b7f0f65bb"
+  },
+  "data": {
+    "train_examples": 808000,
+    "validation_examples": 1000,
+    "test_examples": 1000,
+    "train_sha256": "e41642536746292598fb5fa53bf8ebb01358a161a6ba78892d0579ccc1489253",
+    "validation_sha256": "d3b95bdf0f74863a88bc777fee3fe23854e6ad458b8e7b847b65dac25e59182c",
+    "test_sha256": "661ab1db2ea0d33fc3e6e398c75920a7a8471f64ebad481bcaf5c8a8ff2b9c4b"
+  },
+  "protocol": {
+    "cot_tokens": 75,
+    "remove_per_epoch": 8,
+    "removal_smoothing_lambda": 4,
+    "optimizer": "AdamW",
+    "learning_rate": 0.00005,
+    "batch_size": 32,
+    "precision": "FP32",
+    "seed": 3456,
+    "evaluation": "input-only greedy final-answer exact match"
+  },
+  "explicit": {
+    "validation_correct": 1000,
+    "validation_accuracy": 1.0,
+    "test_correct": 1000,
+    "test_accuracy": 1.0
+  },
+  "validation_curve": [
+    {
+      "epoch": 0,
+      "scheduled_removal": 8,
+      "correct": 953,
+      "examples": 1000,
+      "accuracy": 0.953,
+      "shallow1_accuracy": 0.915,
+      "deep_minus_shallow_percentage_points": 3.8
+    }
+  ]
+}
