@@ -1,6 +1,6 @@
 {
   "status": "running",
-  "observed_at_utc": "2026-10-11T02:29:00Z",
+  "observed_at_utc": "2026-10-11T02:38:57Z",
   "model": {
     "name": "Deep 1",
     "layers": 12,
@@ -150,6 +150,17 @@
       "accuracy": 0.91,
       "shallow1_accuracy": 0.002,
       "deep_minus_shallow_percentage_points": 90.8
+    },
+    {
+      "epoch": 12,
+      "scheduled_removal": 75,
+      "fully_internalized": true,
+      "phase": "adaptation_3",
+      "correct": 965,
+      "examples": 1000,
+      "accuracy": 0.965,
+      "shallow1_accuracy": 0.005,
+      "deep_minus_shallow_percentage_points": 96.0
     }
   ]
 }
