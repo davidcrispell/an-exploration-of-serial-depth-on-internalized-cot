@@ -1,6 +1,6 @@
 {
   "status": "running",
-  "observed_at_utc": "2026-10-11T02:08:03Z",
+  "observed_at_utc": "2026-10-11T02:20:02Z",
   "model": {
     "name": "Deep 1",
     "layers": 12,
@@ -117,6 +117,28 @@
       "accuracy": 0.033,
       "shallow1_accuracy": 0.0,
       "deep_minus_shallow_percentage_points": 3.3
+    },
+    {
+      "epoch": 9,
+      "scheduled_removal": 75,
+      "fully_internalized": true,
+      "phase": "first_full_removal",
+      "correct": 821,
+      "examples": 1000,
+      "accuracy": 0.821,
+      "shallow1_accuracy": 0.002,
+      "deep_minus_shallow_percentage_points": 81.9
+    },
+    {
+      "epoch": 10,
+      "scheduled_removal": 75,
+      "fully_internalized": true,
+      "phase": "adaptation_1",
+      "correct": 913,
+      "examples": 1000,
+      "accuracy": 0.913,
+      "shallow1_accuracy": 0.004,
+      "deep_minus_shallow_percentage_points": 90.9
     }
   ]
 }

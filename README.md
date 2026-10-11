@@ -290,7 +290,12 @@ collapsing the observed gap at that boundary. At 64/75, Deep rebounded to
 **89.9%**, while Shallow scored **0.2%** (+89.7 points). This large second
 rebound reinforces that the curriculum curve is highly non-monotonic. At 72/75,
 Deep fell again to **3.3%**, while Shallow scored **0.0%** (+3.3 points). The
-first fully internalized checkpoint remains pending.
+first fully internalized checkpoint then rebounded to **82.1%**, versus
+Shallow's **0.2%** (+81.9 points). One full-removal adaptation epoch raised Deep
+to **91.3%**, while Shallow's matched point was **0.4%** (+90.9 points). Deep has
+not yet reached the 99% stopping threshold, so adaptation continues. These
+one-seed results are not a causal depth-only estimate because Deep retains a
+3.12-point LAMBADA advantage.
 
 The archived Shallow evaluation did not save per-example correctness. A local
 CPU rerun of the identical checkpoint scored 98.6%, two examples below the

@@ -327,7 +327,11 @@ collapsed completely at that boundary. At 64/75, Deep rebounded dramatically to
 gap. This second rebound further emphasizes that the curriculum curve is highly
 non-monotonic. At 72/75, Deep fell again to 33/1,000 (3.3%), while Shallow
 scored 0/1,000 (0.0%), narrowing the observed gap to +3.3 points. The first
-fully internalized checkpoint remains pending.
+fully internalized checkpoint then rebounded to 821/1,000 (82.1%), versus
+Shallow's 2/1,000 (0.2%), an observed +81.9-point gap. One full-removal
+adaptation epoch raised Deep to 913/1,000 (91.3%), while Shallow's matched point
+was 4/1,000 (0.4%), an observed +90.9-point gap. Deep has not yet met the 99%
+stopping threshold, so full-removal adaptation continues.
 
 | Curriculum checkpoint | Deep 1 | Shallow 1 | Deep minus shallow |
 | --- | ---: | ---: | ---: |
@@ -341,6 +345,8 @@ fully internalized checkpoint remains pending.
 | Epoch 6 (56 / 75) | 0.0% | 0.0% | 0.0 pp |
 | Epoch 7 (64 / 75) | 89.9% | 0.2% | +89.7 pp |
 | Epoch 8 (72 / 75) | 3.3% | 0.0% | +3.3 pp |
+| Epoch 9 (first 75 / 75) | 82.1% | 0.2% | +81.9 pp |
+| Epoch 10 (adaptation 1) | 91.3% | 0.4% | +90.9 pp |
 
 The localhost dashboard overlays Deep 1 and Shallow 1 for explicit-CoT loss,
 internalization loss, and validation accuracy on 3x3, 4x4, and 5x5. Every
