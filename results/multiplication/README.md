@@ -312,12 +312,16 @@ The first completed internalization checkpoint retained 953/1,000 (95.3%)
 validation accuracy with 8/75 reasoning tokens removed. Shallow 1 scored
 915/1,000 (91.5%) at the identical boundary, an observed Deep-minus-Shallow
 gap of +3.8 percentage points. This is below the predeclared 5-point reporting
-threshold and is not a causal depth estimate; later checkpoints remain pending.
+threshold. At 16/75, Deep 1 then fell to 100/1,000 (10.0%), below Shallow 1's
+323/1,000 (32.3%) by 22.3 points. The early curve is therefore sharply
+non-monotonic and does not support a uniformly greater Deep internalization
+capacity; later checkpoints remain pending.
 
 | Curriculum checkpoint | Deep 1 | Shallow 1 | Deep minus shallow |
 | --- | ---: | ---: | ---: |
 | Explicit stage (0 / 75) | 100.0% | 100.0% | 0.0 pp |
 | Epoch 0 (8 / 75) | 95.3% | 91.5% | +3.8 pp |
+| Epoch 1 (16 / 75) | 10.0% | 32.3% | -22.3 pp |
 
 - [`deep1-5x5-explicit-cot-validation.json`](deep1-5x5-explicit-cot-validation.json)
 - [`deep1-5x5-explicit-cot-test.json`](deep1-5x5-explicit-cot-test.json)
