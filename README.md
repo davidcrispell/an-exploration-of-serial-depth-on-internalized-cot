@@ -4,6 +4,7 @@ We trained 2 small models to similar losses to investigate the effects of lower 
 
 Deep 1 and Shallow 1 both reach 100% accuracy on nxn digit multiplication when generating an explicit CoT reasoning trace. However, after an internalization treatment (following the method here: https://arxiv.org/pdf/2405.14838), Shallow 1 achieves 0.6% 5x5 digit multiplication ability whereas Deep 1 achieves 96.3% accuracy. 
 
+Additional examination might test shallow model ability on other CoT 100% tasks, such as GSM-8k, under internalization conditioning. This would probably give us signal on other relevant domains in which internalization is a scheming risk.
 
 
 # Modded-NanoGPT
