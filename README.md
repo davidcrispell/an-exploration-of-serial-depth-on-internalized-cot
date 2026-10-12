@@ -6,6 +6,14 @@ Deep 1 and Shallow 1 both reach 100% accuracy on nxn digit multiplication when g
 
 Additional examination might test shallow model ability on other CoT 100% tasks, such as GSM-8k, under internalization conditioning. This would probably give us signal on other relevant domains in which internalization is a scheming risk.
 
+## Training and internalization curves
+
+![Explicit-CoT fine-tuning loss](https://raw.githubusercontent.com/davidcrispell/an-exploration-of-serial-depth-on-internalized-cot/main/results/multiplication/figures/explicit-loss-curves.png)
+
+![CoT internalization rollout loss](https://raw.githubusercontent.com/davidcrispell/an-exploration-of-serial-depth-on-internalized-cot/main/results/multiplication/figures/internalization-loss-curves.png)
+
+![Validation accuracy across the internalization curriculum](https://raw.githubusercontent.com/davidcrispell/an-exploration-of-serial-depth-on-internalized-cot/main/results/multiplication/figures/validation-accuracy-curves.png)
+
 
 # Modded-NanoGPT
 
