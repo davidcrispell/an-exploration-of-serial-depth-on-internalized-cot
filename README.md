@@ -1,10 +1,10 @@
 Serial depth and chain-of-thought internalization
 
-We trained 2 small models to similar losses to investigate the effects of lower serial depth on CoT internalization. Our motivation is creating an information bottleneck whereby models must reason over token-space instead of uninterpretable layer space. Our specific experiment is training a model with standard depth (Deep 1, 12 layers) and a model with shallow depth (Shallow 1, 6 layers).
+We trained 2 small parameter matched models to similar losses to investigate the effects of lower layer-wise serial depth on CoT internalization. Our models, Deep 1 and Shallow 1, were trained with identical parameter counts (162,201,600 parameters). Our motivation is creating an internal information bottleneck whereby models must reason over token-space instead of over uninterpretable layer space. 
 
 Deep 1 and Shallow 1 both reach 100% accuracy on nxn digit multiplication when generating an explicit CoT reasoning trace. However, after an internalization treatment (following the method here: https://arxiv.org/pdf/2405.14838), Shallow 1 achieves 0.6% 5x5 digit multiplication ability whereas Deep 1 achieves 96.3% accuracy. 
 
-Additional examination might test shallow model ability on other CoT 100% tasks, such as GSM-8k, under internalization conditioning. This would probably give us signal on other relevant domains in which internalization is a scheming risk.
+Additional examination might test shallow model ability on other explicit CoT tasks, such as GSM-8k, under internalization conditioning. This would probably give us signal on other relevant domains in which internalization is a scheming risk.
 
 ## Training and internalization curves
 
@@ -14,6 +14,11 @@ Additional examination might test shallow model ability on other CoT 100% tasks,
 
 ![Validation accuracy across the internalization curriculum](https://raw.githubusercontent.com/davidcrispell/an-exploration-of-serial-depth-on-internalized-cot/main/results/multiplication/figures/validation-accuracy-curves.png)
 
+Some confounds might be that we stopped training (for small-budget reasons) Shallow 1's explicit 5x5 CoT earlier than its loss looks to have minimized, which was unfortunate. Further, capabilities between Shallow 1 and Deep 1 are not completely equal. On LAMBADA, Deep 1 and Shallow 1 score 29.42% and 26.30% respectively, so it seems there could be a training price to pay for larger models.
+
+The pricing of training Deep 1 and Shallow 1 was subject to confounds. Shallow 1 was more expensive to train and less generally capable than Deep 1, but also had the desirable property of not being able to reason totally internally. Further investigation into the interactions between scale, internalization capacity, and generally the tradeoffs here is warranted. 
+
+There was an additional confound in that we did not scrutinize our coding agent's training run design choice around stopping. It implemented a linear learning rate slowdown to preserve budget when a clean run would have been to not do this. Replicating these experiments and fixing these bugs would allow for a cleaner investigation of depth on reasoning internalization.
 
 # Modded-NanoGPT
 
