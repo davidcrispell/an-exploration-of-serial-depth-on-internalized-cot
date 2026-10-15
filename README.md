@@ -1,6 +1,6 @@
 Serial depth and chain-of-thought internalization
 
-We trained 2 small parameter matched models to similar losses to investigate the effects of lower layer-wise serial depth on CoT internalization. Our models, Deep 1 and Shallow 1, were trained with identical parameter counts (162,201,600 parameters). Our motivation is creating an internal information bottleneck whereby models must reason over token-space instead of over uninterpretable layer space. 
+We trained 2 small parameter matched models, Deep 1 and Shallow 1, to similar losses on FineWeb to investigate the effects of lower layer-wise serial depth on CoT internalization. Our models, Deep 1 and Shallow 1, were trained with identical parameter counts (162,201,600 parameters). Deep 1 is able to learn to perform 5x5 digit multiplication internally, whereas Shallow 1 could not. Our motivation is creating an internal information bottleneck whereby models must reason over token-space instead of over uninterpretable layer space. 
 
 Deep 1 and Shallow 1 both reach 100% accuracy on nxn (n from 3 to 5) digit multiplication when generating an explicit CoT reasoning trace. However, after an internalization treatment (following the method here: https://arxiv.org/pdf/2405.14838), Shallow 1 achieves 0.6% 5x5 digit multiplication ability whereas Deep 1 achieves 96.3% accuracy. 
 
