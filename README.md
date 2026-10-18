@@ -1,3 +1,5 @@
+Further investigation into training interventions to force CoT externalization are pending.
+
 Serial depth and chain-of-thought internalization
 
 We trained 2 small parameter matched models, Deep 1 and Shallow 1, to similar losses on FineWeb to investigate the effects of lower layer-wise serial depth on CoT internalization. Our models, Deep 1 and Shallow 1, were trained with identical parameter counts (162,201,600 parameters). Deep 1 is able to learn to perform 5x5 digit multiplication internally, whereas Shallow 1 could not. Our motivation is creating an internal information bottleneck whereby models must reason over token-space instead of over uninterpretable layer space. 
