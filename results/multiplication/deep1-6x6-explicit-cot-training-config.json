@@ -1,0 +1,21 @@
+{
+  "checkpoint": "/workspace/checkpoints/deep1-fineweb-matched.pt",
+  "train_path": "/workspace/paper-data/6_by_6_mult/train.txt",
+  "validation_path": "/workspace/paper-data/6_by_6_mult/valid.txt",
+  "test_path": "/workspace/paper-data/6_by_6_mult/src1_test.txt",
+  "output_dir": "/workspace/experiment-results/deep1-6x6-explicit-cot-fp32",
+  "cache_dir": "/workspace/token-cache/6x6",
+  "digits": 6,
+  "epochs": 1,
+  "batch_size": 32,
+  "accumulate": 1,
+  "lr": 5e-05,
+  "max_grad_norm": 1.0,
+  "seed": 3456,
+  "log_every": 100,
+  "eval_examples": 1000,
+  "eval_batch_size": 32,
+  "max_steps": null,
+  "compile": false,
+  "bf16": false
+}
