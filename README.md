@@ -108,6 +108,12 @@ Run the CPU-only architecture tests with:
 python -m unittest discover -s tests -v
 ```
 
+## GSM8K internalized-CoT extension
+
+The variable-length GSM8K trainer, token-removal curriculum, question-only
+greedy evaluator, reproducibility settings, and example Deep 1 / Shallow 1
+commands are documented in [`benchmarks/gsm8k`](benchmarks/gsm8k/README.md).
+
 ## Held-out multiplication benchmarks
 
 The canonical validation and test splits from
