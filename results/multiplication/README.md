@@ -12,7 +12,10 @@ The explicit-CoT recurrent-adapter warmup completed one epoch and scored
 PyTorch rotary-cache transition bug when switching from inference-mode
 validation back to training. The cache fix is regression-tested, and the run
 resumed from the saved warmup checkpoint without repeating the warmup. The
-paper-matched 75-token internalization curriculum is currently in progress.
+first completed internalization boundary scored 67/1,000 (6.7%) with 8/75 CoT
+tokens removed. At the identical boundary, Shallow 1 scored 91.5% and Deep 1
+scored 95.3%. The paper-matched 75-token curriculum is still in progress, so
+this early separation is not a final capacity result and may be non-monotonic.
 
 - [`shallow1-1-recurrent-5x5-internalized-cot-progress.json`](shallow1-1-recurrent-5x5-internalized-cot-progress.json)
 - [`shallow1-1-recurrent-5x5-internalized-cot-training-config.json`](shallow1-1-recurrent-5x5-internalized-cot-training-config.json)

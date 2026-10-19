@@ -12,8 +12,10 @@ An active Shallow 1.1 pilot reuses the frozen six-layer Shallow 1 stack twice,
 training only two 1024×1024 recurrent adapter matrices (2,097,152 trainable
 parameters; 164,298,752 total). Its one-epoch explicit-CoT adapter warmup reached
 994/1,000 (99.4%) input-only validation accuracy on 5x5 multiplication. The
-75-token internalization curriculum is now running; this is an architectural
-pilot, not yet evidence that recurrence improves or worsens monitorability.
+first internalization boundary scored 67/1,000 (6.7%) with 8/75 CoT tokens
+removed, versus 91.5% for Shallow 1 and 95.3% for Deep 1 at the same boundary.
+The 75-token curriculum is still running; this is an architectural pilot, not
+yet evidence that recurrence improves or worsens monitorability.
 
 ## Training and internalization curves
 
