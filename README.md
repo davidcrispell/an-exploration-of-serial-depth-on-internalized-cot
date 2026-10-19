@@ -8,6 +8,13 @@ Deep 1 and Shallow 1 both reach 100% accuracy on nxn (n from 3 to 5) digit multi
 
 Additional examination might test shallow model ability on other explicit CoT tasks, such as GSM-8k, under internalization conditioning. This would probably give us signal on other relevant domains in which internalization is a scheming risk.
 
+An active Shallow 1.1 pilot reuses the frozen six-layer Shallow 1 stack twice,
+training only two 1024×1024 recurrent adapter matrices (2,097,152 trainable
+parameters; 164,298,752 total). Its one-epoch explicit-CoT adapter warmup reached
+994/1,000 (99.4%) input-only validation accuracy on 5x5 multiplication. The
+75-token internalization curriculum is now running; this is an architectural
+pilot, not yet evidence that recurrence improves or worsens monitorability.
+
 ## Training and internalization curves
 
 ![Explicit-CoT fine-tuning loss](https://raw.githubusercontent.com/davidcrispell/an-exploration-of-serial-depth-on-internalized-cot/main/results/multiplication/figures/explicit-loss-curves.png)

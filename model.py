@@ -82,7 +82,14 @@ class Rotary(nn.Module):
 
     def forward(self, x):
         seq_len = x.shape[1]
-        if seq_len != self.seq_len_cached or self.cos_cached.device != x.device:
+        cache_is_inference = (
+            self.cos_cached is not None and torch.is_inference(self.cos_cached)
+        )
+        if (
+            seq_len != self.seq_len_cached
+            or self.cos_cached.device != x.device
+            or (torch.is_grad_enabled() and cache_is_inference)
+        ):
             self.seq_len_cached = seq_len
             t = torch.arange(seq_len, device=x.device).type_as(self.inv_freq)
             freqs = torch.outer(t, self.inv_freq.to(x.device))

@@ -1,5 +1,22 @@
 # Multiplication results
 
+## Active Shallow 1.1 recurrent 5x5 pilot
+
+Shallow 1.1 initializes from Shallow 1's verified 100%-accurate explicit-CoT
+checkpoint and executes its frozen six-layer stack twice. Only two full-width
+1024×1024 recurrent matrices train: 2,097,152 trainable parameters on top of
+the frozen 162,201,600-parameter base (164,298,752 total).
+
+The explicit-CoT recurrent-adapter warmup completed one epoch and scored
+994/1,000 (99.4%) on input-only greedy validation. The run then encountered a
+PyTorch rotary-cache transition bug when switching from inference-mode
+validation back to training. The cache fix is regression-tested, and the run
+resumed from the saved warmup checkpoint without repeating the warmup. The
+paper-matched 75-token internalization curriculum is currently in progress.
+
+- [`shallow1-1-recurrent-5x5-internalized-cot-progress.json`](shallow1-1-recurrent-5x5-internalized-cot-progress.json)
+- [`shallow1-1-recurrent-5x5-internalized-cot-training-config.json`](shallow1-1-recurrent-5x5-internalized-cot-training-config.json)
+
 ## Untreated shallow-model baseline
 
 Checkpoint: 6 layers, width 1024, 8 heads, MLP width 2768, 162,201,600 parameters.

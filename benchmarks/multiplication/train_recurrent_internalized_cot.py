@@ -30,7 +30,10 @@ from benchmarks.multiplication.cot import (
     shifted_inputs_and_labels,
 )
 from benchmarks.multiplication.evaluate import evaluate_size
-from benchmarks.multiplication.recurrent import load_recurrent_from_explicit
+from benchmarks.multiplication.recurrent import (
+    load_recurrent_checkpoint,
+    load_recurrent_from_explicit,
+)
 from benchmarks.multiplication.train_explicit_cot import load_or_build_token_cache
 
 
@@ -110,6 +113,7 @@ def evaluate(model, tokenizer, lines, args, *, stage, epoch, global_step, remove
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--checkpoint", type=Path, required=True)
+    parser.add_argument("--resume-warmup-checkpoint", type=Path)
     parser.add_argument("--train-path", type=Path, required=True)
     parser.add_argument("--validation-path", type=Path, required=True)
     parser.add_argument("--test-path", type=Path, required=True)
@@ -160,13 +164,29 @@ def main() -> None:
     first_line = read_examples(args.train_path, 1)[0]
     first_ids, prompt_length = encode_explicit_example(tokenizer, first_line)
     cot_tokens = cot_token_count(first_ids, tokenizer.eot_token)
-    model, source_payload = load_recurrent_from_explicit(
-        args.checkpoint,
-        device,
-        parameter_dtype,
-        prefix_mixin=True,
-        hidden_jitter=args.hidden_jitter,
-    )
+    resume_payload = None
+    if args.resume_warmup_checkpoint is not None:
+        model, resume_payload = load_recurrent_checkpoint(
+            args.resume_warmup_checkpoint, device, parameter_dtype
+        )
+        if resume_payload.get("stage") != "recurrent_warmup":
+            raise ValueError(
+                "--resume-warmup-checkpoint requires a recurrent_warmup checkpoint"
+            )
+        if resume_payload.get("cot_tokens") != cot_tokens:
+            raise ValueError("resume checkpoint CoT-token count does not match the data")
+        source_payload = {
+            "epoch": resume_payload.get("explicit_cot_epoch"),
+            "base_step": resume_payload.get("base_step"),
+        }
+    else:
+        model, source_payload = load_recurrent_from_explicit(
+            args.checkpoint,
+            device,
+            parameter_dtype,
+            prefix_mixin=True,
+            hidden_jitter=args.hidden_jitter,
+        )
     counts = model.parameter_counts()
     if counts["recurrent"] != 2 * model.config.n_embd**2:
         raise RuntimeError(f"unexpected recurrent parameter count: {counts}")
@@ -188,14 +208,19 @@ def main() -> None:
         flush=True,
     )
 
-    global_step = 0
-    metrics: list[dict] = []
+    global_step = int(resume_payload.get("global_step", 0)) if resume_payload else 0
+    metrics_path = args.output_dir / "validation_metrics.json"
+    if resume_payload is not None and metrics_path.exists():
+        metrics: list[dict] = json.loads(metrics_path.read_text(encoding="utf-8"))
+    else:
+        metrics = []
     stop = False
 
     # First teach the two recurrent matrices to preserve the already-perfect
     # explicit-CoT behavior before removing any reasoning tokens.
     optimizer = make_optimizer(model, args.lr)
-    for epoch in range(args.warmup_epochs):
+    warmup_epochs = range(args.warmup_epochs) if resume_payload is None else range(0)
+    for epoch in warmup_epochs:
         model.train()
         permutation = np.random.permutation(len(token_rows))
         interval_started = time.perf_counter()

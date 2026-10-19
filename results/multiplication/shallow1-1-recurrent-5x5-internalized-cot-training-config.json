@@ -1,0 +1,32 @@
+{
+  "checkpoint": "/root/experiment-inputs/shallow1-5x5-explicit.pt",
+  "resume_warmup_checkpoint": "/root/experiment-results/shallow1-1-recurrent-5x5-internalized-cot-fp32/recurrent_warmup_latest.pt",
+  "train_path": "/root/experiment-inputs/train.txt",
+  "validation_path": "/root/experiment-inputs/validation.txt",
+  "test_path": "/root/experiment-inputs/test.txt",
+  "output_dir": "/root/experiment-results/shallow1-1-recurrent-5x5-internalized-cot-fp32",
+  "cache_dir": "/root/token-cache/5x5",
+  "digits": 5,
+  "warmup_epochs": 1,
+  "epochs": 15,
+  "batch_size": 32,
+  "accumulate": 1,
+  "lr": 5e-05,
+  "max_grad_norm": 1.0,
+  "remove_per_epoch": 8.0,
+  "removal_smoothing_lambda": 4.0,
+  "target_validation_accuracy": 0.99,
+  "seed": 3456,
+  "log_every": 100,
+  "eval_examples": 1000,
+  "eval_batch_size": 32,
+  "max_steps": null,
+  "hidden_jitter": 0.02,
+  "bf16": false,
+  "parameter_counts": {
+    "base": 162201600,
+    "recurrent": 2097152,
+    "trainable": 2097152,
+    "total": 164298752
+  }
+}

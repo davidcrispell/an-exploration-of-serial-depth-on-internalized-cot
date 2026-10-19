@@ -74,6 +74,14 @@ class GPTModelTests(unittest.TestCase):
         self.assertEqual(logits.shape, (2, 1, self.config.vocab_size))
         self.assertIsNone(loss)
 
+    def test_training_after_inference_mode_refreshes_rotary_cache(self):
+        tokens = torch.randint(0, self.config.vocab_size, (2, 5))
+        with torch.inference_mode():
+            self.model(tokens)
+
+        _, loss = self.model(tokens, targets=tokens)
+        loss.backward()
+
 
 if __name__ == "__main__":
     unittest.main()
