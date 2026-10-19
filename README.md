@@ -25,7 +25,9 @@ remained at 0/1,000 (0.0%) at 40/75 removed, versus 14.6% for Shallow 1 and
 14.4% for Deep 1. At 56/75 removed, all three models scored 0/1,000 (0.0%). At
 64/75 removed, Shallow 1.1 remained at 0/1,000 (0.0%), versus 0.2% for Shallow
 1 and Deep 1's sharp rebound to 89.9%. At 72/75 removed, Shallow 1.1 and
-Shallow 1 both scored 0/1,000 (0.0%), while Deep 1 scored 3.3%.
+Shallow 1 both scored 0/1,000 (0.0%), while Deep 1 scored 3.3%. At the first
+75/75 full-removal boundary, Shallow 1.1 remained at 0/1,000 (0.0%), versus
+0.2% for Shallow 1 and 82.1% for Deep 1.
 
 ## Training and internalization curves
 
