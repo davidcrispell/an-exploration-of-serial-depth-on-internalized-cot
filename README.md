@@ -17,7 +17,8 @@ removed, versus 91.5% for Shallow 1 and 95.3% for Deep 1 at the same boundary.
 At 16/75 removed, Shallow 1.1 scored 64/1,000 (6.4%), versus 32.3% for Shallow
 1 and 10.0% for Deep 1. The 75-token curriculum is still running; this is an
 architectural pilot, not yet evidence that recurrence improves or worsens
-monitorability.
+monitorability. At 24/75 removed, Shallow 1.1 fell to 1/1,000 (0.1%), versus
+18.8% for Shallow 1 and 91.3% for Deep 1.
 
 ## Training and internalization curves
 
