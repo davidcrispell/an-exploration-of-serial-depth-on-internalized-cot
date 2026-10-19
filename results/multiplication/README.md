@@ -1,6 +1,6 @@
 # Multiplication results
 
-## Active Shallow 1.1 recurrent 5x5 pilot
+## Completed Shallow 1.1 recurrent 5x5 pilot
 
 Shallow 1.1 initializes from Shallow 1's verified 100%-accurate explicit-CoT
 checkpoint and executes its frozen six-layer stack twice. Only two full-width
@@ -14,8 +14,7 @@ validation back to training. The cache fix is regression-tested, and the run
 resumed from the saved warmup checkpoint without repeating the warmup. The
 first completed internalization boundary scored 67/1,000 (6.7%) with 8/75 CoT
 tokens removed. At the identical boundary, Shallow 1 scored 91.5% and Deep 1
-scored 95.3%. The paper-matched 75-token curriculum is still in progress, so
-this early separation is not a final capacity result and may be non-monotonic.
+scored 95.3%.
 At the second boundary, Shallow 1.1 scored 64/1,000 (6.4%) with 16/75 tokens
 removed, versus 32.3% for Shallow 1 and 10.0% for Deep 1. At 24/75 removed,
 Shallow 1.1 fell to 1/1,000 (0.1%), versus 18.8% for Shallow 1 and 91.3% for
@@ -34,10 +33,53 @@ Shallow 1 and 91.3% for Deep 1. After a second adaptation epoch it again
 scored 0/1,000 (0.0%), versus 0.2% for Shallow 1 and 91.0% for Deep 1. After a
 third adaptation epoch it remained at 0/1,000 (0.0%), versus 0.5% for Shallow
 1 and 96.5% for Deep 1. After a fourth adaptation epoch it again scored
-0/1,000 (0.0%), versus 0.3% for Shallow 1 and 96.6% for Deep 1.
+0/1,000 (0.0%), versus 0.3% for Shallow 1 and 96.6% for Deep 1. The fifth and
+final adaptation epoch remained at 0/1,000 (0.0%), versus 0.6% for Shallow 1
+and 96.3% for Deep 1. Held-out test was also 0/1,000 (0.0%), versus 0.3% for
+Shallow 1 and 95.8% for Deep 1.
+
+| Curriculum checkpoint | Shallow 1.1 recurrent | Shallow 1 | Deep 1 |
+| --- | ---: | ---: | ---: |
+| Explicit warmup (0 / 75) | 99.4% | 100.0% | 100.0% |
+| 8 / 75 | 6.7% | 91.5% | 95.3% |
+| 16 / 75 | 6.4% | 32.3% | 10.0% |
+| 24 / 75 | 0.1% | 18.8% | 91.3% |
+| 32 / 75 | 0.0% | 67.2% | 83.7% |
+| 40 / 75 | 0.0% | 14.6% | 45.2% |
+| 48 / 75 | 0.0% | 10.4% | 14.4% |
+| 56 / 75 | 0.0% | 0.0% | 0.0% |
+| 64 / 75 | 0.0% | 0.2% | 89.9% |
+| 72 / 75 | 0.0% | 0.0% | 3.3% |
+| First 75 / 75 | 0.0% | 0.2% | 82.1% |
+| Adaptation 1 | 0.0% | 0.4% | 91.3% |
+| Adaptation 2 | 0.0% | 0.2% | 91.0% |
+| Adaptation 3 | 0.0% | 0.5% | 96.5% |
+| Adaptation 4 | 0.0% | 0.3% | 96.6% |
+| Adaptation 5 (final validation) | 0.0% | 0.6% | 96.3% |
+| Held-out test | 0.0% | 0.3% | 95.8% |
+
+The full run lasted 7:10:22.743 (2026-10-19 08:38:43Z through
+15:49:05.743Z). Account balance changed from $56.4655598618 before setup to
+$48.3601044425 after teardown, an exact $8.1054554193 account-level delta that
+includes other concurrent Runpod work. The pod-specific billing read recorded
+$4.0673626156 through 15:00 UTC; its final partial bucket was still pending.
+Pod `vpp9263s4vctvi` was deleted after local artifact verification.
+
+Git-ignored artifacts:
+
+- `artifacts/checkpoints/shallow1-1-recurrent-5x5-warmup/recurrent_warmup_latest.pt`
+  (657,214,613 bytes; SHA256 `e1856b58f0fc349ee07431f54ad17aa050865026207522a2b767569e5c7ff765`)
+- `artifacts/checkpoints/shallow1-1-recurrent-5x5-internalized-cot/latest.pt`
+  (657,213,895 bytes; SHA256 `45f8d1de55f3f957b1cc593bb2a927f170831764889450dee7020a09a7ebd6a4`)
+
+This one-seed pilot does not identify a causal recurrence or depth effect: the
+architectures differ, only the recurrent adapters trained, and the baseline
+models retain a 3.12-point LAMBADA capability difference.
 
 - [`shallow1-1-recurrent-5x5-internalized-cot-progress.json`](shallow1-1-recurrent-5x5-internalized-cot-progress.json)
 - [`shallow1-1-recurrent-5x5-internalized-cot-training-config.json`](shallow1-1-recurrent-5x5-internalized-cot-training-config.json)
+- [`shallow1-1-recurrent-5x5-internalized-cot-test-metrics.json`](shallow1-1-recurrent-5x5-internalized-cot-test-metrics.json)
+- [`shallow1-1-recurrent-5x5-internalized-cot-summary.json`](shallow1-1-recurrent-5x5-internalized-cot-summary.json)
 
 ## Untreated shallow-model baseline
 

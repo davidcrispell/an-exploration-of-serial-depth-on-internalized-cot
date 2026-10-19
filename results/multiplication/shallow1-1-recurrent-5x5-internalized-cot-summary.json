@@ -1,0 +1,65 @@
+{
+  "experiment": "shallow1_1_recurrent_5x5_internalized_cot",
+  "status": "complete",
+  "architecture": {
+    "base_layers": 6,
+    "recurrent_passes": 2,
+    "base_parameters_frozen": 162201600,
+    "recurrent_parameters_trainable": 2097152,
+    "total_parameters": 164298752
+  },
+  "source_explicit_checkpoint_sha256": "c9a95971305960d4d8152b257088df723f8447c7064bcea35ea90b2a01d585ee",
+  "validation_curve": [
+    {"checkpoint": "explicit_warmup", "removed": 0, "correct": 994, "examples": 1000, "accuracy": 0.994},
+    {"checkpoint": "epoch_0", "removed": 8, "correct": 67, "examples": 1000, "accuracy": 0.067},
+    {"checkpoint": "epoch_1", "removed": 16, "correct": 64, "examples": 1000, "accuracy": 0.064},
+    {"checkpoint": "epoch_2", "removed": 24, "correct": 1, "examples": 1000, "accuracy": 0.001},
+    {"checkpoint": "epoch_3", "removed": 32, "correct": 0, "examples": 1000, "accuracy": 0.0},
+    {"checkpoint": "epoch_4", "removed": 40, "correct": 0, "examples": 1000, "accuracy": 0.0},
+    {"checkpoint": "epoch_5", "removed": 48, "correct": 0, "examples": 1000, "accuracy": 0.0},
+    {"checkpoint": "epoch_6", "removed": 56, "correct": 0, "examples": 1000, "accuracy": 0.0},
+    {"checkpoint": "epoch_7", "removed": 64, "correct": 0, "examples": 1000, "accuracy": 0.0},
+    {"checkpoint": "epoch_8", "removed": 72, "correct": 0, "examples": 1000, "accuracy": 0.0},
+    {"checkpoint": "epoch_9_first_full_removal", "removed": 75, "correct": 0, "examples": 1000, "accuracy": 0.0},
+    {"checkpoint": "epoch_10_adaptation_1", "removed": 75, "correct": 0, "examples": 1000, "accuracy": 0.0},
+    {"checkpoint": "epoch_11_adaptation_2", "removed": 75, "correct": 0, "examples": 1000, "accuracy": 0.0},
+    {"checkpoint": "epoch_12_adaptation_3", "removed": 75, "correct": 0, "examples": 1000, "accuracy": 0.0},
+    {"checkpoint": "epoch_13_adaptation_4", "removed": 75, "correct": 0, "examples": 1000, "accuracy": 0.0},
+    {"checkpoint": "epoch_14_adaptation_5_final", "removed": 75, "correct": 0, "examples": 1000, "accuracy": 0.0}
+  ],
+  "final_test": {"removed": 75, "correct": 0, "examples": 1000, "accuracy": 0.0},
+  "comparison": {
+    "shallow1_final_validation_accuracy": 0.006,
+    "shallow1_final_test_accuracy": 0.003,
+    "deep1_final_validation_accuracy": 0.963,
+    "deep1_final_test_accuracy": 0.958
+  },
+  "runpod": {
+    "pod_id": "vpp9263s4vctvi",
+    "gpu": "NVIDIA A40",
+    "gpu_price_usd_per_hour": 0.59,
+    "pipeline_started_at": "2026-10-19T08:38:43Z",
+    "pipeline_finished_at": "2026-10-19T15:49:05.743Z",
+    "pipeline_runtime_seconds": 25822.743,
+    "balance_before_usd": 56.4655598618,
+    "balance_after_teardown_usd": 48.3601044425,
+    "account_balance_delta_usd": 8.1054554193,
+    "account_delta_includes_concurrent_work": true,
+    "pod_billing_observed_through": "2026-10-19T15:00:00Z",
+    "pod_billing_observed_usd": 4.067362615605816,
+    "pod_deleted": true
+  },
+  "checkpoints": {
+    "warmup": {
+      "local_path": "artifacts/checkpoints/shallow1-1-recurrent-5x5-warmup/recurrent_warmup_latest.pt",
+      "bytes": 657214613,
+      "sha256": "e1856b58f0fc349ee07431f54ad17aa050865026207522a2b767569e5c7ff765"
+    },
+    "final": {
+      "local_path": "artifacts/checkpoints/shallow1-1-recurrent-5x5-internalized-cot/latest.pt",
+      "bytes": 657213895,
+      "sha256": "45f8d1de55f3f957b1cc593bb2a927f170831764889450dee7020a09a7ebd6a4"
+    }
+  },
+  "interpretation": "The recurrent-adapter pilot preserved 99.4% explicit-CoT validation accuracy but reached 0.0% after full 5x5 CoT removal and remained there through five adaptation epochs and held-out test. This is one seed and not a causal recurrence or depth estimate."
+}

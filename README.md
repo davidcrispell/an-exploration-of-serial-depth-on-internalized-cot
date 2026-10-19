@@ -8,16 +8,14 @@ Deep 1 and Shallow 1 both reach 100% accuracy on nxn (n from 3 to 5) digit multi
 
 Additional examination might test shallow model ability on other explicit CoT tasks, such as GSM-8k, under internalization conditioning. This would probably give us signal on other relevant domains in which internalization is a scheming risk.
 
-An active Shallow 1.1 pilot reuses the frozen six-layer Shallow 1 stack twice,
+A completed Shallow 1.1 pilot reuses the frozen six-layer Shallow 1 stack twice,
 training only two 1024×1024 recurrent adapter matrices (2,097,152 trainable
 parameters; 164,298,752 total). Its one-epoch explicit-CoT adapter warmup reached
 994/1,000 (99.4%) input-only validation accuracy on 5x5 multiplication. The
 first internalization boundary scored 67/1,000 (6.7%) with 8/75 CoT tokens
 removed, versus 91.5% for Shallow 1 and 95.3% for Deep 1 at the same boundary.
 At 16/75 removed, Shallow 1.1 scored 64/1,000 (6.4%), versus 32.3% for Shallow
-1 and 10.0% for Deep 1. The 75-token curriculum is still running; this is an
-architectural pilot, not yet evidence that recurrence improves or worsens
-monitorability. At 24/75 removed, Shallow 1.1 fell to 1/1,000 (0.1%), versus
+1 and 10.0% for Deep 1. At 24/75 removed, Shallow 1.1 fell to 1/1,000 (0.1%), versus
 18.8% for Shallow 1 and 91.3% for Deep 1. At 32/75 removed, Shallow 1.1
 scored 0/1,000 (0.0%), versus 67.2% for Shallow 1 and 83.7% for Deep 1. It
 remained at 0/1,000 (0.0%) at 40/75 removed, versus 14.6% for Shallow 1 and
@@ -33,7 +31,19 @@ Deep 1. After a second adaptation epoch it again scored 0/1,000 (0.0%), versus
 0.2% for Shallow 1 and 91.0% for Deep 1. After a third adaptation epoch it
 remained at 0/1,000 (0.0%), versus 0.5% for Shallow 1 and 96.5% for Deep 1.
 After a fourth adaptation epoch it again scored 0/1,000 (0.0%), versus 0.3%
-for Shallow 1 and 96.6% for Deep 1.
+for Shallow 1 and 96.6% for Deep 1. The fifth and final adaptation epoch and
+held-out test both remained at 0/1,000 (0.0%), versus Shallow 1's 0.6%
+validation and 0.3% test and Deep 1's 96.3% validation and 95.8% test. The
+recurrent warmup and final checkpoints were locally verified at SHA256
+`e1856b58f0fc349ee07431f54ad17aa050865026207522a2b767569e5c7ff765`
+and `45f8d1de55f3f957b1cc593bb2a927f170831764889450dee7020a09a7ebd6a4`.
+The pipeline ran for 7:10:22.743. Account balance changed from
+$56.4655598618 before setup to $48.3601044425 after teardown, an exact
+$8.1054554193 account-level delta that includes other concurrent Runpod work;
+the experiment pod's billing read recorded $4.0673626156 through 15:00 UTC,
+with the final partial billing bucket not yet settled. Pod `vpp9263s4vctvi`
+was deleted after artifact verification. This one-seed architectural pilot
+does not establish that recurrence itself improves or worsens monitorability.
 
 ## Training and internalization curves
 
