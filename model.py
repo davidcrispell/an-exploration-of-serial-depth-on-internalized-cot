@@ -168,12 +168,16 @@ class GPT(nn.Module):
         self.lm_head = nn.Linear(config.n_embd, config.vocab_size, bias=False)
         self.lm_head.weight.data.zero_()
 
-    def forward(self, idx, targets=None, return_logits=True):
-        x = self.transformer.wte(idx)
+    def forward_hidden_from_embeddings(self, embeddings):
+        """Run the transformer stack from externally supplied residual inputs."""
+        x = embeddings
         x = F.rms_norm(x, (x.size(-1),))
         for block in self.transformer.h:
             x = block(x)
-        x = F.rms_norm(x, (x.size(-1),))
+        return F.rms_norm(x, (x.size(-1),))
+
+    def forward(self, idx, targets=None, return_logits=True):
+        x = self.forward_hidden_from_embeddings(self.transformer.wte(idx))
 
         if targets is not None:
             logits = self.lm_head(x).float()
