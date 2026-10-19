@@ -166,3 +166,40 @@ The load-verified checkpoint is stored locally at
 `b7d1e1c596839a8d3da0fd27eea21ad9f4f9b9537d5a0dd527190594fd14b300`.
 Checkpoint weights and full logs are Git-ignored; compact configuration, cost,
 and validation-curve data are tracked in [`deep1-matched.json`](deep1-matched.json).
+
+## Deeper 1 fixed-parameter depth reallocation
+
+Deeper 1 reallocates the same **162,201,600 parameters** across 24 layers,
+width 600, 5 attention heads (120 dimensions per head), and MLP width 2,336.
+It was trained from scratch with the same FineWeb binaries, tokenizer, global
+batch of 512 sequences, sequence length 1,024, zero warmup, 1,308-update linear
+warmdown, and matched-loss stopping rule used for Deep 1. Validation and the
+rolling checkpoint were written every 25 updates.
+
+The trainer stopped at step **4,050** when exact validation loss reached
+**3.3052506447**, below the preregistered 3.3074311275 threshold. This is only
+0.0001804829 below Shallow 1 and 0.0002346039 above Deep 1, so all three models
+have the same exact parameter count and tightly matched aggregate FineWeb loss.
+The compact Deeper 1 validation curve was 10.8258 at step 0; 4.3187 at 250;
+3.9047 at 500; 3.7528 at 750; 3.6626 at 1,000; 3.6020 at 1,250; 3.5612 at
+1,500; 3.5223 at 1,750; 3.4901 at 2,000; 3.4687 at 2,250; 3.4482 at 2,500;
+3.4327 at 2,750; 3.4160 at 3,000; 3.4000 at 3,250; 3.3708 at 3,500; 3.3410
+at 3,750; 3.3109 at 4,000; and 3.3052506447 at 4,050. The full 25-update
+curve remains in the Git-ignored training log.
+
+The run processed 2,123,366,400 training tokens. Its measured training timer
+was exactly **4,196.120 seconds (1h 09m 56.120s)**, excluding compilation,
+checkpoint I/O, and most wall-clock validation overhead. The account balance
+changed from $48.2077708007 before setup to $33.5451013396 after artifact
+recovery and teardown, an observed account-level delta of **$14.6626694611**;
+the delta from training launch was $14.0306131639. The B200 pod and the
+task-created network volume were both deleted after local artifact verification.
+
+The remote checkpoint was load-verified with the embedded 24/5/600/2,336
+configuration and exact parameter count. Its local SHA256 matches the remote
+SHA256:
+`39a994e7427adade779fb7282fdb58be93e3d5db9f131521b212b6833a930fda`.
+Checkpoint weights and full logs are Git-ignored; compact data are tracked in
+[`deeper1-matched.json`](deeper1-matched.json). This is a fixed-parameter depth
+reallocation result, not yet a causal CoT-control result; matched downstream
+internalization experiments are still required.

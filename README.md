@@ -294,6 +294,21 @@ parameter count and near-identical aggregate pretraining loss therefore do not
 imply identical broad capability; this residual difference must accompany any
 interpretation of the paired internalization results.
 
+A fixed-parameter **Deeper 1** control now reallocates those same 162,201,600
+parameters across 24 layers, width 600, 5 attention heads (head dimension 120),
+and MLP width 2,336. Under the same FineWeb recipe and matched-loss stopping
+rule, it stopped at step 4,050 with validation loss **3.3052506447**: only
+0.0001804829 below Shallow 1 and 0.0002346039 above Deep 1. It processed
+2,123,366,400 tokens in an exact measured training time of **4,196.120 seconds
+(1h 09m 56.120s)**. The observed account-level setup-through-teardown cost was
+**$14.6626694611**. Its load-verified local checkpoint has SHA256
+`39a994e7427adade779fb7282fdb58be93e3d5db9f131521b212b6833a930fda`;
+compact configuration and curve data are in
+[`results/pretraining/deeper1-matched.json`](results/pretraining/deeper1-matched.json).
+This establishes a third exact-parameter, matched-loss pretraining point; it
+does not by itself establish a causal CoT-control effect before matched
+downstream internalization experiments.
+
 On the custom 3x3 multiplication extension, both matched models reached 100.0%
 explicit-CoT validation and test accuracy. Their stepwise internalization
 curves were strongly non-monotonic. Deep 1 versus Shallow 1 was 89.7% versus
