@@ -8,6 +8,22 @@ Deep 1 and Shallow 1 both reach 100% accuracy on nxn (n from 3 to 5) digit multi
 
 Additional examination might test shallow model ability on other explicit CoT tasks, such as GSM-8k, under internalization conditioning. This would probably give us signal on other relevant domains in which internalization is a scheming risk.
 
+## Training and internalization curves
+
+![Explicit-CoT fine-tuning loss](https://raw.githubusercontent.com/davidcrispell/an-exploration-of-serial-depth-on-internalized-cot/main/results/multiplication/figures/explicit-loss-curves.png)
+
+![CoT internalization rollout loss](https://raw.githubusercontent.com/davidcrispell/an-exploration-of-serial-depth-on-internalized-cot/main/results/multiplication/figures/internalization-loss-curves.png)
+
+![Validation accuracy across the internalization curriculum](https://raw.githubusercontent.com/davidcrispell/an-exploration-of-serial-depth-on-internalized-cot/main/results/multiplication/figures/validation-accuracy-curves.png)
+
+Some confounds might be that we stopped training (for small-budget reasons) Shallow 1's explicit 5x5 CoT earlier than its loss looks to have minimized, which was unfortunate. Further, capabilities between Shallow 1 and Deep 1 are not completely equal. On LAMBADA, Deep 1 and Shallow 1 score 29.42% and 26.30% respectively, so it seems there could be a compute tax to pay for monitorability.
+
+The pricing of training Deep 1 and Shallow 1 was subject to confounds. Shallow 1 was more expensive to train and less generally capable than Deep 1, but also had the desirable property of not being able to reason totally internally. Further investigation into the interactions between scale, scheming specific CoT internalization, layerwise bit count internalization capacity, and generally the tradeoffs here is warranted. 
+
+There was an additional confound in that we did not scrutinize our coding agent's training run design choice around stopping. It implemented a linear learning rate slowdown to preserve budget when the clean choice would have been to not do this. Replicating these experiments and fixing these bugs would allow for a cleaner investigation of depth on reasoning internalization. 
+
+# Modded-NanoGPT/ Codex notes
+
 A completed Shallow 1.1 pilot reuses the frozen six-layer Shallow 1 stack twice,
 training only two 1024×1024 recurrent adapter matrices (2,097,152 trainable
 parameters; 164,298,752 total). Its one-epoch explicit-CoT adapter warmup reached
@@ -44,22 +60,6 @@ the experiment pod's billing read recorded $4.0673626156 through 15:00 UTC,
 with the final partial billing bucket not yet settled. Pod `vpp9263s4vctvi`
 was deleted after artifact verification. This one-seed architectural pilot
 does not establish that recurrence itself improves or worsens monitorability.
-
-## Training and internalization curves
-
-![Explicit-CoT fine-tuning loss](https://raw.githubusercontent.com/davidcrispell/an-exploration-of-serial-depth-on-internalized-cot/main/results/multiplication/figures/explicit-loss-curves.png)
-
-![CoT internalization rollout loss](https://raw.githubusercontent.com/davidcrispell/an-exploration-of-serial-depth-on-internalized-cot/main/results/multiplication/figures/internalization-loss-curves.png)
-
-![Validation accuracy across the internalization curriculum](https://raw.githubusercontent.com/davidcrispell/an-exploration-of-serial-depth-on-internalized-cot/main/results/multiplication/figures/validation-accuracy-curves.png)
-
-Some confounds might be that we stopped training (for small-budget reasons) Shallow 1's explicit 5x5 CoT earlier than its loss looks to have minimized, which was unfortunate. Further, capabilities between Shallow 1 and Deep 1 are not completely equal. On LAMBADA, Deep 1 and Shallow 1 score 29.42% and 26.30% respectively, so it seems there could be a compute tax to pay for monitorability.
-
-The pricing of training Deep 1 and Shallow 1 was subject to confounds. Shallow 1 was more expensive to train and less generally capable than Deep 1, but also had the desirable property of not being able to reason totally internally. Further investigation into the interactions between scale, scheming specific CoT internalization, layerwise bit count internalization capacity, and generally the tradeoffs here is warranted. 
-
-There was an additional confound in that we did not scrutinize our coding agent's training run design choice around stopping. It implemented a linear learning rate slowdown to preserve budget when the clean choice would have been to not do this. Replicating these experiments and fixing these bugs would allow for a cleaner investigation of depth on reasoning internalization. 
-
-# Modded-NanoGPT
 
 ## Configurable-depth experimental fork
 
