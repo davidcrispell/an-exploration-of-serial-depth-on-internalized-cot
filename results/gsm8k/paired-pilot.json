@@ -1,0 +1,83 @@
+{
+  "pilot": "paired-gsm8k-internalized-cot",
+  "seed": 3456,
+  "held_out_test_evaluated": false,
+  "protocol": {
+    "train_split": "full augmented train set",
+    "validation_examples": 500,
+    "batch_size": 32,
+    "precision": "FP32",
+    "optimizer": "AdamW",
+    "learning_rate": 5e-05,
+    "explicit_epochs": 1,
+    "internalization_epochs": 43,
+    "first_full_removal_epoch": 39,
+    "full_removal_adaptation_epochs": 3,
+    "validation_removals": [0, 8, 16, 24, 32, "all:39", "all:40", "all:41", "all:42"]
+  },
+  "models": {
+    "deep1": {
+      "architecture": "12x768, 6 heads, MLP 3072",
+      "parameters": 162201600,
+      "base_sha256": "3d9b65247396d545884ef3da4771023be9767ad95afc140d604d175225706164",
+      "explicit_validation": {"correct": 80, "total": 500, "accuracy_percent": 16.0},
+      "internalization_validation": [
+        {"epoch": 0, "removal": 0, "correct": 104, "total": 500, "accuracy_percent": 20.8},
+        {"epoch": 8, "removal": 8, "correct": 114, "total": 500, "accuracy_percent": 22.8},
+        {"epoch": 16, "removal": 16, "correct": 82, "total": 500, "accuracy_percent": 16.4},
+        {"epoch": 24, "removal": 24, "correct": 88, "total": 500, "accuracy_percent": 17.6},
+        {"epoch": 32, "removal": 32, "correct": 94, "total": 500, "accuracy_percent": 18.8},
+        {"epoch": 39, "removal": "all", "correct": 89, "total": 500, "accuracy_percent": 17.8},
+        {"epoch": 40, "removal": "all", "correct": 89, "total": 500, "accuracy_percent": 17.8},
+        {"epoch": 41, "removal": "all", "correct": 88, "total": 500, "accuracy_percent": 17.6},
+        {"epoch": 42, "removal": "all", "correct": 91, "total": 500, "accuracy_percent": 18.2}
+      ],
+      "stage_runtime_seconds": {"explicit": 2073.157546843984, "internalized": 67261.60966007499},
+      "checkpoint_sha256": {
+        "explicit_best": "989f1232ef233986ecc14d869d754b2c0474c4cc2addca780212f47bf1024ddd",
+        "internalized_best": "44c123088c02fb0227593ef1f0e813ed9d07d00bdf0e2bc147e9f44e2cc4dfb1",
+        "internalized_latest": "9f97c89a3ad5782ee24a5eeedf6ce45a514b339e25f2c2d4676ed5ba5f3969ab"
+      }
+    },
+    "shallow1": {
+      "architecture": "6x1024, 8 heads, MLP 2768",
+      "parameters": 162201600,
+      "base_sha256": "27c19a1728b5ffc690545d152b653440dbbe09c063321c1c6b863e36df1bebba",
+      "explicit_validation": {"correct": 71, "total": 500, "accuracy_percent": 14.2},
+      "internalization_validation": [
+        {"epoch": 0, "removal": 0, "correct": 105, "total": 500, "accuracy_percent": 21.0},
+        {"epoch": 8, "removal": 8, "correct": 98, "total": 500, "accuracy_percent": 19.6},
+        {"epoch": 16, "removal": 16, "correct": 64, "total": 500, "accuracy_percent": 12.8},
+        {"epoch": 24, "removal": 24, "correct": 72, "total": 500, "accuracy_percent": 14.4},
+        {"epoch": 32, "removal": 32, "correct": 74, "total": 500, "accuracy_percent": 14.8},
+        {"epoch": 39, "removal": "all", "correct": 68, "total": 500, "accuracy_percent": 13.6},
+        {"epoch": 40, "removal": "all", "correct": 59, "total": 500, "accuracy_percent": 11.8},
+        {"epoch": 41, "removal": "all", "correct": 71, "total": 500, "accuracy_percent": 14.2},
+        {"epoch": 42, "removal": "all", "correct": 58, "total": 500, "accuracy_percent": 11.6}
+      ],
+      "stage_runtime_seconds": {"explicit": 1460.7506122679915, "internalized": 52854.54363940307},
+      "checkpoint_sha256": {
+        "explicit_best": "c4eed3d0dfed946ed750971d14d742cfb8984002029e1fec47cbc8b32e7778da",
+        "internalized_best": "96010f77d54fb28366a5eb312f85fa61571348496d1b8cb92c1d7ebeec104ddc",
+        "internalized_latest": "f4fb851b4f65c2d2060b39d0c6d1e7aba61bff72bf1b1bf617f7444366c0d30c"
+      }
+    }
+  },
+  "dataset_sha256": {
+    "train": "0a3909a9e7d8d2f7ad6b8c7b5608aa744988d835f9bf874d4cf06ca77df6bf8c",
+    "validation": "04f9bddfe8ac4846571b1e2b612b289c95770b5012fdb34cc36a597b041afb87",
+    "test_provenance_only": "e464efa2713fbcf423bdbfb482c543a6a086188c3d97c294b1d19a70c2a515e8"
+  },
+  "timing_and_cost": {
+    "pipeline_started_at": "2026-10-18T02:52:17Z",
+    "pipeline_completed_at": "2026-10-19T13:13:53Z",
+    "pipeline_runtime_seconds": 123696,
+    "pod_created_at": "2026-10-18T02:32:24.645Z",
+    "pod_deleted_at": "2026-10-19T13:38:44Z",
+    "billable_pod_runtime_seconds": 126379.355,
+    "hourly_cost_usd": 0.59,
+    "isolated_pilot_cost_usd": 20.712172069444442,
+    "shared_account_balance_delta_confounded": true
+  },
+  "interpretation": "One paired seed is descriptive only. It does not establish a causal depth effect, particularly because residual baseline capability was not fully matched."
+}
