@@ -1,4 +1,4 @@
-Further investigation into training interventions to force CoT externalization are pending.
+Further investigation into the relationship between parameters, depth, and width are pending.
 
 Serial depth and chain-of-thought internalization
 
