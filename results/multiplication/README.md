@@ -23,7 +23,8 @@ Deep 1. At 32/75 removed, Shallow 1.1 scored 0/1,000 (0.0%), versus 67.2%
 for Shallow 1 and 83.7% for Deep 1. At 40/75 removed, Shallow 1.1 remained at
 0/1,000 (0.0%), versus 14.6% for Shallow 1 and 45.2% for Deep 1. It again
 scored 0/1,000 (0.0%) at 48/75 removed, versus 10.4% for Shallow 1 and 14.4%
-for Deep 1.
+for Deep 1. At 56/75 removed, Shallow 1.1, Shallow 1, and Deep 1 all scored
+0/1,000 (0.0%).
 
 - [`shallow1-1-recurrent-5x5-internalized-cot-progress.json`](shallow1-1-recurrent-5x5-internalized-cot-progress.json)
 - [`shallow1-1-recurrent-5x5-internalized-cot-training-config.json`](shallow1-1-recurrent-5x5-internalized-cot-training-config.json)
