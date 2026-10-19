@@ -14,8 +14,10 @@ parameters; 164,298,752 total). Its one-epoch explicit-CoT adapter warmup reache
 994/1,000 (99.4%) input-only validation accuracy on 5x5 multiplication. The
 first internalization boundary scored 67/1,000 (6.7%) with 8/75 CoT tokens
 removed, versus 91.5% for Shallow 1 and 95.3% for Deep 1 at the same boundary.
-The 75-token curriculum is still running; this is an architectural pilot, not
-yet evidence that recurrence improves or worsens monitorability.
+At 16/75 removed, Shallow 1.1 scored 64/1,000 (6.4%), versus 32.3% for Shallow
+1 and 10.0% for Deep 1. The 75-token curriculum is still running; this is an
+architectural pilot, not yet evidence that recurrence improves or worsens
+monitorability.
 
 ## Training and internalization curves
 
