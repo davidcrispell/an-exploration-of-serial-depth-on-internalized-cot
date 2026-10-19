@@ -33,7 +33,8 @@ full-removal adaptation epoch it remained at 0/1,000 (0.0%), versus 0.4% for
 Shallow 1 and 91.3% for Deep 1. After a second adaptation epoch it again
 scored 0/1,000 (0.0%), versus 0.2% for Shallow 1 and 91.0% for Deep 1. After a
 third adaptation epoch it remained at 0/1,000 (0.0%), versus 0.5% for Shallow
-1 and 96.5% for Deep 1.
+1 and 96.5% for Deep 1. After a fourth adaptation epoch it again scored
+0/1,000 (0.0%), versus 0.3% for Shallow 1 and 96.6% for Deep 1.
 
 - [`shallow1-1-recurrent-5x5-internalized-cot-progress.json`](shallow1-1-recurrent-5x5-internalized-cot-progress.json)
 - [`shallow1-1-recurrent-5x5-internalized-cot-training-config.json`](shallow1-1-recurrent-5x5-internalized-cot-training-config.json)
