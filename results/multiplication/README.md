@@ -19,7 +19,8 @@ this early separation is not a final capacity result and may be non-monotonic.
 At the second boundary, Shallow 1.1 scored 64/1,000 (6.4%) with 16/75 tokens
 removed, versus 32.3% for Shallow 1 and 10.0% for Deep 1. At 24/75 removed,
 Shallow 1.1 fell to 1/1,000 (0.1%), versus 18.8% for Shallow 1 and 91.3% for
-Deep 1.
+Deep 1. At 32/75 removed, Shallow 1.1 scored 0/1,000 (0.0%), versus 67.2%
+for Shallow 1 and 83.7% for Deep 1.
 
 - [`shallow1-1-recurrent-5x5-internalized-cot-progress.json`](shallow1-1-recurrent-5x5-internalized-cot-progress.json)
 - [`shallow1-1-recurrent-5x5-internalized-cot-training-config.json`](shallow1-1-recurrent-5x5-internalized-cot-training-config.json)
