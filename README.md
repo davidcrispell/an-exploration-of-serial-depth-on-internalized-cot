@@ -22,7 +22,9 @@ monitorability. At 24/75 removed, Shallow 1.1 fell to 1/1,000 (0.1%), versus
 scored 0/1,000 (0.0%), versus 67.2% for Shallow 1 and 83.7% for Deep 1. It
 remained at 0/1,000 (0.0%) at 40/75 removed, versus 14.6% for Shallow 1 and
 45.2% for Deep 1, and again at 48/75 removed, versus 10.4% for Shallow 1 and
-14.4% for Deep 1. At 56/75 removed, all three models scored 0/1,000 (0.0%).
+14.4% for Deep 1. At 56/75 removed, all three models scored 0/1,000 (0.0%). At
+64/75 removed, Shallow 1.1 remained at 0/1,000 (0.0%), versus 0.2% for Shallow
+1 and Deep 1's sharp rebound to 89.9%.
 
 ## Training and internalization curves
 
