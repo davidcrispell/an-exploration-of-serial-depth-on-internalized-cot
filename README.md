@@ -30,7 +30,8 @@ Shallow 1 both scored 0/1,000 (0.0%), while Deep 1 scored 3.3%. At the first
 0.2% for Shallow 1 and 82.1% for Deep 1. After one full-removal adaptation
 epoch it remained at 0/1,000 (0.0%), versus 0.4% for Shallow 1 and 91.3% for
 Deep 1. After a second adaptation epoch it again scored 0/1,000 (0.0%), versus
-0.2% for Shallow 1 and 91.0% for Deep 1.
+0.2% for Shallow 1 and 91.0% for Deep 1. After a third adaptation epoch it
+remained at 0/1,000 (0.0%), versus 0.5% for Shallow 1 and 96.5% for Deep 1.
 
 ## Training and internalization curves
 
