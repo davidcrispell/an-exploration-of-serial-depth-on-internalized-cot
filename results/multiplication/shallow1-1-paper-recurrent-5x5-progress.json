@@ -178,6 +178,19 @@
         {"recurrence": 4, "effective_layers": 18, "correct": 843, "examples": 1000, "accuracy": 0.843},
         {"recurrence": 8, "effective_layers": 34, "correct": 847, "examples": 1000, "accuracy": 0.847}
       ]
+    },
+    {
+      "epoch": 12,
+      "global_step": 353500,
+      "removed_tokens": 75,
+      "total_cot_tokens": 75,
+      "checkpoint_sha256": "6ebfc7c4d92ad33a7b3b71d3890192e32a5a308dad1527601db0b9699765f7f0",
+      "validation": [
+        {"recurrence": 1, "effective_layers": 6, "correct": 573, "examples": 1000, "accuracy": 0.573},
+        {"recurrence": 2, "effective_layers": 10, "correct": 884, "examples": 1000, "accuracy": 0.884},
+        {"recurrence": 4, "effective_layers": 18, "correct": 899, "examples": 1000, "accuracy": 0.899},
+        {"recurrence": 8, "effective_layers": 34, "correct": 899, "examples": 1000, "accuracy": 0.899}
+      ]
     }
   ]
 }

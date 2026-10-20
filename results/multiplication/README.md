@@ -41,8 +41,11 @@ recurrence-by-removal surface then rebounded at the first full-removal boundary
 to 22.4%, 67.7%, 70.9%, and 71.0%. It is being preserved rather than summarized
 as a single depth curve. After one full-removal adaptation epoch, accuracy rose
 again to 41.5%, 77.4%, 78.8%, and 78.9%. After two full-removal adaptation
-epochs, it rose further to 50.7%, 81.0%, 84.3%, and 84.7%. The epoch-11
-checkpoint SHA256 is
+epochs, it rose further to 50.7%, 81.0%, 84.3%, and 84.7%. After three,
+accuracy reached 57.3%, 88.4%, 89.9%, and 89.9%. The epoch-12 checkpoint
+SHA256 is
+`6ebfc7c4d92ad33a7b3b71d3890192e32a5a308dad1527601db0b9699765f7f0`;
+the epoch-11 checkpoint SHA256 is
 `8b417aa4d5db1e109c0f5f68a457f032a1f40924e00f4278a6686dca89a46de4`;
 the epoch-10 checkpoint SHA256 is
 `9fd51d14bec451272e972370bd6d7dbcba52cfce465f7c4ac1b79517e0149c79`;
