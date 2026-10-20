@@ -33,6 +33,16 @@ r=1, 2, 4, and 8 respectively. The non-monotonic recurrence result is retained
 without a causal claim; progress is tracked in
 [`results/multiplication`](results/multiplication/README.md).
 
+## Circuit serial depth
+
+Using Google DeepMind's released JAX serial-depth calculator on an
+operation-faithful transcription of these models, the 103-token 5x5 forward
+pass measures 823 for Shallow 1, 1,603 for Deep 1, and 3,163 for Deeper 1.
+Paper-recurrent Shallow 1.1 measures 854, 1,405, 2,507, and 4,711 at inference
+recurrence counts 1, 2, 4, and 8. All traces have zero unsupported primitives.
+The reproducible script, full sequence-length sensitivity, and methodological
+caveats are in [`results/serial-depth`](results/serial-depth/README.md).
+
 # Modded-NanoGPT/ Codex notes
 
 A completed Shallow 1.1 pilot reuses the frozen six-layer Shallow 1 stack twice,
