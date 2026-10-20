@@ -37,7 +37,8 @@ At 48/75 removed it dropped to 1.0%, 3.4%, 4.4%, and 4.6%. At 56/75 removed,
 all four recurrence settings scored 0/1,000 (0.0%). At 64/75 removed, r=1
 remained near zero at 0.2%, while r=2, r=4, and r=8 rebounded to 29.2%, 34.3%,
 and 33.9%. At 72/75 removed, accuracy fell back to 0.0%, 0.1%, 0.3%, and 0.2%.
-The
+At the first full-removal boundary, it rebounded to 22.4%, 67.7%, 70.9%, and
+71.0%. The
 recurrence-by-removal surface is retained without a causal claim; progress is
 tracked in
 [`results/multiplication`](results/multiplication/README.md).

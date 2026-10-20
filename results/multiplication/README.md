@@ -37,8 +37,11 @@ evaluated recurrence scored 0/1,000 (0.0%). At the eighth boundary (64/75
 removed), r=1 remained near zero at 2/1,000 (0.2%), while r=2, r=4, and r=8
 rebounded to 29.2%, 34.3%, and 33.9%. At the ninth boundary (72/75 removed),
 accuracy fell back to 0.0%, 0.1%, 0.3%, and 0.2%. The full
-recurrence-by-removal surface is being preserved rather than summarized as a
-single depth curve. The epoch-8 checkpoint SHA256 is
+recurrence-by-removal surface then rebounded at the first full-removal boundary
+to 22.4%, 67.7%, 70.9%, and 71.0%. It is being preserved rather than summarized
+as a single depth curve. The epoch-9 checkpoint SHA256 is
+`5d9c561ee93014b4c0bf1eda9d263790fa934cdd5d3408c4554f4b58a5e201ee`;
+the epoch-8 checkpoint SHA256 is
 `62c2c21075b1fa9fd26c56b6e3dbc955c1669a6d1e7c26ae80956bf00772eee2`;
 the epoch-7 checkpoint SHA256 is
 `18a009385e07b93014cb94ec73e8bffb33383c85d3b7e7fd9bf434ffc68c06e4`;
