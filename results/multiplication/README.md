@@ -1,6 +1,6 @@
 # Multiplication results
 
-## Paper-style Shallow 1.1 recurrent 5x5 run (in progress)
+## Completed paper-style Shallow 1.1 recurrent 5x5 run
 
 The replacement Shallow 1.1 experiment adapts the recurrent-depth construction
 from [Geiping et al. (2025)](https://arxiv.org/abs/2502.05171) to the pretrained
@@ -22,61 +22,47 @@ same checkpoint was evaluated at four inference recurrence counts:
 | 4 | 18 | 996 / 1,000 | 99.6% |
 | 8 | 34 | 992 / 1,000 | 99.2% |
 
-At the first internalization boundary (8/75 removed), validation accuracy was
-63.3% at r=1, 88.8% at r=2, 86.0% at the primary r=4 recurrence, and 84.5% at
-r=8. At the second boundary (16/75 removed), accuracy was 37.0% at r=1, 55.7%
-at r=2, 66.9% at r=4, and 69.0% at r=8. The first boundary is non-monotonic in
-inference recurrence count, while the second is monotonic across the evaluated
-recurrences. At the third boundary (24/75 removed), accuracy rebounded to 44.0%
-at r=1, 84.1% at r=2, 86.9% at r=4, and 86.8% at r=8. At the fourth boundary
-(32/75 removed), it fell to 11.9%, 24.2%, 36.0%, and
-36.3%, respectively. At the fifth boundary (40/75 removed), accuracy was 11.4%,
-25.4%, 29.6%, and 29.5%. At the sixth boundary (48/75 removed), it dropped to
-1.0%, 3.4%, 4.4%, and 4.6%. At the seventh boundary (56/75 removed), every
-evaluated recurrence scored 0/1,000 (0.0%). At the eighth boundary (64/75
-removed), r=1 remained near zero at 2/1,000 (0.2%), while r=2, r=4, and r=8
-rebounded to 29.2%, 34.3%, and 33.9%. At the ninth boundary (72/75 removed),
-accuracy fell back to 0.0%, 0.1%, 0.3%, and 0.2%. The full
-recurrence-by-removal surface then rebounded at the first full-removal boundary
-to 22.4%, 67.7%, 70.9%, and 71.0%. It is being preserved rather than summarized
-as a single depth curve. After one full-removal adaptation epoch, accuracy rose
-again to 41.5%, 77.4%, 78.8%, and 78.9%. After two full-removal adaptation
-epochs, it rose further to 50.7%, 81.0%, 84.3%, and 84.7%. After three,
-accuracy reached 57.3%, 88.4%, 89.9%, and 89.9%. After four, the recurrence
-surface reached 64.6%, 86.9%, 92.5%, and 92.6%. The epoch-13 checkpoint
-SHA256 is
-`29632a408a4781ec44d68d04a11d01f5693e0506167028c5c30528be0ad55131`;
-the epoch-12 checkpoint SHA256 is
-`6ebfc7c4d92ad33a7b3b71d3890192e32a5a308dad1527601db0b9699765f7f0`;
-the epoch-11 checkpoint SHA256 is
-`8b417aa4d5db1e109c0f5f68a457f032a1f40924e00f4278a6686dca89a46de4`;
-the epoch-10 checkpoint SHA256 is
-`9fd51d14bec451272e972370bd6d7dbcba52cfce465f7c4ac1b79517e0149c79`;
-the epoch-9 checkpoint SHA256 is
-`5d9c561ee93014b4c0bf1eda9d263790fa934cdd5d3408c4554f4b58a5e201ee`;
-the epoch-8 checkpoint SHA256 is
-`62c2c21075b1fa9fd26c56b6e3dbc955c1669a6d1e7c26ae80956bf00772eee2`;
-the epoch-7 checkpoint SHA256 is
-`18a009385e07b93014cb94ec73e8bffb33383c85d3b7e7fd9bf434ffc68c06e4`;
-the epoch-6 checkpoint SHA256 is
-`53a0fac5ca552abbf24c5c2e0eeb36f5bc957c264f22b7d1aff20e9cf1781414`;
-the epoch-5 checkpoint SHA256 is
-`d07c82d09340a80fa27d3a2062a0c771cf4fbeb9315cbbda62f1d6e775e5662d`;
-the epoch-4 checkpoint SHA256 is
-`b28a6984966f1fe915f2913b68b33734499801e81c7760ecb7e18fb9e8f4ead7`;
-the epoch-3 checkpoint SHA256 is
-`b26895da0bc278d2e4e32b1f84165bb7f6ef74c8a6cf0159eb6994a37c393e6b`;
-the epoch-2 checkpoint SHA256 is
-`6ca6b610de60b36212fddf7228ead134bcb868d496169189751ed3b0a770f0e7`;
-the epoch-1 checkpoint SHA256 is
-`28d822cc0c7aace5f996b413347c569480d442a282d685a5e069fdaf5252e03b`, and
-the epoch-0 checkpoint SHA256 is
-`ccdce4c73939a636194b526956262167baf23517aa85995a117eec66fc80c753`.
-The curriculum continues from that checkpoint. The warmup checkpoint is
-preserved on the run's network volume at SHA256
+The complete validation surface is non-monotonic in both removal stage and
+inference recurrence. Rows after the first 75/75 boundary are full-removal
+adaptation epochs:
+
+| Epoch | Removed | r=1 / 6 layers | r=2 / 10 layers | r=4 / 18 layers | r=8 / 34 layers |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 0 | 8/75 | 63.3% | 88.8% | 86.0% | 84.5% |
+| 1 | 16/75 | 37.0% | 55.7% | 66.9% | 69.0% |
+| 2 | 24/75 | 44.0% | 84.1% | 86.9% | 86.8% |
+| 3 | 32/75 | 11.9% | 24.2% | 36.0% | 36.3% |
+| 4 | 40/75 | 11.4% | 25.4% | 29.6% | 29.5% |
+| 5 | 48/75 | 1.0% | 3.4% | 4.4% | 4.6% |
+| 6 | 56/75 | 0.0% | 0.0% | 0.0% | 0.0% |
+| 7 | 64/75 | 0.2% | 29.2% | 34.3% | 33.9% |
+| 8 | 72/75 | 0.0% | 0.1% | 0.3% | 0.2% |
+| 9 | 75/75 | 22.4% | 67.7% | 70.9% | 71.0% |
+| 10 | 75/75 | 41.5% | 77.4% | 78.8% | 78.9% |
+| 11 | 75/75 | 50.7% | 81.0% | 84.3% | 84.7% |
+| 12 | 75/75 | 57.3% | 88.4% | 89.9% | 89.9% |
+| 13 | 75/75 | 64.6% | 86.9% | **92.5%** | **92.6%** |
+| 14 | 75/75 | 59.8% | 84.6% | 87.4% | 87.2% |
+
+The final held-out test scores were 57.6%, 85.5%, 88.0%, and 87.7% at r=1,
+r=2, r=4, and r=8. The primary r=4 run therefore peaked at 92.5% validation
+on epoch 13, then ended at 87.4% validation and 88.0% test after the prescribed
+15 internalization epochs; it did not meet the 99% stopping gate. At the same
+5x5 full-removal endpoint, the non-recurrent Shallow 1 test score was 0.3%, the
+old frozen-adapter Shallow 1.1 score was 0.0%, and Deep 1 scored 95.8%. These
+protocols differ in architecture, parameter count, and optimization behavior,
+and all are one-seed measurements, so the comparison does not isolate a causal
+effect of recurrence or NLS depth.
+
+The pipeline ran for 8:38:31. The exact Runpod balance delta from pre-setup
+through artifact verification was $11.181487796. Both load-verified checkpoints
+and the complete configuration, metrics, and logs are preserved locally with
+matching remote SHA256 hashes. The final checkpoint SHA256 is
+`55e2bc95fc8d14829c56fb14191b0a1d4c1eb3b2d748d7ad3aed1d57a9feac85`;
+the warmup checkpoint SHA256 is
 `e0765193ad23199c2360ac7be529db2142f9a64a74ad576fcc7e5e1fa0c5af7d`.
-These one-seed measurements do not yet establish whether recurrence improves
-hidden-reasoning acquisition.
+Pod `rm38g4dzn0852n` and task-created volume `qk1ncz8fdk` were deleted after
+local verification.
 
 - [`shallow1-1-paper-recurrent-5x5-progress.json`](shallow1-1-paper-recurrent-5x5-progress.json)
 - [Validation comparison figure (PNG)](figures/paper-recurrent-validation-comparison.png)

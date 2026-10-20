@@ -1,5 +1,5 @@
 {
-  "status": "internalization_in_progress",
+  "status": "completed_max_epochs",
   "paper": "https://arxiv.org/abs/2502.05171",
   "architecture": {
     "split": [1, 4, 1],
@@ -204,6 +204,54 @@
         {"recurrence": 4, "effective_layers": 18, "correct": 925, "examples": 1000, "accuracy": 0.925},
         {"recurrence": 8, "effective_layers": 34, "correct": 926, "examples": 1000, "accuracy": 0.926}
       ]
+    },
+    {
+      "epoch": 14,
+      "global_step": 404000,
+      "removed_tokens": 75,
+      "total_cot_tokens": 75,
+      "checkpoint_sha256": "55e2bc95fc8d14829c56fb14191b0a1d4c1eb3b2d748d7ad3aed1d57a9feac85",
+      "validation": [
+        {"recurrence": 1, "effective_layers": 6, "correct": 598, "examples": 1000, "accuracy": 0.598},
+        {"recurrence": 2, "effective_layers": 10, "correct": 846, "examples": 1000, "accuracy": 0.846},
+        {"recurrence": 4, "effective_layers": 18, "correct": 874, "examples": 1000, "accuracy": 0.874},
+        {"recurrence": 8, "effective_layers": 34, "correct": 872, "examples": 1000, "accuracy": 0.872}
+      ]
     }
-  ]
+  ],
+  "final_test": [
+    {"recurrence": 1, "effective_layers": 6, "correct": 576, "examples": 1000, "accuracy": 0.576},
+    {"recurrence": 2, "effective_layers": 10, "correct": 855, "examples": 1000, "accuracy": 0.855},
+    {"recurrence": 4, "effective_layers": 18, "correct": 880, "examples": 1000, "accuracy": 0.88},
+    {"recurrence": 8, "effective_layers": 34, "correct": 877, "examples": 1000, "accuracy": 0.877}
+  ],
+  "completion": {
+    "finished_at_utc": "2026-10-20T08:14:31Z",
+    "runtime_seconds": 31111,
+    "runtime": "8:38:31",
+    "stopping_reason": "maximum_15_internalization_epochs",
+    "primary_recurrence_reached_99_percent": false,
+    "checkpoint_sha256": {
+      "recurrent_warmup_latest.pt": "e0765193ad23199c2360ac7be529db2142f9a64a74ad576fcc7e5e1fa0c5af7d",
+      "latest.pt": "55e2bc95fc8d14829c56fb14191b0a1d4c1eb3b2d748d7ad3aed1d57a9feac85"
+    },
+    "artifact_sha256": {
+      "training_config.json": "09fc408d5e4d5550c8d468d967a15ab6b0aebf24a0d20cf7f8f0ac5a98564951",
+      "validation_metrics.json": "defa8bd4c3f2751f20efae30d0144e687cdf2971d175736753f82993dae723f7",
+      "test_metrics.json": "5de7d80e3b3a0cc946fb7f2226c72adab4fac8ead9bfcc50b5313e13305230b5",
+      "train.log": "966b82a0e448d5a70aa7c169f10392c7bff0cbff31b1537a3486dfcb4b8b46e3",
+      "pipeline.log": "7e184d3b38d19b5ffc88e17c288441105ac35b9dd01d81bdbb9da06845120959"
+    },
+    "runpod": {
+      "gpu": "NVIDIA GeForce RTX 5090",
+      "hourly_rate_usd": 1.19,
+      "starting_balance_before_setup_usd": 33.3799074673,
+      "ending_balance_after_artifact_verification_usd": 22.1984196713,
+      "balance_delta_usd": 11.181487796,
+      "pod_id": "rm38g4dzn0852n",
+      "pod_deleted": true,
+      "volume_id": "qk1ncz8fdk",
+      "volume_deleted": true
+    }
+  }
 }

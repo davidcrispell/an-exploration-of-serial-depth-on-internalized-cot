@@ -22,26 +22,21 @@ The pricing of training Deep 1 and Shallow 1 was subject to confounds. Shallow 1
 
 There was an additional confound in that we did not scrutinize our coding agent's training run design choice around stopping. It implemented a linear learning rate slowdown to preserve budget when the clean choice would have been to not do this. Replicating these experiments and fixing these bugs would allow for a cleaner investigation of depth on reasoning internalization. 
 
-A replacement Shallow 1.1 recurrent experiment now follows the recurrent-depth
+The replacement Shallow 1.1 recurrent experiment follows the recurrent-depth
 construction in [Geiping et al. (2025)](https://arxiv.org/abs/2502.05171), rather
-than freezing and executing the original six-layer stack twice. Its first
-explicit-CoT warmup epoch reached 99.9%, 99.8%, 99.6%, and 99.2% validation
-accuracy at 1, 2, 4, and 8 recurrences respectively. It passed the r=4 gate and
-entered the unchanged 75-token 5x5 internalization curriculum. At the first
-8/75-token boundary it reached 63.3%, 88.8%, 86.0%, and 84.5% validation at
-r=1, 2, 4, and 8 respectively. At 16/75 removed it reached 37.0%, 55.7%,
-66.9%, and 69.0% at the same recurrence counts. At 24/75 removed, it rebounded
-to 44.0%, 84.1%, 86.9%, and 86.8%. At 32/75 removed it fell to 11.9%, 24.2%,
-36.0%, and 36.3%. At 40/75 removed it scored 11.4%, 25.4%, 29.6%, and 29.5%.
-At 48/75 removed it dropped to 1.0%, 3.4%, 4.4%, and 4.6%. At 56/75 removed,
-all four recurrence settings scored 0/1,000 (0.0%). At 64/75 removed, r=1
-remained near zero at 0.2%, while r=2, r=4, and r=8 rebounded to 29.2%, 34.3%,
-and 33.9%. At 72/75 removed, accuracy fell back to 0.0%, 0.1%, 0.3%, and 0.2%.
-At the first full-removal boundary, it rebounded to 22.4%, 67.7%, 70.9%, and
-71.0%. After one full-removal adaptation epoch, it improved to 41.5%, 77.4%,
-78.8%, and 78.9%. The
-recurrence-by-removal surface is retained without a causal claim; progress is
-tracked in
+than freezing and executing the original six-layer stack twice. Its 1-prelude,
+4-core, 1-coda model has 164,299,777 trainable parameters and passed the
+explicit-CoT gate at every evaluated recurrence. It completed the prescribed
+15-epoch 75-token internalization curriculum. The primary r=4 mode (18
+effective transformer blocks) peaked at 92.5% validation on epoch 13 and ended
+at 87.4% validation and 88.0% held-out test; r=1, r=2, and r=8 finished at
+57.6%, 85.5%, and 87.7% test. The primary run did not reach the 99% stopping
+gate. By comparison, the non-recurrent Shallow 1, old frozen-adapter Shallow
+1.1, and Deep 1 finished at 0.3%, 0.0%, and 95.8% test on the same 5x5 task.
+Because these are one-seed measurements with architectural, parameter-count,
+and optimization differences, they do not isolate a causal effect of recurrence
+or NLS depth. The full non-monotonic recurrence-by-removal surface, runtime,
+cost, artifact hashes, and protocol details are in
 [`results/multiplication`](results/multiplication/README.md).
 
 ![Paper-recurrent validation against prior 5x5 runs](results/multiplication/figures/paper-recurrent-validation-comparison.png)
