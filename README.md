@@ -29,8 +29,9 @@ explicit-CoT warmup epoch reached 99.9%, 99.8%, 99.6%, and 99.2% validation
 accuracy at 1, 2, 4, and 8 recurrences respectively. It passed the r=4 gate and
 entered the unchanged 75-token 5x5 internalization curriculum. At the first
 8/75-token boundary it reached 63.3%, 88.8%, 86.0%, and 84.5% validation at
-r=1, 2, 4, and 8 respectively. The non-monotonic recurrence result is retained
-without a causal claim; progress is tracked in
+r=1, 2, 4, and 8 respectively. At 16/75 removed it reached 37.0%, 55.7%,
+66.9%, and 69.0% at the same recurrence counts. The recurrence-by-removal
+surface is retained without a causal claim; progress is tracked in
 [`results/multiplication`](results/multiplication/README.md).
 
 ## Circuit serial depth

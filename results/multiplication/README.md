@@ -24,9 +24,14 @@ same checkpoint was evaluated at four inference recurrence counts:
 
 At the first internalization boundary (8/75 removed), validation accuracy was
 63.3% at r=1, 88.8% at r=2, 86.0% at the primary r=4 recurrence, and 84.5% at
-r=8. This first boundary is non-monotonic in inference recurrence count, so the
+r=8. At the second boundary (16/75 removed), accuracy was 37.0% at r=1, 55.7%
+at r=2, 66.9% at r=4, and 69.0% at r=8. The first boundary is non-monotonic in
+inference recurrence count, while the second is monotonic across the evaluated
+recurrences, so the
 full recurrence-by-removal surface is being preserved rather than summarized as
-a single depth curve. The epoch-0 checkpoint SHA256 is
+a single depth curve. The epoch-1 checkpoint SHA256 is
+`28d822cc0c7aace5f996b413347c569480d442a282d685a5e069fdaf5252e03b`;
+the epoch-0 checkpoint SHA256 is
 `ccdce4c73939a636194b526956262167baf23517aa85995a117eec66fc80c753`.
 The curriculum continues from that checkpoint. The warmup checkpoint is
 preserved on the run's network volume at SHA256
