@@ -22,11 +22,17 @@ same checkpoint was evaluated at four inference recurrence counts:
 | 4 | 18 | 996 / 1,000 | 99.6% |
 | 8 | 34 | 992 / 1,000 | 99.2% |
 
-The paper-matched 75-token internalization curriculum is now running. The
-warmup checkpoint is preserved on the run's network volume at SHA256
+At the first internalization boundary (8/75 removed), validation accuracy was
+63.3% at r=1, 88.8% at r=2, 86.0% at the primary r=4 recurrence, and 84.5% at
+r=8. This first boundary is non-monotonic in inference recurrence count, so the
+full recurrence-by-removal surface is being preserved rather than summarized as
+a single depth curve. The epoch-0 checkpoint SHA256 is
+`ccdce4c73939a636194b526956262167baf23517aa85995a117eec66fc80c753`.
+The curriculum continues from that checkpoint. The warmup checkpoint is
+preserved on the run's network volume at SHA256
 `e0765193ad23199c2360ac7be529db2142f9a64a74ad576fcc7e5e1fa0c5af7d`.
-These explicit-CoT measurements establish the gate only; they do not yet show
-whether recurrence improves hidden-reasoning acquisition.
+These one-seed measurements do not yet establish whether recurrence improves
+hidden-reasoning acquisition.
 
 - [`shallow1-1-paper-recurrent-5x5-progress.json`](shallow1-1-paper-recurrent-5x5-progress.json)
 

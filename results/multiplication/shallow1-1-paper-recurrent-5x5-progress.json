@@ -21,5 +21,20 @@
       {"recurrence": 4, "effective_layers": 18, "correct": 996, "examples": 1000, "accuracy": 0.996},
       {"recurrence": 8, "effective_layers": 34, "correct": 992, "examples": 1000, "accuracy": 0.992}
     ]
-  }
+  },
+  "internalization": [
+    {
+      "epoch": 0,
+      "global_step": 50500,
+      "removed_tokens": 8,
+      "total_cot_tokens": 75,
+      "checkpoint_sha256": "ccdce4c73939a636194b526956262167baf23517aa85995a117eec66fc80c753",
+      "validation": [
+        {"recurrence": 1, "effective_layers": 6, "correct": 633, "examples": 1000, "accuracy": 0.633},
+        {"recurrence": 2, "effective_layers": 10, "correct": 888, "examples": 1000, "accuracy": 0.888},
+        {"recurrence": 4, "effective_layers": 18, "correct": 860, "examples": 1000, "accuracy": 0.86},
+        {"recurrence": 8, "effective_layers": 34, "correct": 845, "examples": 1000, "accuracy": 0.845}
+      ]
+    }
+  ]
 }

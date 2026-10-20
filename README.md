@@ -27,8 +27,11 @@ construction in [Geiping et al. (2025)](https://arxiv.org/abs/2502.05171), rathe
 than freezing and executing the original six-layer stack twice. Its first
 explicit-CoT warmup epoch reached 99.9%, 99.8%, 99.6%, and 99.2% validation
 accuracy at 1, 2, 4, and 8 recurrences respectively. It passed the r=4 gate and
-has entered the unchanged 75-token 5x5 internalization curriculum; results are
-tracked in [`results/multiplication`](results/multiplication/README.md).
+entered the unchanged 75-token 5x5 internalization curriculum. At the first
+8/75-token boundary it reached 63.3%, 88.8%, 86.0%, and 84.5% validation at
+r=1, 2, 4, and 8 respectively. The non-monotonic recurrence result is retained
+without a causal claim; progress is tracked in
+[`results/multiplication`](results/multiplication/README.md).
 
 # Modded-NanoGPT/ Codex notes
 
