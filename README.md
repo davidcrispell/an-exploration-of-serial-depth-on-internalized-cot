@@ -30,9 +30,12 @@ accuracy at 1, 2, 4, and 8 recurrences respectively. It passed the r=4 gate and
 entered the unchanged 75-token 5x5 internalization curriculum. At the first
 8/75-token boundary it reached 63.3%, 88.8%, 86.0%, and 84.5% validation at
 r=1, 2, 4, and 8 respectively. At 16/75 removed it reached 37.0%, 55.7%,
-66.9%, and 69.0% at the same recurrence counts. The recurrence-by-removal
-surface is retained without a causal claim; progress is tracked in
+66.9%, and 69.0% at the same recurrence counts. At 24/75 removed, it rebounded
+to 44.0%, 84.1%, 86.9%, and 86.8%. The recurrence-by-removal surface is
+retained without a causal claim; progress is tracked in
 [`results/multiplication`](results/multiplication/README.md).
+
+![Paper-recurrent validation against prior 5x5 runs](results/multiplication/figures/paper-recurrent-validation-comparison.png)
 
 ## Circuit serial depth
 
