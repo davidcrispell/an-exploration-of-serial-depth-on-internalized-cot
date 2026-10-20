@@ -31,8 +31,9 @@ entered the unchanged 75-token 5x5 internalization curriculum. At the first
 8/75-token boundary it reached 63.3%, 88.8%, 86.0%, and 84.5% validation at
 r=1, 2, 4, and 8 respectively. At 16/75 removed it reached 37.0%, 55.7%,
 66.9%, and 69.0% at the same recurrence counts. At 24/75 removed, it rebounded
-to 44.0%, 84.1%, 86.9%, and 86.8%. The recurrence-by-removal surface is
-retained without a causal claim; progress is tracked in
+to 44.0%, 84.1%, 86.9%, and 86.8%. At 32/75 removed it fell to 11.9%, 24.2%,
+36.0%, and 36.3%. The recurrence-by-removal surface is retained without a causal
+claim; progress is tracked in
 [`results/multiplication`](results/multiplication/README.md).
 
 ![Paper-recurrent validation against prior 5x5 runs](results/multiplication/figures/paper-recurrent-validation-comparison.png)

@@ -28,9 +28,12 @@ r=8. At the second boundary (16/75 removed), accuracy was 37.0% at r=1, 55.7%
 at r=2, 66.9% at r=4, and 69.0% at r=8. The first boundary is non-monotonic in
 inference recurrence count, while the second is monotonic across the evaluated
 recurrences. At the third boundary (24/75 removed), accuracy rebounded to 44.0%
-at r=1, 84.1% at r=2, 86.9% at r=4, and 86.8% at r=8. The full
-recurrence-by-removal surface is being preserved rather than summarized as a
-single depth curve. The epoch-2 checkpoint SHA256 is
+at r=1, 84.1% at r=2, 86.9% at r=4, and 86.8% at r=8. At the fourth boundary
+(32/75 removed), it fell to 11.9%, 24.2%, 36.0%, and
+36.3%, respectively. The full recurrence-by-removal surface is being preserved
+rather than summarized as a single depth curve. The epoch-3 checkpoint SHA256 is
+`b26895da0bc278d2e4e32b1f84165bb7f6ef74c8a6cf0159eb6994a37c393e6b`;
+the epoch-2 checkpoint SHA256 is
 `6ca6b610de60b36212fddf7228ead134bcb868d496169189751ed3b0a770f0e7`;
 the epoch-1 checkpoint SHA256 is
 `28d822cc0c7aace5f996b413347c569480d442a282d685a5e069fdaf5252e03b`, and
