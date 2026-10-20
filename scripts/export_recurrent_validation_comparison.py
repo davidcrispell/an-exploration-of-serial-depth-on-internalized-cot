@@ -137,7 +137,7 @@ def main() -> None:
     figure.text(
         0.5,
         0.005,
-        "Current run through the first 75/75 full-removal checkpoint; historical curves stop at that boundary.",
+        "Current run through one full-removal adaptation epoch; historical curves stop after their first 75/75 checkpoint.",
         ha="center",
         fontsize=9,
         color="#555555",
