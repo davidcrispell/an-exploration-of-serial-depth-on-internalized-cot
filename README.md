@@ -33,8 +33,9 @@ r=1, 2, 4, and 8 respectively. At 16/75 removed it reached 37.0%, 55.7%,
 66.9%, and 69.0% at the same recurrence counts. At 24/75 removed, it rebounded
 to 44.0%, 84.1%, 86.9%, and 86.8%. At 32/75 removed it fell to 11.9%, 24.2%,
 36.0%, and 36.3%. At 40/75 removed it scored 11.4%, 25.4%, 29.6%, and 29.5%.
-The recurrence-by-removal surface is retained without a causal claim; progress
-is tracked in
+At 48/75 removed it dropped to 1.0%, 3.4%, 4.4%, and 4.6%. The
+recurrence-by-removal surface is retained without a causal claim; progress is
+tracked in
 [`results/multiplication`](results/multiplication/README.md).
 
 ![Paper-recurrent validation against prior 5x5 runs](results/multiplication/figures/paper-recurrent-validation-comparison.png)
