@@ -1,5 +1,35 @@
 # Multiplication results
 
+## Paper-style Shallow 1.1 recurrent 5x5 run (in progress)
+
+The replacement Shallow 1.1 experiment adapts the recurrent-depth construction
+from [Geiping et al. (2025)](https://arxiv.org/abs/2502.05171) to the pretrained
+six-layer Shallow 1 checkpoint. It partitions the model as one prelude block,
+four recurrent core blocks, and one coda block. Unlike the completed frozen-stack
+pilot below, all 164,299,777 parameters train; the recurrent additions comprise a
+learned 2h-to-h state/input adapter, a core normalization weight, and a scalar
+normalization interpolation. Recurrence is sampled with the paper's
+log-normal--Poisson rule around target depth four, and gradients are retained
+through the final four recurrent iterations.
+
+The first explicit-CoT recurrent warmup epoch passed the primary r=4 gate. The
+same checkpoint was evaluated at four inference recurrence counts:
+
+| Recurrences | Effective layers | Correct | Accuracy |
+| ---: | ---: | ---: | ---: |
+| 1 | 6 | 999 / 1,000 | 99.9% |
+| 2 | 10 | 998 / 1,000 | 99.8% |
+| 4 | 18 | 996 / 1,000 | 99.6% |
+| 8 | 34 | 992 / 1,000 | 99.2% |
+
+The paper-matched 75-token internalization curriculum is now running. The
+warmup checkpoint is preserved on the run's network volume at SHA256
+`e0765193ad23199c2360ac7be529db2142f9a64a74ad576fcc7e5e1fa0c5af7d`.
+These explicit-CoT measurements establish the gate only; they do not yet show
+whether recurrence improves hidden-reasoning acquisition.
+
+- [`shallow1-1-paper-recurrent-5x5-progress.json`](shallow1-1-paper-recurrent-5x5-progress.json)
+
 ## Completed Shallow 1.1 recurrent 5x5 pilot
 
 Shallow 1.1 initializes from Shallow 1's verified 100%-accurate explicit-CoT

@@ -22,6 +22,14 @@ The pricing of training Deep 1 and Shallow 1 was subject to confounds. Shallow 1
 
 There was an additional confound in that we did not scrutinize our coding agent's training run design choice around stopping. It implemented a linear learning rate slowdown to preserve budget when the clean choice would have been to not do this. Replicating these experiments and fixing these bugs would allow for a cleaner investigation of depth on reasoning internalization. 
 
+A replacement Shallow 1.1 recurrent experiment now follows the recurrent-depth
+construction in [Geiping et al. (2025)](https://arxiv.org/abs/2502.05171), rather
+than freezing and executing the original six-layer stack twice. Its first
+explicit-CoT warmup epoch reached 99.9%, 99.8%, 99.6%, and 99.2% validation
+accuracy at 1, 2, 4, and 8 recurrences respectively. It passed the r=4 gate and
+has entered the unchanged 75-token 5x5 internalization curriculum; results are
+tracked in [`results/multiplication`](results/multiplication/README.md).
+
 # Modded-NanoGPT/ Codex notes
 
 A completed Shallow 1.1 pilot reuses the frozen six-layer Shallow 1 stack twice,

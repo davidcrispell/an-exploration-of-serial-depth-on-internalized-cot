@@ -1,0 +1,25 @@
+{
+  "status": "internalization_in_progress",
+  "paper": "https://arxiv.org/abs/2502.05171",
+  "architecture": {
+    "split": [1, 4, 1],
+    "mean_recurrence": 4,
+    "mean_backprop_depth": 4,
+    "base_parameters": 162201600,
+    "recurrent_parameters": 2098177,
+    "total_trainable_parameters": 164299777
+  },
+  "warmup": {
+    "epoch": 0,
+    "global_step": 25250,
+    "passed_primary_gate": true,
+    "primary_recurrence": 4,
+    "checkpoint_sha256": "e0765193ad23199c2360ac7be529db2142f9a64a74ad576fcc7e5e1fa0c5af7d",
+    "validation": [
+      {"recurrence": 1, "effective_layers": 6, "correct": 999, "examples": 1000, "accuracy": 0.999},
+      {"recurrence": 2, "effective_layers": 10, "correct": 998, "examples": 1000, "accuracy": 0.998},
+      {"recurrence": 4, "effective_layers": 18, "correct": 996, "examples": 1000, "accuracy": 0.996},
+      {"recurrence": 8, "effective_layers": 34, "correct": 992, "examples": 1000, "accuracy": 0.992}
+    ]
+  }
+}
