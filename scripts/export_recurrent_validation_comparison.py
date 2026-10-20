@@ -133,11 +133,17 @@ def main() -> None:
     axes[1].set_title("Paper-recurrent validation by recurrence")
     axes[1].legend(loc="lower left", frameon=True, framealpha=0.92)
 
+    full_removal_points = sum(
+        int(row["removed_tokens"]) == 75 for row in current["internalization"]
+    )
+    adaptation_epochs = max(0, full_removal_points - 1)
+    epoch_word = "epoch" if adaptation_epochs == 1 else "epochs"
     figure.suptitle("5×5 CoT internalization validation", fontsize=15, y=1.01)
     figure.text(
         0.5,
         0.005,
-        "Current run through one full-removal adaptation epoch; historical curves stop after their first 75/75 checkpoint.",
+        f"Current run through {adaptation_epochs} full-removal adaptation {epoch_word}; "
+        "historical curves stop after their first 75/75 checkpoint.",
         ha="center",
         fontsize=9,
         color="#555555",
