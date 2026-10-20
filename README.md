@@ -46,15 +46,29 @@ tracked in
 
 ![Paper-recurrent validation against prior 5x5 runs](results/multiplication/figures/paper-recurrent-validation-comparison.png)
 
-## Circuit serial depth
+## NLS depth (Google serial-depth measurement)
 
 Using Google DeepMind's released JAX serial-depth calculator on an
-operation-faithful transcription of these models, the 103-token 5x5 forward
-pass measures 823 for Shallow 1, 1,603 for Deep 1, and 3,163 for Deeper 1.
-Paper-recurrent Shallow 1.1 measures 854, 1,405, 2,507, and 4,711 at inference
-recurrence counts 1, 2, 4, and 8. All traces have zero unsupported primitives.
-The reproducible script, full sequence-length sensitivity, and methodological
-caveats are in [`results/serial-depth`](results/serial-depth/README.md).
+operation-faithful transcription of each architecture, the measured NLS depths
+are:
+
+| Model / inference mode | Parameters | Effective transformer blocks | 13 tokens | 103 tokens (5x5 task) | 1,024 tokens |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Shallow 1 | 162,201,600 | 6 | 769 | 823 | 877 |
+| Deep 1 | 162,201,600 | 12 | 1,495 | 1,603 | 1,711 |
+| Deeper 1 | 162,201,600 | 24 | 2,947 | 3,163 | 3,379 |
+| Shallow 1.1 frozen recurrent pilot | 164,298,752 | 12 | 1,552 | 1,660 | 1,768 |
+| Paper-recurrent Shallow 1.1, r=1 | 164,299,777 | 6 | 800 | 854 | 908 |
+| Paper-recurrent Shallow 1.1, r=2 | 164,299,777 | 10 | 1,315 | 1,405 | 1,495 |
+| Paper-recurrent Shallow 1.1, r=4 | 164,299,777 | 18 | 2,345 | 2,507 | 2,669 |
+| Paper-recurrent Shallow 1.1, r=8 | 164,299,777 | 34 | 4,405 | 4,711 | 5,017 |
+
+NLS depth depends on input length, so the 103-token column is the primary
+task-matched comparison rather than a context-free model constant. These are
+forward-pass dependency-graph measurements, not latency or FLOP counts. All
+traces have zero unsupported primitives. The reproducible script, raw JSON,
+sequence-length sensitivity, and methodological caveats are in
+[`results/serial-depth`](results/serial-depth/README.md).
 
 # Modded-NanoGPT/ Codex notes
 

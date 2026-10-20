@@ -1,4 +1,4 @@
-# Google serial-depth measurements
+# NLS-depth measurements with Google DeepMind's serial-depth calculator
 
 These measurements use the unmodified calculator from
 [`google-deepmind/serial_depth`](https://github.com/google-deepmind/serial_depth)
@@ -7,6 +7,10 @@ at commit
 The calculator assigns depth zero to data movement, depth one to elementwise
 operations, logarithmic depth to dot products and reductions, and cumulative
 depth to sequentially dependent operations.
+
+Throughout this project, **NLS depth** means the forward-pass serial depth
+returned by this implementation. It depends on input length, so every value is
+reported together with its sequence length.
 
 Because the released calculator traces JAX rather than PyTorch, the project
 script [`scripts/measure_google_serial_depth.py`](../../scripts/measure_google_serial_depth.py)
