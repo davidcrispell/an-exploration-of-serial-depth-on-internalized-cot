@@ -137,7 +137,7 @@ def main() -> None:
     figure.text(
         0.5,
         0.005,
-        "Current run through 48/75 removed tokens; historical curves stop at their first full-removal checkpoint.",
+        "Current run through 56/75 removed tokens; historical curves stop at their first full-removal checkpoint.",
         ha="center",
         fontsize=9,
         color="#555555",

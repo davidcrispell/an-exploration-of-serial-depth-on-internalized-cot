@@ -32,9 +32,12 @@ at r=1, 84.1% at r=2, 86.9% at r=4, and 86.8% at r=8. At the fourth boundary
 (32/75 removed), it fell to 11.9%, 24.2%, 36.0%, and
 36.3%, respectively. At the fifth boundary (40/75 removed), accuracy was 11.4%,
 25.4%, 29.6%, and 29.5%. At the sixth boundary (48/75 removed), it dropped to
-1.0%, 3.4%, 4.4%, and 4.6%. The full recurrence-by-removal surface is being
-preserved rather than summarized as a single depth curve. The epoch-5 checkpoint
-SHA256 is
+1.0%, 3.4%, 4.4%, and 4.6%. At the seventh boundary (56/75 removed), every
+evaluated recurrence scored 0/1,000 (0.0%). The full recurrence-by-removal
+surface is being preserved rather than summarized as a single depth curve. The
+epoch-6 checkpoint SHA256 is
+`53a0fac5ca552abbf24c5c2e0eeb36f5bc957c264f22b7d1aff20e9cf1781414`;
+the epoch-5 checkpoint SHA256 is
 `d07c82d09340a80fa27d3a2062a0c771cf4fbeb9315cbbda62f1d6e775e5662d`;
 the epoch-4 checkpoint SHA256 is
 `b28a6984966f1fe915f2913b68b33734499801e81c7760ecb7e18fb9e8f4ead7`;
