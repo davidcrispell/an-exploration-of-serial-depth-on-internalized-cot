@@ -1,4 +1,4 @@
-Further investigation into the relationship between monitorability, depth, and width are pending.
+Further investigation into the relationship between monitorability, depth, and width are underway, with our proposal here: https://docs.google.com/document/d/1y3oH3qRG9SS4eVAN68K5BELG40AX81azwoz74seWtAw/edit?usp=sharing
 
 Serial depth and chain-of-thought internalization
 
